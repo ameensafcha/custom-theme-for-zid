@@ -17,7 +17,7 @@
     "url": "https://github.com/zidsa/default-theme-vitrin/issues"
   },
   "homepage": "https://github.com/zidsa/default-theme-vitrin#readme",
-  "dependencies": {
+  "devDependencies": {
     "@tailwindcss/cli": "^4.1.13",
     "tailwindcss": "^4.1.13"
   }
