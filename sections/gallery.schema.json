@@ -1,0 +1,54 @@
+{
+  "section_id": "uuid",
+  "template": "sections/gallery.jinja",
+  "name": {
+    "ar": "معرض الصور",
+    "en": "Gallery"
+  },
+  "settings": [
+    {
+      "id": "title",
+      "type": "text",
+      "label": {
+        "ar": "العنوان",
+        "en": "Title"
+      },
+      "default": "Summer night mode"
+    },
+    {
+      "id": "gallery",
+      "type": "list",
+      "label": {
+        "ar": "الصور",
+        "en": "Images"
+      },
+      "max_items": 8,
+      "info": {
+        "ar": "أضف صور المعرض (حتى 8 صور)",
+        "en": "Add gallery images (up to 8 images)"
+      },
+      "settings": [
+        {
+          "id": "image",
+          "type": "image",
+          "label": {
+            "ar": "الصورة",
+            "en": "Image"
+          }
+        },
+        {
+          "id": "url",
+          "type": "url",
+          "label": {
+            "ar": "الرابط",
+            "en": "Link"
+          },
+          "info": {
+            "ar": "اترك فارغًا إذا لم تكن بحاجة إلى رابط",
+            "en": "Leave empty if no link needed"
+          }
+        }
+      ]
+    }
+  ]
+}

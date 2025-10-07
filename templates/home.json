@@ -1,0 +1,223 @@
+{
+  "components": {
+    "ar": [
+      {
+        "template": "sections/hero.jinja",
+        "settings": {
+          "background_image": "https://images.unsplash.com/photo-1441986300917-64674bd600d8",
+          "overlay_opacity": 5,
+          "badge_text": "مجموعة جديدة",
+          "heading": "مجموعة الربيع 2025",
+          "description": "ادخل الموسم بأناقة انسيابية وجمال بسيط",
+          "button_text": "تسوق المجموعة",
+          "button_url": "/p",
+          "min_height": 700
+        }
+      },
+      {
+        "template": "sections/hero.jinja",
+        "settings": {
+          "background_image": "https://images.unsplash.com/photo-1441986300917-64674bd600d8",
+          "overlay_opacity": 5,
+          "badge_text": "مجموعة جديدة",
+          "heading": "مجموعة الربيع 2025",
+          "description": "ادخل الموسم بأناقة انسيابية وجمال بسيط",
+          "button_text": "تسوق المجموعة",
+          "button_url": "/p",
+          "min_height": 700
+        }
+      },
+      {
+        "template": "sections/partners.jinja",
+        "settings": {
+          "title": "شركاؤنا",
+          "store_partners": [
+            {
+              "image": "https://placehold.co/200x200?text=Partner+1",
+              "url": "https://example.com",
+              "name": "شريك 1"
+            },
+            {
+              "image": "https://placehold.co/200x200?text=Partner+2",
+              "url": "https://example.com",
+              "name": "شريك 2"
+            },
+            {
+              "image": "https://placehold.co/200x200?text=Partner+3",
+              "url": "",
+              "name": "شريك 3"
+            },
+            {
+              "image": "https://placehold.co/200x200?text=Partner+4",
+              "url": "https://example.com",
+              "name": "شريك 4"
+            },
+            {
+              "image": "https://placehold.co/200x200?text=Partner+5",
+              "url": "",
+              "name": "شريك 5"
+            }
+          ]
+        }
+      },
+      {
+        "template": "sections/gallery.jinja",
+        "settings": {
+          "title": "ليلة صيفية",
+          "gallery": [
+            {
+              "image": "https://images.unsplash.com/photo-1441986300917-64674bd600d8",
+              "url": "/p"
+            },
+            {
+              "image": "https://images.unsplash.com/photo-1483985988355-763728e1935b",
+              "url": "/p"
+            },
+            {
+              "image": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d",
+              "url": ""
+            },
+            {
+              "image": "https://images.unsplash.com/photo-1445205170230-053b83016050",
+              "url": ""
+            },
+            {
+              "image": "https://images.unsplash.com/photo-1532453288672-3a27e9be9efd",
+              "url": "/p"
+            }
+          ]
+        }
+      },
+      {
+        "template": "sections/benefits.jinja",
+        "settings": {
+          "store_features": [
+            {
+              "image": "https://placehold.co/200x200?text=شحن+مجاني",
+              "title": "شحن مجاني",
+              "description": "لجميع الطلبات فوق 500 ريال"
+            },
+            {
+              "image": "https://placehold.co/200x200?text=إرجاع+سهل",
+              "title": "إرجاع سهل",
+              "description": "خلال 30 يوم من الشراء"
+            },
+            {
+              "image": "https://placehold.co/200x200?text=دفع+آمن",
+              "title": "دفع آمن",
+              "description": "معاملات محمية 100%"
+            },
+            {
+              "image": "https://placehold.co/200x200?text=دعم+24/7",
+              "title": "دعم 24/7",
+              "description": "خدمة عملاء على مدار الساعة"
+            }
+          ]
+        }
+      }
+    ],
+    "en": [
+      {
+        "template": "sections/hero.jinja",
+        "settings": {
+          "background_image": "https://images.unsplash.com/photo-1441986300917-64674bd600d8",
+          "overlay_opacity": 5,
+          "badge_text": "NEW COLLECTION",
+          "heading": "Superbloom 2025",
+          "description": "Step into the season with flowing silhouettes and effortless elegance.",
+          "button_text": "Shop the Collection",
+          "button_url": "/p",
+          "min_height": 700
+        }
+      },
+      {
+        "template": "sections/partners.jinja",
+        "settings": {
+          "title": "Our Partners",
+          "store_partners": [
+            {
+              "image": "https://placehold.co/200x200?text=Partner+1",
+              "url": "https://example.com",
+              "name": "Partner 1"
+            },
+            {
+              "image": "https://placehold.co/200x200?text=Partner+2",
+              "url": "https://example.com",
+              "name": "Partner 2"
+            },
+            {
+              "image": "https://placehold.co/200x200?text=Partner+3",
+              "url": "",
+              "name": "Partner 3"
+            },
+            {
+              "image": "https://placehold.co/200x200?text=Partner+4",
+              "url": "https://example.com",
+              "name": "Partner 4"
+            },
+            {
+              "image": "https://placehold.co/200x200?text=Partner+5",
+              "url": "",
+              "name": "Partner 5"
+            }
+          ]
+        }
+      },
+      {
+        "template": "sections/gallery.jinja",
+        "settings": {
+          "title": "Summer night mode",
+          "gallery": [
+            {
+              "image": "https://images.unsplash.com/photo-1441986300917-64674bd600d8",
+              "url": "/p"
+            },
+            {
+              "image": "https://images.unsplash.com/photo-1483985988355-763728e1935b",
+              "url": "/p"
+            },
+            {
+              "image": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d",
+              "url": ""
+            },
+            {
+              "image": "https://images.unsplash.com/photo-1445205170230-053b83016050",
+              "url": ""
+            },
+            {
+              "image": "https://images.unsplash.com/photo-1532453288672-3a27e9be9efd",
+              "url": "/p"
+            }
+          ]
+        }
+      },
+      {
+        "template": "sections/benefits.jinja",
+        "settings": {
+          "store_features": [
+            {
+              "image": "https://placehold.co/200x200?text=Free+Shipping",
+              "title": "Free Shipping",
+              "description": "For all orders over 500 SAR"
+            },
+            {
+              "image": "https://placehold.co/200x200?text=Easy+Returns",
+              "title": "Easy Returns",
+              "description": "Within 30 days of purchase"
+            },
+            {
+              "image": "https://placehold.co/200x200?text=Secure+Payment",
+              "title": "Secure Payment",
+              "description": "100% protected transactions"
+            },
+            {
+              "image": "https://placehold.co/200x200?text=24/7+Support",
+              "title": "24/7 Support",
+              "description": "Round-the-clock customer service"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

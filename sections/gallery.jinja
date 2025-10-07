@@ -1,46 +1,82 @@
-<section class="px-4 py-6 md:p-16">
+<section
+  section-id="{{ sectionId }}"
+  class="px-4 py-6 md:p-16"
+>
   <div class="theme-container">
-    <h2
-      class="text-primary mb-6 text-[32px] leading-[41.6px] [font-variant:all-small-caps] md:text-[40px] md:leading-[48px]"
-    >
-      Summer night mode
-    </h2>
-    <div class="grid auto-rows-[153px] grid-cols-2 gap-4 md:auto-rows-[314px] md:grid-cols-4">
-      <div class="col-span-2 row-span-2 overflow-hidden rounded md:col-span-2 md:row-span-2">
-        <img
-          src="{{ "images/bento-1.png" | asset_url }}"
-          alt=""
-          class="h-full w-full object-cover"
-        />
+    {% if settings.title %}
+      <h2
+        class="text-primary mb-6 text-[32px] leading-[41.6px] [font-variant:all-small-caps] md:text-[40px] md:leading-[48px]"
+      >
+        {{ settings.title }}
+      </h2>
+    {% endif %}
+    {% if settings.gallery %}
+      {% set item_count = settings.gallery | length %}
+      <div
+        class="gallery-grid grid auto-rows-[153px] grid-cols-2 gap-4 md:auto-rows-[314px] md:grid-cols-4"
+        data-items="{{ item_count }}"
+      >
+        {% for item in settings.gallery %}
+          <div class="gallery-item overflow-hidden rounded">
+            {% if item.url %}
+              <a
+                href="{{ item.url }}"
+                class="block h-full w-full"
+              >
+                <img
+                  src="{{ item.image }}"
+                  alt=""
+                  class="h-full w-full object-cover"
+                  {% if loop.index0 > 0 %}loading="lazy"{% endif %}
+                />
+              </a>
+            {% else %}
+              <img
+                src="{{ item.image }}"
+                alt=""
+                class="h-full w-full object-cover"
+                {% if loop.index0 > 0 %}loading="lazy"{% endif %}
+              />
+            {% endif %}
+          </div>
+        {% endfor %}
       </div>
-      <div class="overflow-hidden rounded">
-        <img
-          src="{{ "images/bento-2.png" | asset_url }}"
-          alt=""
-          class="h-full w-full object-cover"
-        />
-      </div>
-      <div class="overflow-hidden rounded">
-        <img
-          src="{{ "images/bento-3.png" | asset_url }}"
-          alt=""
-          class="h-full w-full object-cover"
-        />
-      </div>
-      <div class="overflow-hidden rounded">
-        <img
-          src="{{ "images/bento-4.png" | asset_url }}"
-          alt=""
-          class="h-full w-full object-cover"
-        />
-      </div>
-      <div class="overflow-hidden rounded">
-        <img
-          src="{{ "images/bento-5.png" | asset_url }}"
-          alt=""
-          class="h-full w-full object-cover"
-        />
-      </div>
-    </div>
+    {% endif %}
   </div>
+  {# prettier-ignore-start #}
+  <style>
+    /* 3 items: 1 top (full width), 2 bottom */
+    .gallery-grid[data-items="3"] .gallery-item:nth-child(1) {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
+    @media (min-width: 768px) {
+      .gallery-grid[data-items="3"] .gallery-item:nth-child(1) {
+        grid-column: span 4;
+        grid-row: span 2;
+      }
+      .gallery-grid[data-items="3"] .gallery-item:nth-child(2),
+      .gallery-grid[data-items="3"] .gallery-item:nth-child(3) {
+        grid-column: span 2;
+        grid-row: span 2;
+      }
+    }
+
+    /* 5 items: bento layout */
+    .gallery-grid[data-items="5"] .gallery-item:nth-child(1) {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
+    @media (min-width: 768px) {
+      .gallery-grid[data-items="5"] .gallery-item:nth-child(2) {
+        grid-column: span 1;
+        grid-row: span 2;
+      }
+      .gallery-grid[data-items="5"] .gallery-item:nth-child(5) {
+        grid-column: span 2;
+        grid-row: span 1;
+      }
+    }
+  </style>
+  {# prettier-ignore-end #}
 </section>
