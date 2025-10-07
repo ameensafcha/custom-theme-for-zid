@@ -1,10 +1,10 @@
 <section
   section-id="{{ sectionId }}"
-  class="relative flex items-center justify-center overflow-hidden px-4 py-6 md:px-16 md:py-0"
-  style="min-height: {{ settings.min_height | default(700) }}px"
+  class="{% if settings.style_variant == 'compact' %}py-6 md:py-32{% else %}py-6 md:py-0{% endif %} relative flex items-center justify-center overflow-hidden px-4 md:px-16"
+  data-variant="{{ settings.style_variant | default('default') }}"
 >
   <div
-    class="absolute inset-0 -z-10 bg-cover bg-center bg-no-repeat"
+    class="absolute inset-0 -z-10 bg-cover bg-no-repeat"
     style="background-image: url('{{ settings.background_image }}')"
   >
     <div
@@ -15,11 +15,21 @@
   <div class="theme-container space-y-6">
     <div>
       {% if settings.badge_text %}
-        <span class="text-[16px] leading-normal [font-variant:all-small-caps]"> {{ settings.badge_text }} </span>
+        <span class="text-[16px] leading-normal [font-variant:all-small-caps]">{{ settings.badge_text }}</span>
       {% endif %}
-      <h1 class="text-[40px] leading-[48px] uppercase [font-variant:all-small-caps] md:text-[56px] md:leading-[67.2px]">
-        {{ settings.heading }}
-      </h1>
+      {% if settings.is_primary_hero %}
+        <h1
+          class="text-[40px] leading-[48px] uppercase [font-variant:all-small-caps] md:text-[56px] md:leading-[67.2px]"
+        >
+          {{ settings.heading }}
+        </h1>
+      {% else %}
+        <h2
+          class="text-[40px] leading-[48px] uppercase [font-variant:all-small-caps] md:text-[56px] md:leading-[67.2px]"
+        >
+          {{ settings.heading }}
+        </h2>
+      {% endif %}
       {% if settings.description %}
         <p class="text-[20px] leading-[28px] [font-variant:all-small-caps]">{{ settings.description }}</p>
       {% endif %}
@@ -33,4 +43,21 @@
       </a>
     {% endif %}
   </div>
+  {# prettier-ignore-start #}
+  <style>
+    [section-id="{{ sectionId }}"] {
+      min-height: {{ settings.min_height_mobile | default(700) }}px;
+    }
+
+    @media (min-width: 768px) {
+      [section-id="{{ sectionId }}"] {
+        min-height: {{ settings.min_height_desktop | default(700) }}px;
+      }
+    }
+
+    [section-id="{{ sectionId }}"] .bg-cover {
+      background-position: {{ settings.background_position | default('center') }};
+    }
+  </style>
+  {# prettier-ignore-end #}
 </section>

@@ -7,6 +7,44 @@
   },
   "settings": [
     {
+      "id": "is_primary_hero",
+      "type": "checkbox",
+      "label": {
+        "ar": "البانر الرئيسي",
+        "en": "Primary Hero"
+      },
+      "info": {
+        "ar": "استخدم H1 للعنوان (يجب أن يكون هناك H1 واحد فقط في الصفحة)",
+        "en": "Use H1 for heading (there should be only one H1 per page)"
+      },
+      "default": true
+    },
+    {
+      "id": "style_variant",
+      "type": "select",
+      "label": {
+        "ar": "نمط العرض",
+        "en": "Style Variant"
+      },
+      "options": [
+        {
+          "value": "default",
+          "label": {
+            "ar": "افتراضي",
+            "en": "Default"
+          }
+        },
+        {
+          "value": "compact",
+          "label": {
+            "ar": "مضغوط",
+            "en": "Compact"
+          }
+        }
+      ],
+      "default": "default"
+    },
+    {
       "id": "background_image",
       "type": "image",
       "label": {
@@ -17,6 +55,38 @@
         "ar": "ارفع صورة بحجم 1920 × 700 بكسل",
         "en": "Upload image 1920 × 700 pixels"
       }
+    },
+    {
+      "id": "background_position",
+      "type": "select",
+      "label": {
+        "ar": "موضع الخلفية",
+        "en": "Background Position"
+      },
+      "options": [
+        {
+          "value": "center",
+          "label": {
+            "ar": "وسط",
+            "en": "Center"
+          }
+        },
+        {
+          "value": "top",
+          "label": {
+            "ar": "أعلى",
+            "en": "Top"
+          }
+        },
+        {
+          "value": "bottom",
+          "label": {
+            "ar": "أسفل",
+            "en": "Bottom"
+          }
+        }
+      ],
+      "default": "center"
     },
     {
       "id": "overlay_opacity",
@@ -77,11 +147,24 @@
       "default": ""
     },
     {
-      "id": "min_height",
+      "id": "min_height_mobile",
       "type": "range",
       "label": {
-        "ar": "الحد الأدنى للارتفاع",
-        "en": "Minimum Height"
+        "ar": "الحد الأدنى للارتفاع (موبايل)",
+        "en": "Minimum Height (Mobile)"
+      },
+      "min": 400,
+      "max": 900,
+      "step": 50,
+      "unit": "px",
+      "default": 700
+    },
+    {
+      "id": "min_height_desktop",
+      "type": "range",
+      "label": {
+        "ar": "الحد الأدنى للارتفاع (سطح المكتب)",
+        "en": "Minimum Height (Desktop)"
       },
       "min": 400,
       "max": 900,

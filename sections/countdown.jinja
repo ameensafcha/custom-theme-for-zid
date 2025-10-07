@@ -1,59 +1,60 @@
 <section
+  section-id="{{ sectionId }}"
   class="relative flex min-h-[700px] items-center justify-center overflow-hidden px-4 py-6 md:min-h-[480px] md:px-16 md:py-32"
 >
-  <div
-    class="absolute inset-0 -z-10 bg-cover bg-center bg-no-repeat md:bg-bottom"
-    style="background-image:url('{{ 'images/countdown-bg.png' | asset_url }}')"
-  >
-    <div class="bg-primary/5 absolute inset-0"></div>
-  </div>
+  {% if settings.background_image %}
+    <div
+      class="absolute inset-0 -z-10 bg-cover bg-center bg-no-repeat md:bg-bottom"
+      style="background-image:url('{{ settings.background_image }}')"
+    >
+      <div
+        class="bg-primary absolute inset-0"
+        style="opacity: {{ settings.overlay_opacity | default(50) / 100 }}"
+      ></div>
+    </div>
+  {% endif %}
   <div class="theme-container">
-    <div class="grid gap-x-20 gap-y-8 lg:grid-cols-12 lg:items-center">
+    <div class="countdown-content grid gap-x-20 gap-y-8 lg:grid-cols-12 lg:items-center">
       <div class="space-y-6 lg:col-span-6">
         <div>
-          <span class="text-[16px] leading-normal [font-variant:all-small-caps]"> LIMITED TIME ONLY </span>
-          <h2
-            class="text-[40px] leading-[48px] uppercase [font-variant:all-small-caps] md:text-[56px] md:leading-[67.2px]"
-          >
-            SUPER SALE UP TO 40% OFF
-          </h2>
-          <p class="text-[20px] leading-[28px] [font-variant:all-small-caps]">
-            Shop our collection of exclusive handbags and backpacks at reduced price during super sale. Hurry up!
-          </p>
+          {% if settings.badge_text %}
+            <span class="text-[16px] leading-normal [font-variant:all-small-caps]">{{ settings.badge_text }}</span>
+          {% endif %}
+          {% if settings.title %}
+            <h2
+              class="text-[40px] leading-[48px] uppercase [font-variant:all-small-caps] md:text-[56px] md:leading-[67.2px]"
+            >
+              {{ settings.title }}
+            </h2>
+          {% endif %}
+          {% if settings.description %}
+            <p class="text-[20px] leading-[28px] [font-variant:all-small-caps]">
+              {{ settings.description }}
+            </p>
+          {% endif %}
         </div>
-        <a
-          href="#"
-          class="bg-primary text-primary-foreground rounded px-4 py-3"
-        >
-          Shop now
-        </a>
+        {% if settings.button_text %}
+          <a
+            href="{{ settings.button_url | default('#') }}"
+            class="bg-primary text-primary-foreground inline-block rounded px-4 py-3"
+          >
+            {{ settings.button_text }}
+          </a>
+        {% endif %}
       </div>
       <div class="lg:col-span-6">
-        <div class="flex items-stretch gap-2 md:gap-4 lg:justify-end">
+        <div class="countdown-timer flex items-stretch gap-2 md:gap-4 lg:justify-end">
           <div
             class="bg-background/30 flex min-w-16 flex-col items-center justify-center rounded p-2 text-center backdrop-blur-xs md:min-w-24"
           >
             <span
-              class="text-primary text-[32px] leading-[41.6px] [font-variant:all-small-caps] md:text-[48px] md:leading-[57.6px]"
+              class="days-value text-primary text-[32px] leading-[41.6px] [font-variant:all-small-caps] md:text-[48px] md:leading-[57.6px]"
             >
-              45
+              00
             </span>
-            <span class="text-primary text-[16px] leading-normal [font-variant:all-small-caps]"> DAY </span>
-          </div>
-          <span
-            aria-hidden="true"
-            class="my-2 w-px bg-white/60"
-          ></span>
-
-          <div
-            class="bg-background/30 flex min-w-16 flex-col items-center justify-center rounded p-2 text-center backdrop-blur-xs md:min-w-24"
-          >
-            <span
-              class="text-primary text-[32px] leading-[41.6px] [font-variant:all-small-caps] md:text-[48px] md:leading-[57.6px]"
-            >
-              45
+            <span class="text-primary text-[16px] leading-normal [font-variant:all-small-caps]">
+              {{ 'يوم' if session.lang == 'ar' else 'Day' }}
             </span>
-            <span class="text-primary text-[16px] leading-normal [font-variant:all-small-caps]"> Hour </span>
           </div>
           <span
             aria-hidden="true"
@@ -63,11 +64,13 @@
             class="bg-background/30 flex min-w-16 flex-col items-center justify-center rounded p-2 text-center backdrop-blur-xs md:min-w-24"
           >
             <span
-              class="text-primary text-[32px] leading-[41.6px] [font-variant:all-small-caps] md:text-[48px] md:leading-[57.6px]"
+              class="hours-value text-primary text-[32px] leading-[41.6px] [font-variant:all-small-caps] md:text-[48px] md:leading-[57.6px]"
             >
-              45
+              00
             </span>
-            <span class="text-primary text-[16px] leading-normal [font-variant:all-small-caps]"> Min </span>
+            <span class="text-primary text-[16px] leading-normal [font-variant:all-small-caps]">
+              {{ 'ساعة' if session.lang == 'ar' else 'Hour' }}
+            </span>
           </div>
           <span
             aria-hidden="true"
@@ -77,14 +80,68 @@
             class="bg-background/30 flex min-w-16 flex-col items-center justify-center rounded p-2 text-center backdrop-blur-xs md:min-w-24"
           >
             <span
-              class="text-primary text-[32px] leading-[41.6px] [font-variant:all-small-caps] md:text-[48px] md:leading-[57.6px]"
+              class="minutes-value text-primary text-[32px] leading-[41.6px] [font-variant:all-small-caps] md:text-[48px] md:leading-[57.6px]"
             >
-              45
+              00
             </span>
-            <span class="text-primary text-[16px] leading-normal [font-variant:all-small-caps]"> Sec </span>
+            <span class="text-primary text-[16px] leading-normal [font-variant:all-small-caps]">
+              {{ 'دقيقة' if session.lang == 'ar' else 'Min' }}
+            </span>
+          </div>
+          <span
+            aria-hidden="true"
+            class="my-2 w-px bg-white/60"
+          ></span>
+          <div
+            class="bg-background/30 flex min-w-16 flex-col items-center justify-center rounded p-2 text-center backdrop-blur-xs md:min-w-24"
+          >
+            <span
+              class="seconds-value text-primary text-[32px] leading-[41.6px] [font-variant:all-small-caps] md:text-[48px] md:leading-[57.6px]"
+            >
+              00
+            </span>
+            <span class="text-primary text-[16px] leading-normal [font-variant:all-small-caps]">
+              {{ 'ثانية' if session.lang == 'ar' else 'Sec' }}
+            </span>
           </div>
         </div>
       </div>
     </div>
   </div>
+  <script>
+    (function () {
+      const section = document.querySelector('[section-id="{{ sectionId }}"]');
+      const endDate = new Date('{{ settings.end_date }}').getTime();
+      const daysEl = section.querySelector('.days-value');
+      const hoursEl = section.querySelector('.hours-value');
+      const minutesEl = section.querySelector('.minutes-value');
+      const secondsEl = section.querySelector('.seconds-value');
+      const contentEl = section.querySelector('.countdown-content');
+
+      function updateCountdown() {
+        const now = new Date().getTime();
+        const distance = endDate - now;
+
+        if (distance < 0) {
+          if (interval) clearInterval(interval);
+          section.style.display = 'none';
+          return;
+        }
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        daysEl.textContent = String(days).padStart(2, '0');
+        hoursEl.textContent = String(hours).padStart(2, '0');
+        minutesEl.textContent = String(minutes).padStart(2, '0');
+        secondsEl.textContent = String(seconds).padStart(2, '0');
+      }
+
+      let interval;
+      updateCountdown();
+      interval = setInterval(updateCountdown, 1000);
+    })();
+  </script>
 </section>

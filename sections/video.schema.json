@@ -1,0 +1,56 @@
+{
+  "section_id": "uuid",
+  "template": "sections/video.jinja",
+  "name": {
+    "ar": "فيديو",
+    "en": "Video"
+  },
+  "settings": [
+    {
+      "id": "title",
+      "type": "text",
+      "label": {
+        "ar": "العنوان",
+        "en": "Title"
+      },
+      "info": {
+        "ar": "يظهر فقط عندما لا يكون التشغيل التلقائي مفعلاً",
+        "en": "Only shows when autoplay is disabled"
+      },
+      "default": ""
+    },
+    {
+      "id": "poster_image",
+      "type": "image",
+      "label": {
+        "ar": "صورة الغلاف",
+        "en": "Cover Image"
+      },
+      "info": {
+        "ar": "تظهر قبل تشغيل الفيديو",
+        "en": "Shows before video plays"
+      }
+    },
+    {
+      "id": "video",
+      "type": "video",
+      "label": {
+        "ar": "الفيديو",
+        "en": "Video"
+      },
+      "info": {
+        "ar": "يدعم mp4, webm, ogg - الحد الأقصى 10MB",
+        "en": "Supports mp4, webm, ogg - Maximum 10MB"
+      }
+    },
+    {
+      "id": "autoplay",
+      "type": "checkbox",
+      "label": {
+        "ar": "تشغيل الفيديو بشكل مباشر",
+        "en": "Autoplay"
+      },
+      "default": false
+    }
+  ]
+}

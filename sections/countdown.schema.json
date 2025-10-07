@@ -1,0 +1,97 @@
+{
+  "section_id": "uuid",
+  "template": "sections/countdown.jinja",
+  "name": {
+    "ar": "العد التنازلي",
+    "en": "Countdown Timer"
+  },
+  "settings": [
+    {
+      "id": "badge_text",
+      "type": "text",
+      "label": {
+        "ar": "نص الشارة",
+        "en": "Badge Text"
+      },
+      "info": {
+        "ar": "اتركه فارغًا لإخفاء الشارة",
+        "en": "Leave empty to hide badge"
+      },
+      "default": "Limited Time Only"
+    },
+    {
+      "id": "title",
+      "type": "text",
+      "label": {
+        "ar": "العنوان",
+        "en": "Title"
+      },
+      "default": "Super Sale Up To 40% Off"
+    },
+    {
+      "id": "description",
+      "type": "textarea",
+      "label": {
+        "ar": "الوصف",
+        "en": "Description"
+      },
+      "default": "Shop our collection at reduced price during super sale. Hurry up!"
+    },
+    {
+      "id": "end_date",
+      "type": "text",
+      "label": {
+        "ar": "تاريخ الانتهاء",
+        "en": "End Date"
+      },
+      "info": {
+        "ar": "بصيغة YYYY-MM-DD HH:MM (مثال: 2025-12-31 23:59)",
+        "en": "Format: YYYY-MM-DD HH:MM (example: 2025-12-31 23:59)"
+      },
+      "default": "2025-12-31 23:59"
+    },
+    {
+      "id": "button_text",
+      "type": "text",
+      "label": {
+        "ar": "نص الزر",
+        "en": "Button Text"
+      },
+      "default": "Shop Now"
+    },
+    {
+      "id": "button_url",
+      "type": "url",
+      "label": {
+        "ar": "رابط الزر",
+        "en": "Button URL"
+      },
+      "default": ""
+    },
+    {
+      "id": "background_image",
+      "type": "image",
+      "label": {
+        "ar": "صورة الخلفية",
+        "en": "Background Image"
+      },
+      "info": {
+        "ar": "اختياري",
+        "en": "Optional"
+      }
+    },
+    {
+      "id": "overlay_opacity",
+      "type": "range",
+      "label": {
+        "ar": "شفافية الطبقة",
+        "en": "Overlay Opacity"
+      },
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 50
+    }
+  ]
+}
