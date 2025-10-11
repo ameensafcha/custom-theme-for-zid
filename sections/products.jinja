@@ -1,137 +1,255 @@
-<section class="px-4 pb-6 md:px-16 md:pb-16">
-  <div class="theme-container">
-    <div class="mb-6 md:flex md:items-center md:justify-between">
+<section
+  section-id="{{ sectionId }}"
+  class="px-4 pb-6 md:px-16 md:pb-16"
+>
+  <div class="theme-container space-y-6">
+    <div class="md:flex md:items-center md:justify-between">
       <h2
         class="text-primary text-[32px] leading-[41.6px] [font-variant:all-small-caps] md:text-[40px] md:leading-[48px]"
       >
-        PRODUCTS
+        {{ settings.title }}
       </h2>
-      <a
-        href="#"
-        class="text-primary hidden gap-2 px-4 py-3 text-[16px] leading-[24px] md:flex"
-      >
-        View all
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
+      {% if settings.display_more %}
+        <a
+          href="#"
+          class="text-primary hidden gap-2 px-4 py-3 text-[16px] leading-[24px] md:flex"
         >
-          <path
-            d="M13.9745 6.14648C14.1952 6.14826 14.3883 6.22853 14.5536 6.38965V6.39062L19.5351 11.3652C19.6246 11.4547 19.6886 11.5478 19.7285 11.6436C19.7683 11.7394 19.7889 11.8415 19.789 11.9502C19.789 12.0591 19.7683 12.1618 19.7285 12.2578C19.6886 12.3535 19.6245 12.4467 19.5351 12.5361L14.579 17.4854C14.4135 17.647 14.2209 17.7287 13.9999 17.7305C13.7792 17.7324 13.5882 17.6515 13.4267 17.4863V17.4854C13.2617 17.3242 13.1797 17.1287 13.1796 16.8975C13.1796 16.6661 13.2615 16.4681 13.4267 16.3027L16.9521 12.7773H4.70209C4.46362 12.7773 4.26671 12.6986 4.11029 12.542C3.95387 12.3854 3.87592 12.1884 3.87592 11.9502C3.87601 11.7122 3.954 11.5159 4.11029 11.3594C4.26671 11.2028 4.46362 11.1241 4.70209 11.124H16.9521L16.9091 11.0811L13.3769 7.54297C13.2118 7.38177 13.1335 7.1902 13.1415 6.96777C13.1496 6.74456 13.2365 6.55052 13.4023 6.38477C13.5636 6.22362 13.7538 6.14461 13.9745 6.14648Z"
-            fill="#0B0A09"
-            stroke="#0B0A09"
-            stroke-width="0.05"
-          ></path>
-        </svg>
-      </a>
+          View all
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+          >
+            <path
+              d="M13.9745 6.14648C14.1952 6.14826 14.3883 6.22853 14.5536 6.38965V6.39062L19.5351 11.3652C19.6246 11.4547 19.6886 11.5478 19.7285 11.6436C19.7683 11.7394 19.7889 11.8415 19.789 11.9502C19.789 12.0591 19.7683 12.1618 19.7285 12.2578C19.6886 12.3535 19.6245 12.4467 19.5351 12.5361L14.579 17.4854C14.4135 17.647 14.2209 17.7287 13.9999 17.7305C13.7792 17.7324 13.5882 17.6515 13.4267 17.4863V17.4854C13.2617 17.3242 13.1797 17.1287 13.1796 16.8975C13.1796 16.6661 13.2615 16.4681 13.4267 16.3027L16.9521 12.7773H4.70209C4.46362 12.7773 4.26671 12.6986 4.11029 12.542C3.95387 12.3854 3.87592 12.1884 3.87592 11.9502C3.87601 11.7122 3.954 11.5159 4.11029 11.3594C4.26671 11.2028 4.46362 11.1241 4.70209 11.124H16.9521L16.9091 11.0811L13.3769 7.54297C13.2118 7.38177 13.1335 7.1902 13.1415 6.96777C13.1496 6.74456 13.2365 6.55052 13.4023 6.38477C13.5636 6.22362 13.7538 6.14461 13.9745 6.14648Z"
+              fill="#0B0A09"
+              stroke="#0B0A09"
+              stroke-width="0.05"
+            ></path>
+          </svg>
+        </a>
+      {% endif %}
     </div>
-    <div class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-      <div class="group relative flex flex-col gap-4">
-        <div class="relative aspect-[3/4] w-full overflow-hidden rounded">
-          <img
-            src="{{ "images/categories-img-1.png" | asset_url }}"
-            alt="Woman in cream linen wrap dress holding ceramic vase"
-            class="h-full w-full object-cover object-center"
-          />
+    <div class="embla">
+      <div class="embla__viewport overflow-hidden">
+        <div class="embla__container">
+          {% for product in settings.products.results %}
+            <div class="embla__slide">
+              <div
+                class="group relative flex flex-col gap-4"
+                {% if product.is_infinite == false and product.quantity <= 0 %}
+                  data-out-of-stock
+                {% endif %}
+              >
+                <div class="relative aspect-[3/4] w-full overflow-hidden rounded">
+                  <img
+                    {% if product.images or product.videos %}
+                      src="{{ product.main_image.image.small if product.main_image else '' }}"
+                    {% else %}
+                      src="{{ image_url(('images/product-img.svg' | asset_url), w=235, q=100, f='auto') }}"
+                    {% endif %}
+                    alt="{{ product.name }}"
+                    class="h-full w-full object-cover object-center"
+                    {% if loop.index0 > 0 %}loading="lazy"{% endif %}
+                  />
 
-          <div class="absolute top-4 left-4 flex flex-col gap-2">
-            <span class="bg-background w-fit rounded px-2 text-[16px] leading-normal [font-variant:all-small-caps]">
-              NEW
-            </span>
-            <span class="bg-background w-fit rounded px-2 text-[16px] leading-normal [font-variant:all-small-caps]">
-              SELLING FAST
-            </span>
-          </div>
-          <button class="bg-background/10 absolute right-4 bottom-4 rounded p-2 backdrop-blur-xs">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              class="text-primary"
-              fill="none"
-            >
-              <path
-                d="M12.335 4.90039C14.4876 2.96816 17.8154 3.03282 19.8887 5.11035C21.9615 7.18744 22.0335 10.494 20.1104 12.6533L12 20.7773L3.88867 12.6533C1.96591 10.4938 2.04034 7.18232 4.11133 5.11133C6.18662 3.03604 9.50781 2.96534 11.667 4.90039L12.001 5.2002L12.335 4.90039ZM19.1807 5.81738C17.4935 4.12681 14.7711 4.05738 13.0029 5.64453L12.001 6.54297L11 5.64551C9.22716 4.05645 6.50963 4.12709 4.81836 5.81836C3.14268 7.49404 3.05766 10.1774 4.60254 11.9512L4.61426 11.9648L4.62598 11.9766L11.6465 19.0078L12 19.3623L12.3535 19.0078L19.374 11.9766L19.3857 11.9648L19.3975 11.9512C20.9431 10.1765 20.8577 7.4981 19.1807 5.81738Z"
-                fill="#0B0A09"
-                stroke="#0B0A09"
-              ></path>
-            </svg>
-          </button>
-        </div>
-        <div>
-          <h3 class="text-[20px] leading-[28px] [font-variant:all-small-caps]">LINEN BLEND SLIP</h3>
-          <div class="flex items-center">
-            <div class="flex">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="17"
-                viewBox="0 0 16 17"
-                fill="none"
-              >
-                <path
-                  d="M7.99998 12.346L12.12 14.8327L11.0266 10.146L14.6666 6.99268L9.87331 6.58602L7.99998 2.16602L6.12665 6.58602L1.33331 6.99268L4.97331 10.146L3.87998 14.8327L7.99998 12.346Z"
-                  fill="#FFB400"
-                ></path>
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="17"
-                viewBox="0 0 16 17"
-                fill="none"
-              >
-                <path
-                  d="M7.99998 12.346L12.12 14.8327L11.0266 10.146L14.6666 6.99268L9.87331 6.58602L7.99998 2.16602L6.12665 6.58602L1.33331 6.99268L4.97331 10.146L3.87998 14.8327L7.99998 12.346Z"
-                  fill="#FFB400"
-                ></path>
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="17"
-                viewBox="0 0 16 17"
-                fill="none"
-              >
-                <path
-                  d="M7.99998 12.346L12.12 14.8327L11.0266 10.146L14.6666 6.99268L9.87331 6.58602L7.99998 2.16602L6.12665 6.58602L1.33331 6.99268L4.97331 10.146L3.87998 14.8327L7.99998 12.346Z"
-                  fill="#FFB400"
-                ></path>
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="17"
-                viewBox="0 0 16 17"
-                fill="none"
-              >
-                <path
-                  d="M7.99998 12.346L12.12 14.8327L11.0266 10.146L14.6666 6.99268L9.87331 6.58602L7.99998 2.16602L6.12665 6.58602L1.33331 6.99268L4.97331 10.146L3.87998 14.8327L7.99998 12.346Z"
-                  fill="#FFB400"
-                ></path>
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="17"
-                viewBox="0 0 16 17"
-                fill="none"
-              >
-                <path
-                  d="M7.99998 12.346L12.12 14.8327L11.0266 10.146L14.6666 6.99268L9.87331 6.58602L7.99998 2.16602L6.12665 6.58602L1.33331 6.99268L4.97331 10.146L3.87998 14.8327L7.99998 12.346Z"
-                  fill="#FFB400"
-                ></path>
-              </svg>
+                  <div class="absolute top-4 left-4 flex flex-col gap-2">
+                    <span
+                      class="bg-foreground hidden w-fit rounded px-2 py-1 text-[16px] leading-normal [font-variant:all-small-caps] group-data-[out-of-stock]:block"
+                    >
+                      OUT OF STOCK
+                    </span>
+                    <span
+                      class="bg-background w-fit rounded px-2 text-[16px] leading-normal [font-variant:all-small-caps]"
+                    >
+                      NEW
+                    </span>
+                    <span
+                      class="bg-background w-fit rounded px-2 text-[16px] leading-normal [font-variant:all-small-caps]"
+                    >
+                      SELLING FAST
+                    </span>
+                  </div>
+                  {% if store.settings.products.wishlist_enabled %}
+                    <button class="bg-background/10 absolute right-4 bottom-4 rounded p-2 backdrop-blur-xs">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        class="text-primary"
+                        fill="none"
+                      >
+                        <path
+                          d="M12.335 4.90039C14.4876 2.96816 17.8154 3.03282 19.8887 5.11035C21.9615 7.18744 22.0335 10.494 20.1104 12.6533L12 20.7773L3.88867 12.6533C1.96591 10.4938 2.04034 7.18232 4.11133 5.11133C6.18662 3.03604 9.50781 2.96534 11.667 4.90039L12.001 5.2002L12.335 4.90039ZM19.1807 5.81738C17.4935 4.12681 14.7711 4.05738 13.0029 5.64453L12.001 6.54297L11 5.64551C9.22716 4.05645 6.50963 4.12709 4.81836 5.81836C3.14268 7.49404 3.05766 10.1774 4.60254 11.9512L4.61426 11.9648L4.62598 11.9766L11.6465 19.0078L12 19.3623L12.3535 19.0078L19.374 11.9766L19.3857 11.9648L19.3975 11.9512C20.9431 10.1765 20.8577 7.4981 19.1807 5.81738Z"
+                          fill="#0B0A09"
+                          stroke="#0B0A09"
+                        ></path>
+                      </svg>
+                    </button>
+                  {% endif %}
+                </div>
+                <div>
+                  <h3 class="text-[20px] leading-[28px] [font-variant:all-small-caps]">{{ product.name }}</h3>
+                  {% if store.settings.products.reviews_enabled %}
+                    {% if product.rating %}
+                      <div class="flex items-center gap-2">
+                        {% set rating = product.rating.average %}
+                        {% include 'components/rating-stars.jinja' %}
+                        {% if product.rating.total_count > 0 %}
+                          <span class="text-secondary text-[14px] leading-[1.5]"
+                            >({{ product.rating.total_count }})</span
+                          >
+                        {% endif %}
+                      </div>
+                    {% endif %}
+                  {% endif %}
+                  <div class="flex flex-wrap items-center gap-2">
+                    <p class="text-primary text-[16px] leading-[24px]">{{ product.formatted_price }}</p>
+                    {% if product.formatted_sale_price is not none %}
+                      <span class="text-destructive text-[14px] leading-[21px] line-through">
+                        {{ product.formatted_sale_price }}
+                      </span>
+                    {% endif %}
+                    <span
+                      class="inline-flex items-center rounded-md bg-[#DDF8DC] px-2 py-1 text-base leading-normal [line-height:normal] text-[#649560] [font-variant:all-small-caps]"
+                    >
+                      {{ _("Discount") }} {{ product.discount_percentage }}%
+                    </span>
+                  </div>
+                </div>
+                {% if product.is_infinite == false and product.quantity <= 0 %}
+                  <button
+                    disabled
+                    class="border-primary text-primary w-full cursor-not-allowed rounded border px-4 py-3 opacity-50"
+                  >
+                    Add to bag
+                  </button>
+                {% else %}
+                  <button class="border-primary text-primary w-full rounded border px-4 py-3">Select option</button>
+                {% endif %}
+              </div>
             </div>
-            <span class="text-secondary ml-2 text-[14px] leading-[21px]"> (200) </span>
-          </div>
-          <p class="text-primary text-[16px] leading-[24px]">From 560 SAR</p>
+          {% endfor %}
         </div>
-        <button class="border-primary text-primary w-full rounded border px-4 py-3">Select option</button>
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <div class="embla__progress h-1 w-full rounded-full bg-[#F6F5F4]">
+        <div
+          class="embla__progress-bar h-1 rounded-full bg-[#A89C90]"
+          style="width: 0%"
+        ></div>
+      </div>
+      <div class="hidden items-center gap-2 md:flex">
+        <button
+          class="embla__prev p-2.5"
+          aria-label="Previous"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="25"
+            viewBox="0 0 24 25"
+            fill="none"
+          >
+            <path
+              d="M14.0371 6.57422C14.2664 6.57422 14.4635 6.65601 14.6289 6.82129C14.7943 6.9867 14.877 7.18368 14.877 7.41309C14.877 7.64249 14.7943 7.83948 14.6289 8.00488L10.2754 12.3574L10.2578 12.376L10.2754 12.3936L14.6289 16.7461C14.7942 16.9114 14.8722 17.1039 14.8643 17.3242C14.8562 17.5452 14.77 17.7386 14.6045 17.9043C14.4391 18.0697 14.242 18.1523 14.0127 18.1523C13.7833 18.1523 13.5863 18.0697 13.4209 17.9043L8.47656 12.9609C8.38711 12.8715 8.32305 12.7784 8.2832 12.6826C8.24328 12.5868 8.22368 12.4846 8.22363 12.376C8.22363 12.2671 8.24319 12.1643 8.2832 12.0684C8.32306 11.9726 8.38709 11.8795 8.47656 11.79L13.4463 6.82129C13.6115 6.65617 13.808 6.57431 14.0371 6.57422Z"
+              fill="#0B0A09"
+              stroke="#0B0A09"
+              stroke-width="0.05"
+            ></path>
+          </svg>
+        </button>
+
+        <button
+          class="embla__next p-2.5"
+          aria-label="Next"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="25"
+            viewBox="0 0 24 25"
+            fill="none"
+          >
+            <path
+              d="M9.38715 6.59961C9.61646 6.59961 9.81358 6.6814 9.97894 6.84668L14.9233 11.791C15.0125 11.8803 15.0768 11.9728 15.1166 12.0684C15.1566 12.1643 15.1772 12.2671 15.1772 12.376C15.1772 12.4847 15.1565 12.5867 15.1166 12.6826V12.6836C15.0768 12.7792 15.0125 12.8716 14.9233 12.9609L9.95453 17.9297C9.78925 18.095 9.59669 18.173 9.3764 18.165C9.15538 18.157 8.96206 18.0709 8.79633 17.9053C8.63092 17.7399 8.54828 17.5429 8.54828 17.3135C8.54828 17.0841 8.63092 16.8871 8.79633 16.7217L13.142 12.376L8.77094 8.00488C8.60561 7.83951 8.52752 7.64719 8.53558 7.42676C8.5437 7.20565 8.63055 7.01245 8.79633 6.84668C8.96158 6.68156 9.15804 6.5997 9.38715 6.59961Z"
+              fill="#0B0A09"
+              stroke="#0B0A09"
+              stroke-width="0.05"
+            ></path>
+          </svg>
+        </button>
       </div>
     </div>
   </div>
 </section>
+
+<style>
+  [section-id="{{ sectionId }}"] .embla {
+    --slide-spacing: 1rem; /* 16px gap from design */
+    --slide-size: 320px; /* Mobile card width */
+  }
+
+  [section-id="{{ sectionId }}"] .embla__container {
+    display: flex;
+    touch-action: pan-y pinch-zoom;
+    margin-inline-start: calc(var(--slide-spacing) * -1);
+  }
+
+  [section-id="{{ sectionId }}"] .embla__slide {
+    transform: translate3d(0, 0, 0);
+    flex: 0 0 var(--slide-size);
+    min-width: 0;
+    padding-inline-start: var(--slide-spacing);
+  }
+
+  @media (min-width: 1024px) {
+    [section-id="{{ sectionId }}"] .embla {
+      --slide-size: 380px; /* Desktop card width */
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    const section = document.querySelector('[section-id="{{ sectionId }}"]');
+    if (!section) return;
+
+    const emblaRoot = section.querySelector(".embla");
+    const viewport = emblaRoot.querySelector(".embla__viewport");
+    const container = emblaRoot.querySelector(".embla__container");
+    const prevBtn = section.querySelector(".embla__prev");
+    const nextBtn = section.querySelector(".embla__next");
+    const progressBar = section.querySelector(".embla__progress-bar");
+
+    if (!container || container.children.length <= 1) return;
+
+    const embla = EmblaCarousel(viewport, {
+      direction: document.dir === "rtl" ? "rtl" : "ltr",
+      loop: false,
+      align: "start",
+      slidesToScroll: 1,
+      skipSnaps: false,
+      containScroll: "trimSnaps"
+    });
+
+    if (prevBtn) prevBtn.onclick = () => embla.scrollPrev();
+    if (nextBtn) nextBtn.onclick = () => embla.scrollNext();
+
+    const clamp = (n, min, max) => Math.max(min, Math.min(n, max));
+    const updateProgress = () => {
+      const p = clamp(embla.scrollProgress(), 0, 1);
+      if (progressBar) progressBar.style.width = `${p * 100}%`;
+      if (prevBtn) prevBtn.disabled = !embla.canScrollPrev();
+      if (nextBtn) nextBtn.disabled = !embla.canScrollNext();
+    };
+
+    embla.on("init", updateProgress);
+    embla.on("scroll", updateProgress);
+    embla.on("reInit", updateProgress);
+  })();
+</script>

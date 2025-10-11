@@ -1,0 +1,45 @@
+{
+  "section_id": "uuid",
+  "template": "sections/products.jinja",
+  "name": {
+    "ar": "قائمة المنتجات",
+    "en": "Products"
+  },
+  "settings": [
+    {
+      "id": "title",
+      "type": "text",
+      "label": {
+        "ar": "العنوان",
+        "en": "Title"
+      },
+      "default": "Featured Products"
+    },
+    {
+      "id": "products",
+      "type": "products",
+      "label": {
+        "ar": "اختر قائمة المنتجات",
+        "en": "Select Products"
+      }
+    },
+    {
+      "id": "more_text",
+      "type": "text",
+      "label": {
+        "ar": "نص زر المزيد",
+        "en": "More Button Text"
+      },
+      "default": "View All"
+    },
+    {
+      "id": "display_more",
+      "type": "checkbox",
+      "label": {
+        "ar": "عرض زر المزيد",
+        "en": "Display More Button"
+      },
+      "default": true
+    }
+  ]
+}
