@@ -1,0 +1,76 @@
+{# Native Select Component with Floating Label #}
+{% set select_id = id|default(name ~ '-' ~ range(1000, 9999)|random) %}
+
+<div class="{{ wrapper_class|default('') }}">
+  <!-- Select Container -->
+  <div
+    class="peer focus-within:border-primary has-[select:user-invalid]:border-destructive relative flex h-12 items-center gap-3 rounded border border-[#545352] px-3 transition-all focus-within:border-2 hover:border-2 has-[select:disabled]:border-[#DADADA] has-[select:disabled]:bg-[#F2F2F2] has-[select:user-invalid]:border-2"
+  >
+    <!-- Select Area with Floating Label -->
+    <div class="relative flex-1">
+      <select
+        id="{{ select_id }}"
+        name="{{ name }}"
+        {% if required %}required{% endif %}
+        {% if disabled %}disabled{% endif %}
+        {% if autocomplete %}autocomplete="{{ autocomplete }}"{% endif %}
+        {% if multiple %}multiple{% endif %}
+        class="peer text-primary {{ select_class|default('') }} w-full appearance-none bg-transparent pt-4 pb-0 text-base leading-[1.5] outline-none disabled:cursor-not-allowed disabled:text-[#B5B5B5]"
+        {{ attrs|default('')|safe }}
+      >
+        <!-- Placeholder option for floating label behavior -->
+        <option
+          value=""
+          disabled
+          {% if not value %}selected{% endif %}
+          hidden
+        ></option>
+
+        <!-- Options -->
+        {% if options is defined and options is iterable and options is not string %}
+          {% for option in options %}
+            <option
+              value="{{ option.value }}"
+              {% if value == option.value or (option.selected|default(false)) %}selected{% endif %}
+              {% if option.disabled|default(false) %}disabled{% endif %}
+            >
+              {{ option.label }}
+            </option>
+          {% endfor %}
+        {% endif %}
+      </select>
+
+      <label
+        for="{{ select_id }}"
+        class="peer-user-invalid:text-destructive pointer-events-none absolute start-0 top-1/2 -translate-y-1/2 text-base text-[#858484] transition-all peer-focus:top-0 peer-focus:translate-y-0 peer-focus:text-xs peer-disabled:text-[#B5B5B5] peer-has-[option:checked:not([value=''])]:top-0 peer-has-[option:checked:not([value=''])]:translate-y-0 peer-has-[option:checked:not([value=''])]:text-xs"
+      >
+        {{ label }}{% if required %}<span class="text-destructive">*</span>{% endif %}
+      </label>
+    </div>
+
+    <!-- Dropdown Icon -->
+    <div class="pointer-events-none shrink-0 text-[#858484]">
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 20 20"
+        fill="none"
+      >
+        <path
+          d="M5 7.5L10 12.5L15 7.5"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </div>
+  </div>
+
+  <!-- Caption / Error Message -->
+  {% if caption or error_message %}
+    <p class="peer-has-[select:user-invalid]:text-destructive mt-1.5 text-xs leading-[1.5] text-[#858484]">
+      {{ error_message or caption }}
+    </p>
+  {% endif %}
+</div>
