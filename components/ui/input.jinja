@@ -1,0 +1,53 @@
+{# Text Input Component with Floating Label, Icons, and States #}
+{% set input_id = id|default(name ~ '-' ~ range(1000, 9999)|random) %}
+
+<div class="{{ wrapper_class|default('') }}">
+  <!-- Input Container -->
+  <div
+    class="peer relative flex h-12 items-center gap-3 rounded border border-[#545352] px-3 transition-all hover:border-2 focus-within:border-2 focus-within:border-primary has-[:invalid]:border-2 has-[:invalid]:border-destructive has-[:disabled]:border-[#DADADA] has-[:disabled]:bg-[#F2F2F2]"
+  >
+    <!-- Left Icon (Optional) -->
+    {% if icon_left %}
+      <div class="shrink-0 text-[#858484] [&>svg]:size-5">{{ icon_left|safe }}</div>
+    {% endif %}
+
+    <!-- Input Area with Floating Label -->
+    <div class="relative flex-1">
+      <input
+        type="{{ type|default('text') }}"
+        id="{{ input_id }}"
+        name="{{ name }}"
+        value="{{ value|default('') }}"
+        placeholder=" "
+        {% if required %}required{% endif %}
+        {% if disabled %}disabled{% endif %}
+        {% if readonly %}readonly{% endif %}
+        {% if autocomplete %}autocomplete="{{ autocomplete }}"{% endif %}
+        {% if minlength %}minlength="{{ minlength }}"{% endif %}
+        {% if maxlength %}maxlength="{{ maxlength }}"{% endif %}
+        {% if pattern %}pattern="{{ pattern }}"{% endif %}
+        class="peer text-primary {{ input_class|default('') }} w-full bg-transparent pt-4 pb-0 text-base leading-[1.5] outline-none disabled:cursor-not-allowed disabled:text-[#B5B5B5]"
+        {{ attrs|default('')|safe }}
+      />
+
+      <label
+        for="{{ input_id }}"
+        class="pointer-events-none absolute start-0 text-[#858484] transition-all peer-invalid:text-destructive peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:translate-y-0 peer-focus:text-xs peer-disabled:text-[#B5B5B5] peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-xs"
+      >
+        {{ label }}{% if required %}<span class="text-destructive">*</span>{% endif %}
+      </label>
+    </div>
+
+    <!-- Right Icon (Optional) -->
+    {% if icon_right %}
+      <div class="shrink-0 text-[#858484] [&>svg]:size-5">{{ icon_right|safe }}</div>
+    {% endif %}
+  </div>
+
+  <!-- Caption / Error Message -->
+  {% if caption or error_message %}
+    <p class="mt-1.5 text-xs leading-[1.5] text-[#858484] peer-has-[:invalid]:text-destructive">
+      {{ error_message or caption }}
+    </p>
+  {% endif %}
+</div>
