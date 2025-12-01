@@ -1,0 +1,64 @@
+{# Product Options Component - Button Group Style #}
+{# Parameters: options (array of option objects), product (for pre-selecting values and parent ID) #}
+{% if options %}
+  {# Hidden parent ID for variant products #}
+  {% if product and product.has_variants %}
+    <input
+      id="product-parent-id"
+      type="hidden"
+      value="{{ product.id }}"
+    />
+  {% endif %}
+
+  <div id="product-variants-options">
+    {% for option in options %}
+      {# Capture outer loop index before inner loop #}
+      {% set option_index = loop.index0 %}
+      <div
+        class="grid w-full items-center gap-2"
+        index="{{ option_index }}"
+      >
+        {# Label #}
+        {% with for=option.name|replace(' ', '_')|lower, content=option.name %}
+          {% include 'components/ui/label.jinja' %}
+        {% endwith %}
+
+        {# Build options array for button-group #}
+        {% set ns = namespace(button_options=[]) %}
+        {% for choice in option.choices %}
+          {% set is_selected = false %}
+          {# Check if this choice is selected (for products with pre-selected options) #}
+          {% if product and product.options %}
+            {% if product.selected_product and product.selected_product.attributes and product.selected_product.attributes[option_index] %}
+              {% if product.selected_product.attributes[option_index].value == choice %}
+                {% set is_selected = true %}
+              {% endif %}
+            {% endif %}
+          {% endif %}
+
+          {%
+            set new_option = {
+              'label': choice,
+              'value': choice,
+              'checked': is_selected,
+              'onclick': 'productOptionListItemClicked(event)'
+            }
+          %}
+          {% set ns.button_options = ns.button_options + [new_option] %}
+        {% endfor %}
+
+        {# Render button group with spacing #}
+        {%
+          with
+          name=option.name|replace(' ', '_')|lower,
+          options=ns.button_options,
+          separated=true,
+          wrapper_class='gap-2',
+          attrs='data-option-id="' ~ option.id ~ '" data-option-name="' ~ option.name ~ '"'
+        %}
+          {% include 'components/ui/button-group.jinja' %}
+        {% endwith %}
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
