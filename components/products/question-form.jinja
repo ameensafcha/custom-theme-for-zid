@@ -1,0 +1,114 @@
+{#
+  Product Question Form Component
+
+  Parameters:
+  - product: Product object for API submission
+#}
+{% if product %}
+  <div class="border-border mt-4 border-t pt-4">
+    <h3 class="text-primary mb-4 text-[16px] leading-[24px] font-semibold">{{ _("Ask your question") }}</h3>
+
+    <form
+      id="question-form"
+      data-product-id="{{ product.id }}"
+      data-sending-text="{{ _('Sending...') }}"
+      data-success-message="{{ _('Your question has been sent successfully. You will receive a notification if it is answered.') }}"
+      data-success-title="{{ _('Sent Successfully') }}"
+      data-error-message="{{ _('Failed to send your question. Please try again.') }}"
+      data-error-title="{{ _('Error') }}"
+      class="flex flex-col gap-4"
+    >
+      {# Email and Name Row #}
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+        {# Email Input #}
+        <div class="grid w-full items-center gap-2">
+          {% with for='question_email', content=_('Email'), required=true %}
+            {% include 'components/ui/label.jinja' %}
+          {% endwith %}
+          {%
+            with
+            id='question_email',
+            name='question_email',
+            type='email',
+            required=true,
+            autocomplete='email'
+          %}
+            {% include 'components/ui/input.jinja' %}
+          {% endwith %}
+          <p
+            id="email-error"
+            class="text-destructive hidden text-[12px] leading-[1.5]"
+          >
+            {{ _("Email is incorrect") }}
+          </p>
+        </div>
+
+        {# Name Input #}
+        <div class="grid w-full items-center gap-2">
+          {% with for='question_name', content=_('Name'), required=true %}
+            {% include 'components/ui/label.jinja' %}
+          {% endwith %}
+          {%
+            with
+            id='question_name',
+            name='question_name',
+            required=true,
+            autocomplete='name'
+          %}
+            {% include 'components/ui/input.jinja' %}
+          {% endwith %}
+          <p
+            id="name-error"
+            class="text-destructive hidden text-[12px] leading-[1.5]"
+          >
+            {{ _("This field is required") }}
+          </p>
+        </div>
+      </div>
+
+      {# Question Textarea #}
+      <div class="grid w-full items-center gap-2">
+        {% with for='question_text', content=_('Your question'), required=true %}
+          {% include 'components/ui/label.jinja' %}
+        {% endwith %}
+        <textarea
+          id="question_text"
+          name="question_text"
+          placeholder="{{ _('Enter your question here') }}"
+          rows="3"
+          required
+          class="border-input placeholder:text-secondary focus:border-primary w-full resize-none rounded border px-3 py-3 text-[16px] leading-[1.5] transition-[border-color,border-width] outline-none hover:border-2 focus:border-2"
+        ></textarea>
+        <p
+          id="question-error"
+          class="text-destructive hidden text-[12px] leading-[1.5]"
+        >
+          {{ _("This field is required") }}
+        </p>
+      </div>
+
+      {# Anonymous Checkbox #}
+      {%
+        with
+        label=_('Do not show my name in the comments'),
+        id='is_anonymous',
+        name='is_anonymous'
+      %}
+        {% include 'components/ui/checkbox.jinja' %}
+      {% endwith %}
+
+      {# Submit Button #}
+      {%
+        with
+        content=_('Ask question'),
+        variant='filled',
+        size='md',
+        type='submit',
+        class='self-start',
+        attrs='id="submit-question-btn"'
+      %}
+        {% include 'components/ui/button.jinja' %}
+      {% endwith %}
+    </form>
+  </div>
+{% endif %}
