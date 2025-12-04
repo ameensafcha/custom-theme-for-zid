@@ -7,10 +7,7 @@
       class="absolute inset-0 -z-10 bg-cover bg-center bg-no-repeat md:bg-bottom"
       style="background-image:url('{{ settings.background_image }}')"
     >
-      <div
-        class="bg-primary absolute inset-0"
-        style="opacity: {{ settings.overlay_opacity | default(50) / 100 }}"
-      ></div>
+      <div class="absolute inset-0 bg-white/10"></div>
     </div>
   {% endif %}
   <div class="theme-container">
@@ -18,89 +15,61 @@
       <div class="space-y-6 lg:col-span-6">
         <div>
           {% if settings.badge_text %}
-            <span class="text-[16px] leading-normal [font-variant:all-small-caps]">{{ settings.badge_text }}</span>
+            <span class="text-foreground text-tagline uppercase">{{ settings.badge_text }}</span>
           {% endif %}
           {% if settings.title %}
-            <h2
-              class="text-[40px] leading-[48px] uppercase [font-variant:all-small-caps] md:text-[56px] md:leading-[67.2px]"
-            >
-              {{ settings.title }}
-            </h2>
+            <h2 class="text-foreground text-h3 md:text-h1 uppercase">{{ settings.title }}</h2>
           {% endif %}
           {% if settings.description %}
-            <p class="text-[20px] leading-[28px] [font-variant:all-small-caps]">{{ settings.description }}</p>
+            <p class="text-foreground text-h6">{{ settings.description }}</p>
           {% endif %}
         </div>
         {% if settings.button_text %}
           <a
             href="{{ settings.button_url | default('#') }}"
-            class="bg-primary text-primary-foreground inline-block rounded px-4 py-3"
+            class="bg-primary text-primary-foreground text-body1 ring-primary hover:bg-primary/90 inline-block rounded px-6 py-3 ring-1 hover:ring-2"
           >
             {{ settings.button_text }}
           </a>
         {% endif %}
       </div>
       <div class="lg:col-span-6">
-        <div class="countdown-timer flex items-stretch gap-2 md:gap-4 lg:justify-end">
+        <div class="countdown-timer flex items-stretch gap-4 lg:justify-end">
           <div
-            class="bg-background/30 flex min-w-16 flex-col items-center justify-center rounded p-2 text-center backdrop-blur-xs md:min-w-24"
+            class="flex min-w-16 flex-col items-center justify-center rounded bg-white/30 p-2 text-center backdrop-blur-sm md:min-w-[98px]"
           >
-            <span
-              class="days-value text-primary text-[32px] leading-[41.6px] [font-variant:all-small-caps] md:text-[48px] md:leading-[57.6px]"
-            >
-              00
-            </span>
-            <span class="text-primary text-[16px] leading-normal [font-variant:all-small-caps]">
-              {{ 'يوم' if session.lang == 'ar' else 'Day' }}
-            </span>
+            <span class="days-value text-foreground text-h3 md:text-h2"> 00 </span>
+            <span class="text-foreground text-tagline uppercase"> {{ _('Day') }} </span>
           </div>
           <span
             aria-hidden="true"
-            class="my-2 w-px bg-white/60"
+            class="bg-border-disabled my-2 w-px"
           ></span>
           <div
-            class="bg-background/30 flex min-w-16 flex-col items-center justify-center rounded p-2 text-center backdrop-blur-xs md:min-w-24"
+            class="flex min-w-16 flex-col items-center justify-center rounded bg-white/30 p-2 text-center backdrop-blur-sm md:min-w-[98px]"
           >
-            <span
-              class="hours-value text-primary text-[32px] leading-[41.6px] [font-variant:all-small-caps] md:text-[48px] md:leading-[57.6px]"
-            >
-              00
-            </span>
-            <span class="text-primary text-[16px] leading-normal [font-variant:all-small-caps]">
-              {{ 'ساعة' if session.lang == 'ar' else 'Hour' }}
-            </span>
+            <span class="hours-value text-foreground text-h3 md:text-h2"> 00 </span>
+            <span class="text-foreground text-tagline uppercase"> {{ _('Hour') }} </span>
           </div>
           <span
             aria-hidden="true"
-            class="my-2 w-px bg-white/60"
+            class="bg-border-disabled my-2 w-px"
           ></span>
           <div
-            class="bg-background/30 flex min-w-16 flex-col items-center justify-center rounded p-2 text-center backdrop-blur-xs md:min-w-24"
+            class="flex min-w-16 flex-col items-center justify-center rounded bg-white/30 p-2 text-center backdrop-blur-sm md:min-w-[98px]"
           >
-            <span
-              class="minutes-value text-primary text-[32px] leading-[41.6px] [font-variant:all-small-caps] md:text-[48px] md:leading-[57.6px]"
-            >
-              00
-            </span>
-            <span class="text-primary text-[16px] leading-normal [font-variant:all-small-caps]">
-              {{ 'دقيقة' if session.lang == 'ar' else 'Min' }}
-            </span>
+            <span class="minutes-value text-foreground text-h3 md:text-h2"> 00 </span>
+            <span class="text-foreground text-tagline uppercase"> {{ _('Min') }} </span>
           </div>
           <span
             aria-hidden="true"
-            class="my-2 w-px bg-white/60"
+            class="bg-border-disabled my-2 w-px"
           ></span>
           <div
-            class="bg-background/30 flex min-w-16 flex-col items-center justify-center rounded p-2 text-center backdrop-blur-xs md:min-w-24"
+            class="flex min-w-16 flex-col items-center justify-center rounded bg-white/30 p-2 text-center backdrop-blur-sm md:min-w-[98px]"
           >
-            <span
-              class="seconds-value text-primary text-[32px] leading-[41.6px] [font-variant:all-small-caps] md:text-[48px] md:leading-[57.6px]"
-            >
-              00
-            </span>
-            <span class="text-primary text-[16px] leading-normal [font-variant:all-small-caps]">
-              {{ 'ثانية' if session.lang == 'ar' else 'Sec' }}
-            </span>
+            <span class="seconds-value text-foreground text-h3 md:text-h2"> 00 </span>
+            <span class="text-foreground text-tagline uppercase"> {{ _('Sec') }} </span>
           </div>
         </div>
       </div>

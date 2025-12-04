@@ -1,6 +1,6 @@
 <section
   section-id="{{ sectionId }}"
-  class="{% if settings.style_variant == 'compact' %}py-6 md:py-32{% else %}py-6 md:py-0{% endif %} relative flex items-center justify-center overflow-hidden px-4 md:px-16"
+  class="relative flex items-center overflow-hidden px-4 md:px-16"
   data-variant="{{ settings.style_variant | default('default') }}"
 >
   <div
@@ -9,39 +9,35 @@
   >
     <div
       class="bg-primary absolute inset-0"
-      style="opacity: {{ settings.overlay_opacity | default(5) / 100 }}"
+      style="opacity: {{ settings.overlay_opacity | default(20) / 100 }}"
     ></div>
   </div>
-  <div class="theme-container space-y-6">
-    <div>
-      {% if settings.badge_text %}
-        <span class="text-[16px] leading-normal [font-variant:all-small-caps]">{{ settings.badge_text }}</span>
-      {% endif %}
-      {% if settings.is_primary_hero %}
-        <h1
-          class="text-[40px] leading-[48px] uppercase [font-variant:all-small-caps] md:text-[56px] md:leading-[67.2px]"
-        >
-          {{ settings.heading }}
-        </h1>
-      {% else %}
-        <h2
-          class="text-[40px] leading-[48px] uppercase [font-variant:all-small-caps] md:text-[56px] md:leading-[67.2px]"
-        >
-          {{ settings.heading }}
-        </h2>
-      {% endif %}
-      {% if settings.description %}
-        <p class="text-[20px] leading-[28px] [font-variant:all-small-caps]">{{ settings.description }}</p>
+  <div class="theme-container flex max-w-[960px] flex-col gap-20">
+    <div class="flex max-w-[768px] flex-col gap-6">
+      <div class="flex flex-col gap-4">
+        {% if settings.badge_text %}
+          <span class="text-foreground text-tagline">{{ settings.badge_text }}</span>
+        {% endif %}
+        {% if settings.is_primary_hero %}
+          <h1 class="text-foreground text-h3 md:text-h1">{{ settings.heading }}</h1>
+        {% else %}
+          <h2 class="text-foreground text-h3 md:text-h1">{{ settings.heading }}</h2>
+        {% endif %}
+        {% if settings.description %}
+          <p class="text-foreground text-h6">{{ settings.description }}</p>
+        {% endif %}
+      </div>
+      {% if settings.button_text %}
+        <div class="flex gap-4">
+          <a
+            href="{{ settings.button_url | default('#') }}"
+            class="bg-primary text-primary-foreground text-body1 ring-primary hover:bg-primary/90 inline-block rounded px-6 py-3 ring-1 hover:ring-2"
+          >
+            {{ settings.button_text }}
+          </a>
+        </div>
       {% endif %}
     </div>
-    {% if settings.button_text %}
-      <a
-        href="{{ settings.button_url | default('#') }}"
-        class="bg-primary text-primary-foreground inline-block rounded px-4 py-3"
-      >
-        {{ settings.button_text }}
-      </a>
-    {% endif %}
   </div>
   {# prettier-ignore-start #}
   <style>

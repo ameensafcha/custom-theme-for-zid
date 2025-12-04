@@ -23,14 +23,14 @@
   {% if not settings.autoplay %}
     <div class="video-overlay theme-container space-y-6 text-center transition-opacity duration-500">
       {% if settings.title %}
-        <h2 class="text-[40px] leading-[48px] md:text-[56px] md:leading-[67.2px]">{{ settings.title }}</h2>
+        <h2 class="text-foreground text-h3 md:text-h1">{{ settings.title }}</h2>
       {% endif %}
-      <button class="play-button bg-background text-primary rounded-full p-4">
+      <button class="play-button bg-background text-accent rounded-full p-4">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="32"
-          height="33"
-          viewBox="0 0 32 33"
+          height="32"
+          viewBox="0 0 32 32"
           fill="none"
         >
           <path

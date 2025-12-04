@@ -4,11 +4,7 @@
 >
   <div class="theme-container space-y-6">
     {% if settings.title %}
-      <h2
-        class="text-primary text-[32px] leading-[41.6px] [font-variant:all-small-caps] md:text-[40px] md:leading-[48px]"
-      >
-        {{ settings.title }}
-      </h2>
+      <h2 class="text-foreground text-h3">{{ settings.title }}</h2>
     {% endif %}
 
     <div class="embla">
@@ -16,7 +12,7 @@
         <div class="embla__container">
           {% for testimonial in safeget(settings, "testimonials", []) %}
             <div class="embla__slide">
-              <article class="rounded border border-[#A89C90] bg-[#F6F5F4] p-6">
+              <article class="border-accent bg-secondary rounded border p-6">
                 {% if testimonial.rating %}
                   <div
                     class="flex items-center gap-1"
@@ -29,19 +25,20 @@
                         height="24"
                         viewBox="0 0 24 24"
                         fill="none"
+                        class="{% if i < testimonial.rating %}text-foreground{% else %}text-text-disabled{% endif %}"
                       >
                         <path
                           d="M12 18.1704L18.18 21.9004L16.54 14.8704L22 10.1404L14.81 9.53039L12 2.90039L9.19 9.53039L2 10.1404L7.46 14.8704L5.82 21.9004L12 18.1704Z"
-                          fill="{% if i < testimonial.rating %}#FFB400{% else %}#E0E0E0{% endif %}"
+                          fill="currentColor"
                         ></path>
                       </svg>
                     {% endfor %}
                   </div>
                 {% endif %}
 
-                <p class="mt-6 mb-4 text-[16px] leading-[24px]">{{ testimonial.text }}</p>
+                <p class="text-foreground text-body1 mt-6 mb-4">{{ testimonial.text }}</p>
 
-                <h3 class="text-[16px] leading-[24px] font-semibold">{{ testimonial.name }}</h3>
+                <h3 class="text-foreground text-body1 font-semibold">{{ testimonial.name }}</h3>
               </article>
             </div>
           {% endfor %}
@@ -49,16 +46,16 @@
       </div>
     </div>
     <div class="flex items-center gap-2">
-      <div class="embla__progress h-1 w-full rounded-full bg-[#F6F5F4]">
+      <div class="embla__progress bg-secondary h-1 w-full rounded">
         <div
-          class="embla__progress-bar h-1 rounded-full bg-[#A89C90]"
+          class="embla__progress-bar bg-accent h-1 rounded-sm"
           style="width: 0%"
         ></div>
       </div>
       <div class="hidden items-center gap-2 md:flex">
         <button
-          class="embla__prev p-2.5"
-          aria-label="Previous"
+          class="embla__prev flex size-10 items-center justify-center rounded bg-white/10 p-2.5 backdrop-blur-sm disabled:opacity-30"
+          aria-label="{{ _('Previous') }}"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -76,8 +73,8 @@
         </button>
 
         <button
-          class="embla__next p-2.5"
-          aria-label="Next"
+          class="embla__next flex size-10 items-center justify-center rounded bg-white/10 p-2.5 backdrop-blur-sm disabled:opacity-30"
+          aria-label="{{ _('Next') }}"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

@@ -1,6 +1,6 @@
 <section
   section-id="{{ sectionId }}"
-  class="bg-foreground hidden px-4 py-6 md:block md:p-16"
+  class="bg-secondary hidden px-4 py-6 md:block md:p-16"
 >
   <div class="theme-container">
     {% if settings.store_features %}
@@ -14,11 +14,9 @@
               {% if loop.index0 > 0 %}loading="lazy"{% endif %}
             />
             <div class="space-y-2">
-              <h3 class="text-primary text-[24px] leading-[33.6px] [font-variant:all-small-caps]">
-                {{ feature.title }}
-              </h3>
+              <h3 class="text-foreground text-h5">{{ feature.title }}</h3>
               {% if feature.description %}
-                <p class="text-primary text-[16px] leading-[24px]">{{ feature.description }}</p>
+                <p class="text-foreground text-body1">{{ feature.description }}</p>
               {% endif %}
             </div>
           </div>

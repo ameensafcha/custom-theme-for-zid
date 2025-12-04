@@ -1,19 +1,15 @@
 <section
   section-id="{{ sectionId }}"
-  class="px-4 py-6 md:p-16"
+  class="bg-background px-4 py-6 md:p-16"
 >
   <div class="theme-container">
     {% if settings.title %}
-      <h2
-        class="text-primary mb-6 text-[32px] leading-[41.6px] [font-variant:all-small-caps] md:text-[40px] md:leading-[48px]"
-      >
-        {{ settings.title }}
-      </h2>
+      <h2 class="text-foreground text-h4 md:text-h3 mb-6">{{ settings.title }}</h2>
     {% endif %}
     {% if settings.gallery %}
       {% set item_count = settings.gallery | length %}
       <div
-        class="grid grid-cols-2 gap-2 md:grid-cols-4 [&_.media-wrap]:aspect-[4/3] [&[data-items-count='1']]:grid-cols-1 [&[data-items-count='1']]:md:grid-cols-2 [&[data-items-count='2']]:grid-cols-1 [&[data-items-count='2']]:md:grid-cols-2 [&[data-items-count='3']]:auto-rows-[153px] [&[data-items-count='3']]:grid-cols-2 [&[data-items-count='3']]:md:auto-rows-[314px] [&[data-items-count='3']_.media-wrap]:aspect-auto [&[data-items-count='3']_.media-wrap]:h-full [&[data-items-count='3']_.media-wrap]:w-full [&[data-items-count='3']>*:first-child]:col-span-2 [&[data-items-count='3']>*:first-child]:row-span-2 [&[data-items-count='4']]:grid-cols-1 [&[data-items-count='4']]:md:grid-cols-2 [&[data-items-count='5']]:auto-rows-[153px] [&[data-items-count='5']]:grid-cols-2 [&[data-items-count='5']]:md:auto-rows-[314px] [&[data-items-count='5']]:md:grid-cols-4 [&[data-items-count='5']_.media-wrap]:aspect-auto [&[data-items-count='5']_.media-wrap]:h-full [&[data-items-count='5']_.media-wrap]:w-full [&[data-items-count='5']>*:first-child]:col-span-2 [&[data-items-count='5']>*:first-child]:row-span-2"
+        class="grid grid-cols-2 gap-4 md:grid-cols-4 [&_.media-wrap]:aspect-[4/3] [&[data-items-count='1']]:grid-cols-1 [&[data-items-count='1']]:md:grid-cols-2 [&[data-items-count='2']]:grid-cols-1 [&[data-items-count='2']]:md:grid-cols-2 [&[data-items-count='3']]:auto-rows-[153px] [&[data-items-count='3']]:grid-cols-2 [&[data-items-count='3']]:md:auto-rows-[314px] [&[data-items-count='3']_.media-wrap]:aspect-auto [&[data-items-count='3']_.media-wrap]:h-full [&[data-items-count='3']_.media-wrap]:w-full [&[data-items-count='3']>*:first-child]:col-span-2 [&[data-items-count='3']>*:first-child]:row-span-2 [&[data-items-count='4']]:grid-cols-1 [&[data-items-count='4']]:md:grid-cols-2 [&[data-items-count='5']]:auto-rows-[153px] [&[data-items-count='5']]:grid-cols-2 [&[data-items-count='5']]:md:auto-rows-[314px] [&[data-items-count='5']]:md:grid-cols-4 [&[data-items-count='5']_.media-wrap]:aspect-auto [&[data-items-count='5']_.media-wrap]:h-full [&[data-items-count='5']_.media-wrap]:w-full [&[data-items-count='5']>*:first-child]:col-span-2 [&[data-items-count='5']>*:first-child]:row-span-2"
         data-items-count="{{ item_count }}"
       >
         {% for item in settings.gallery %}
@@ -29,11 +25,7 @@
             {% if item.image_title or item.primary_button_text or item.secondary_button_text %}
               <div class="absolute inset-0 flex flex-col items-center justify-center space-y-6">
                 {% if item.image_title %}
-                  <h3
-                    class="text-primary text-center text-[24px] leading-[33.6px] [font-variant:all-small-caps] md:text-[32px] md:leading-[41.6px]"
-                  >
-                    {{ item.image_title }}
-                  </h3>
+                  <h3 class="text-foreground text-h5 md:text-h4 text-center">{{ item.image_title }}</h3>
                 {% endif %}
 
                 {% if item.primary_button_text or item.secondary_button_text %}
@@ -41,7 +33,7 @@
                     {% if item.primary_button_text and item.primary_button_url %}
                       <a
                         href="{{ item.primary_button_url }}"
-                        class="text-background inline-flex items-center justify-center rounded border border-[#0B0A09] bg-[#0B0A09] px-4 py-3 text-[16px] leading-[24px] transition-colors hover:bg-[#0B0A09]/90"
+                        class="bg-primary text-primary-foreground text-body1 ring-primary hover:bg-primary/90 inline-flex items-center justify-center rounded px-6 py-3 ring-1 transition-all hover:ring-2"
                       >
                         {{ item.primary_button_text }}
                       </a>
@@ -49,7 +41,7 @@
                     {% if item.secondary_button_text and item.secondary_button_url %}
                       <a
                         href="{{ item.secondary_button_url }}"
-                        class="text-primary inline-flex items-center justify-center rounded border border-[#0B0A09] bg-transparent px-4 py-3 text-[16px] leading-[24px] transition-colors hover:bg-[#0B0A09] hover:text-[#fff]"
+                        class="text-foreground text-body1 ring-foreground inline-flex items-center justify-center rounded bg-transparent px-6 py-3 ring-1 transition-all hover:ring-2"
                       >
                         {{ item.secondary_button_text }}
                       </a>

@@ -5,16 +5,12 @@
   <div class="theme-container space-y-6">
     <div class="md:flex md:items-center md:justify-between">
       {% if settings.title %}
-        <h2
-          class="text-primary text-[32px] leading-[41.6px] [font-variant:all-small-caps] md:text-[40px] md:leading-[48px]"
-        >
-          {{ settings.title }}
-        </h2>
+        <h2 class="text-foreground text-h4 md:text-h3">{{ settings.title }}</h2>
       {% endif %}
       {% if settings.display_more %}
         <a
           href="{{ url_for('list_categories') }}"
-          class="text-primary hidden items-center gap-2 px-4 py-3 text-[16px] leading-[24px] md:flex"
+          class="text-foreground text-body1 hidden items-center gap-2 px-4 py-3 md:flex"
         >
           {{ settings.more_text }}
           <svg
@@ -54,7 +50,7 @@
                     {% if loop.index0 > 0 %}loading="lazy"{% endif %}
                   />
                 </div>
-                <h3 class="text-start text-[24px] leading-[33.6px] md:text-center md:text-[32px] md:leading-[41.6px]">
+                <h3 class="text-foreground text-h5 md:text-h4 text-start md:text-center">
                   {{ categoryItem.category.name }}
                 </h3>
               </a>
@@ -64,16 +60,16 @@
       </div>
     </div>
     <div class="flex items-center gap-2">
-      <div class="embla__progress h-1 w-full rounded-full bg-[#F6F5F4]">
+      <div class="embla__progress bg-secondary h-1 w-full rounded">
         <div
-          class="embla__progress-bar h-1 rounded-full bg-[#A89C90]"
+          class="embla__progress-bar bg-accent h-1 rounded-sm"
           style="width: 0%"
         ></div>
       </div>
       <div class="hidden items-center gap-2 md:flex">
         <button
-          class="embla__prev p-2.5"
-          aria-label="Previous"
+          class="embla__prev flex size-10 items-center justify-center rounded bg-white/10 p-2.5 backdrop-blur-sm disabled:opacity-30"
+          aria-label="{{ _('Previous') }}"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -91,8 +87,8 @@
         </button>
 
         <button
-          class="embla__next p-2.5"
-          aria-label="Next"
+          class="embla__next flex size-10 items-center justify-center rounded bg-white/10 p-2.5 backdrop-blur-sm disabled:opacity-30"
+          aria-label="{{ _('Next') }}"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -112,7 +108,7 @@
       {% if settings.display_more %}
         <a
           href="{{ url_for('list_categories') }}"
-          class="text-primary flex items-center gap-2 px-4 py-3 text-[16px] leading-[24px] whitespace-nowrap md:hidden"
+          class="text-foreground text-body1 flex items-center gap-2 px-4 py-3 whitespace-nowrap md:hidden"
         >
           {{ settings.more_text }}
           <svg

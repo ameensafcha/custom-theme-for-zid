@@ -15,7 +15,7 @@
           >
             <div
               class="bg-primary absolute inset-0"
-              style="opacity: {{ slide.overlay_opacity | default(5) / 100 }}"
+              style="opacity: {{ slide.overlay_opacity | default(20) / 100 }}"
             ></div>
           </div>
 
@@ -24,30 +24,32 @@
           >
             <!-- Content for this slide -->
             <div
-              class="theme-container space-y-6"
+              class="theme-container flex max-w-[960px] flex-col gap-20"
               style="text-align: {{ slide.text_alignment | default('start') }}"
             >
-              <div>
-                {% if slide.badge_text %}
-                  <span class="text-[16px] leading-normal [font-variant:all-small-caps]">{{ slide.badge_text }}</span>
-                {% endif %}
-                <h2
-                  class="text-[40px] leading-[48px] uppercase [font-variant:all-small-caps] md:text-[56px] md:leading-[67.2px]"
-                >
-                  {{ slide.heading }}
-                </h2>
-                {% if slide.description %}
-                  <p class="text-[20px] leading-[28px] [font-variant:all-small-caps]">{{ slide.description }}</p>
+              <div class="flex max-w-[768px] flex-col gap-6">
+                <div class="flex flex-col gap-4">
+                  {% if slide.badge_text %}
+                    <span class="text-foreground text-tagline">{{ slide.badge_text }}</span>
+                  {% endif %}
+                  <h2 class="text-foreground text-h3 md:text-h1">
+                    {{ slide.heading }}
+                  </h2>
+                  {% if slide.description %}
+                    <p class="text-foreground text-h6">{{ slide.description }}</p>
+                  {% endif %}
+                </div>
+                {% if slide.button_text %}
+                  <div class="flex gap-4">
+                    <a
+                      href="{{ slide.button_url | default('#') }}"
+                      class="bg-primary text-primary-foreground inline-block rounded px-6 py-3 text-body1 ring-1 ring-primary hover:bg-primary/90 hover:ring-2"
+                    >
+                      {{ slide.button_text }}
+                    </a>
+                  </div>
                 {% endif %}
               </div>
-              {% if slide.button_text %}
-                <a
-                  href="{{ slide.button_url | default('#') }}"
-                  class="bg-primary text-primary-foreground inline-block rounded px-4 py-3"
-                >
-                  {{ slide.button_text }}
-                </a>
-              {% endif %}
             </div>
           </div>
         </div>
@@ -58,7 +60,7 @@
     {% if settings.slides | length > 1 %}
       {% if settings.show_dots %}
         <div
-          class="embla__dots pointer-events-auto absolute bottom-8 left-1/2 z-10 flex -translate-x-1/2 gap-2 rounded-full bg-white/10 p-2 backdrop-blur-xs"
+          class="embla__dots pointer-events-auto absolute bottom-8 left-1/2 z-10 flex -translate-x-1/2 gap-1 rounded-full bg-white/10 p-1 backdrop-blur-sm"
         ></div>
       {% endif %}
     {% endif %}
@@ -146,7 +148,7 @@
         const b = document.createElement("button");
         b.type = "button";
         b.className =
-          "h-2 w-3 rounded-full bg-white/50 data-[active=true]:w-5 data-[active=true]:bg-white/80 transition-all";
+          "h-1.5 w-3 rounded-full bg-white/50 transition-all data-[active=true]:w-5 data-[active=true]:bg-white/80";
         b.addEventListener("click", () => embla.scrollTo(i));
         dotsRoot.appendChild(b);
       });
