@@ -1,0 +1,101 @@
+{#
+  Custom Field - File/Image Upload
+  Renders a file or image upload input field.
+  See docs/headless/custom-field-file.md for full documentation.
+
+  Parameters:
+    - custom_field (object): Field with id, label, type (FILE/IMAGE), is_required, hint, price
+#}
+
+{% set is_image = custom_field.type == 'IMAGE' %}
+{% set file_type = 'image' if is_image else 'file' %}
+
+{% if is_image %}
+  {% set accept_types = 'image/png, image/jpg, image/jpeg, image/gif' %}
+{% else %}
+  {% set accept_types = 'zip, image/png, image/jpg, image/jpeg, image/gif, application/zip, application/x-zip, application/x-zip-compressed, application/x-rar-compressed, application/octet-stream, zz-application/zz-winassoc-psd, application/x-photoshop, application/psd, application/photoshop, application/x-rar, application/vnd.rar, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.ms-excel, text/plain, application/msword, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, text/csv, application/csv, application/vnd.ms-powerpoint, application/pdf, application/rtf, application/txt, application/odf' %}
+{% endif %}
+
+<div
+  id="product-custom-user-input-fields"
+  class="custom-field custom-field--file custom-field--{{ file_type }}"
+>
+  <label class="custom-field__label">
+    {{ custom_field.label }}
+    {% if custom_field.price and custom_field.price > 0 %}
+      <span class="custom-field__price">(+{{ custom_field.formatted_price }})</span>
+    {% endif %}
+    {% if custom_field.is_required %}
+      <span class="custom-field__required">*</span>
+    {% endif %}
+  </label>
+
+  <input
+    type="file"
+    id="{{ custom_field.id }}"
+    name="{{ custom_field.label }}"
+    data-type="{{ custom_field.type.value if custom_field.type.value else custom_field.type }}"
+    title="{{ custom_field.label }}"
+    lang="{{ session.lang }}"
+    accept="{{ accept_types }}"
+    onchange="productOptionInputFileChanged(event, '{{ file_type }}')"
+    style="display: none"
+    class="file-upload__input"
+    {% if custom_field.is_required %}required{% endif %}
+  />
+
+  <div class="file-upload">
+    <span
+      id="file-delete-{{ custom_field.id }}"
+      data-input-id="{{ custom_field.id }}"
+      onclick="productOptionInputFileDelete(event, '{{ file_type }}')"
+      style="display: none"
+      class="file-upload__delete"
+    >
+      <svg
+        class="file-upload__delete-icon"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M18 6L6 18"></path>
+        <path d="M6 6l12 12"></path>
+      </svg>
+    </span>
+
+    <span
+      id="file-preview-{{ custom_field.id }}"
+      style="display: none"
+      class="file-upload__preview"
+    >
+      <img
+        width="24px"
+        height="24px"
+        class="file-upload__preview-image"
+        alt="{{ _('Preview') }}"
+      />
+    </span>
+
+    <span
+      id="file-name-{{ custom_field.id }}"
+      data-hint-text="{{ custom_field.hint|default('') }}"
+      class="file-upload__name"
+    >
+      {{ custom_field.hint|default(_('No file selected')) }}
+    </span>
+
+    <button
+      id="file-upload-{{ custom_field.id }}"
+      type="button"
+      onclick="document.getElementById('{{ custom_field.id }}').click()"
+      class="file-upload__button"
+    >
+      {{ _('Choose File') }}
+    </button>
+  </div>
+</div>

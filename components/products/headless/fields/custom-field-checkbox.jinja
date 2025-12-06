@@ -1,0 +1,52 @@
+{#
+  Custom Field - Checkbox
+  Renders a checkbox group input field.
+  See docs/headless/custom-field-checkbox.md for full documentation.
+
+  Parameters:
+    - custom_field (object): Field with id, label, choices, is_required, hint
+#}
+
+<div
+  id="product-custom-user-option-fields"
+  option-id="product-custom-user-option-fields-group-{{ custom_field.id }}"
+  class="custom-field custom-field--checkbox"
+>
+  <input
+    type="hidden"
+    class="product-custom-user-option-fields-group"
+    name="{{ custom_field.label }}"
+    value="{{ custom_field.id }}"
+  />
+
+  <label class="custom-field__label">
+    {{ custom_field.label }}
+    {% if custom_field.is_required %}
+      <span class="custom-field__required">*</span>
+    {% endif %}
+  </label>
+
+  {% if custom_field.hint %}
+    <p class="custom-field__hint">{{ custom_field.hint }}</p>
+  {% endif %}
+
+  <div class="custom-field__options">
+    {% for choice in custom_field.choices %}
+      <label class="custom-field__option">
+        <input
+          type="checkbox"
+          id="{{ choice.id }}"
+          name="{{ choice.name }}"
+          oninput="productOptionInputChanged(event)"
+          class="custom-field__checkbox"
+        />
+        <span class="custom-field__option-label">
+          {{ choice.name }}
+          {% if choice.price and choice.price > 0 %}
+            <span class="custom-field__option-price">(+{{ choice.formatted_price }})</span>
+          {% endif %}
+        </span>
+      </label>
+    {% endfor %}
+  </div>
+</div>
