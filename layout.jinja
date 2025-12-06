@@ -116,7 +116,23 @@
       defer
       src="{{ 'js/product-gallery-carousel.js' | asset_url }}"
     ></script>
+    <script
+      defer
+      src="{{ 'js/cart.js' | asset_url }}"
+    ></script>
 
+  <script  defer>
+    // Product translations (used by product.js for variant changes)
+    window.productTranslations = {
+      discount: "{{ _('Discount') }}",
+      remaining: "{{ _('Remaining %s only') }}",
+      sold: "{{ _('Sold more than %s times') }}"
+    };
+    window.storeLowStockEnabled = {{ 'true' if store.settings.products.low_stock_enabled else 'false' }};
+    window.storeLowStockThreshold = {{ store.settings.products.low_stock_threshold | default(5) }};
+  </script>
+
+  <script  defer src="{{ 'js/product.js' | asset_url }}"></script>
     {% vitrin_body %}
     {% block footer_scripts %}
     {% endblock %}

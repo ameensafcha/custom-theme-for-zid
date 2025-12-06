@@ -107,7 +107,11 @@
               {% endif %}
 
               {# Sold Items Badge #}
-              {% if product.sold_products_count or (product.selected_product and product.selected_product.sold_products_count) %}
+              {% set sold_count = product.sold_products_count or (product.selected_product and product.selected_product.sold_products_count) %}
+              <span
+                data-sold-count-badge
+                class="{{ 'hidden' if not sold_count }}"
+              >
                 {% set sold_badge %}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -123,7 +127,9 @@
                       stroke-width="0.05"
                     ></path>
                   </svg>
-                  {{ _("Sold more than %s times") | format(product.sold_products_count or product.selected_product.sold_products_count) }}
+                  <span data-sold-count-text
+                    >{{ _("Sold more than %s times") | format(sold_count) if sold_count }}</span
+                  >
                 {% endset %}
                 {%
                   with
@@ -133,10 +139,13 @@
                 %}
                   {% include 'components/ui/badge.jinja' %}
                 {% endwith %}
-              {% endif %}
+              </span>
 
               {# Remaining Stock Badge #}
-              {% if product.low_stock_quantity %}
+              <span
+                data-low-stock-badge
+                class="{{ 'hidden' if not product.low_stock_quantity }}"
+              >
                 {% set stock_badge %}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -150,7 +159,9 @@
                       fill="currentColor"
                     ></path>
                   </svg>
-                  {{ _("Remaining %s only") | format(product.low_stock_quantity) }}
+                  <span data-low-stock-text
+                    >{{ _("Remaining %s only") | format(product.low_stock_quantity) if product.low_stock_quantity }}</span
+                  >
                 {% endset %}
                 {%
                   with
@@ -160,26 +171,43 @@
                 %}
                   {% include 'components/ui/badge.jinja' %}
                 {% endwith %}
-              {% endif %}
+              </span>
             </div>
             {# Price Section #}
             <div class="flex flex-wrap items-center justify-between gap-y-1">
-              {% if product.formatted_sale_price is not none %}
-                {# Product on sale - show sale price, old price crossed out, and discount #}
-                <div class="flex flex-wrap items-center gap-2">
-                  <p class="text-h5 text-caps">{{ product.formatted_sale_price }}</p>
-                  <span class="text-destructive text-body2 line-through"> {{ product.formatted_price }} </span>
+              <div class="flex flex-wrap items-center gap-2">
+                {# Current Price (sale or regular) #}
+                <p
+                  class="text-h5 text-caps"
+                  data-product-price
+                >
+                  {{ product.formatted_sale_price if product.formatted_sale_price else product.formatted_price }}
+                </p>
+                {# Old Price (if on sale) #}
+                <span
+                  class="text-destructive text-body2 {{ 'hidden' if not product.formatted_sale_price }} line-through"
+                  data-product-price-old
+                >
+                  {{ product.formatted_price if product.formatted_sale_price else '' }}
+                </span>
+                {# Discount Badge #}
+                <span
+                  class="bg-success/20 text-success text-tagline {{ 'hidden' if not (product.discount_percentage and product.discount_percentage > 0) }} rounded px-2 py-1"
+                  data-product-discount
+                >
                   {% if product.discount_percentage and product.discount_percentage > 0 %}
-                    <span class="bg-success/20 text-success text-tagline rounded px-2 py-1">
-                      {{ _("Discount") }} {{ product.discount_percentage }}%
-                    </span>
+                    {{ _("Discount") }}
+                    {{ product.discount_percentage }}%
                   {% endif %}
-                </div>
-              {% else %}
-                {# Regular price - no sale #}
-                <p class="text-h5 text-caps">{{ product.formatted_price }}</p>
-              {% endif %}
-              <span class="text-muted-foreground text-body1"> SKU {{ product.sku }} </span>
+                </span>
+              </div>
+              {# SKU #}
+              <span
+                class="text-muted-foreground text-body1 {{ 'hidden' if not product.sku }}"
+                data-product-sku-wrapper
+              >
+                SKU <span data-product-sku>{{ product.sku }}</span>
+              </span>
             </div>
           </div>
 
@@ -205,10 +233,114 @@
             {% endwith %}
             {# Product Options (if available) #}
             {% if product.has_options or product.has_fields %}
-              {% with options=product.options, product=product %}
+              {% with options=product.options, product=product, style='list' %}
                 {% include 'components/products/product-options.jinja' %}
               {% endwith %}
             {% endif %}
+
+            {# Quantity Input #}
+            <div
+              class="{{ 'hidden' if not product.in_stock }} grid w-full items-center gap-2"
+              data-quantity-wrapper
+            >
+              {% with for='product-quantity', content=_('Quantity') %}
+                {% include 'components/ui/label.jinja' %}
+              {% endwith %}
+              {% with quantity=1, min=1, max=product.quantity if not product.is_infinite else none %}
+                {% include 'components/products/headless/quantity-input.jinja' %}
+              {% endwith %}
+            </div>
+
+            {# Action Buttons #}
+            <div class="flex flex-col gap-3 pt-2">
+              {% if product.in_stock %}
+                <div data-in-stock>
+                  {# Add to Cart Button #}
+                  <button
+                    type="button"
+                    data-add-to-cart-form="product-form"
+                    data-success-text="{{ _('Added!') }}"
+                    class="bg-primary text-primary-foreground hover:bg-primary/90 text-body1 flex h-14 w-full items-center justify-center gap-2 rounded px-6 font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <circle
+                        cx="8"
+                        cy="21"
+                        r="1"
+                      ></circle>
+                      <circle
+                        cx="19"
+                        cy="21"
+                        r="1"
+                      ></circle>
+                      <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
+                    </svg>
+                    {{ _("Add to cart") }}
+                  </button>
+
+                  {# Buy Now Button (hidden until checkout_dialog is available) #}
+                  <button
+                    type="button"
+                    data-buy-now-form="product-form"
+                    class="bg-secondary text-foreground hover:bg-secondary/80 text-body1 hidden h-14 w-full items-center justify-center gap-2 rounded px-6 font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M5 12h14"></path>
+                      <path d="m12 5 7 7-7 7"></path>
+                    </svg>
+                    {{ _("Buy now") }}
+                  </button>
+                </div>
+              {% else %}
+                <div data-out-of-stock>
+                  {# Out of Stock Message #}
+                  <div
+                    class="bg-destructive/10 text-destructive text-body1 flex h-14 w-full items-center justify-center gap-2 rounded px-6 font-medium"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="10"
+                      ></circle>
+                      <path d="m15 9-6 6"></path>
+                      <path d="m9 9 6 6"></path>
+                    </svg>
+                    {{ _("Out of stock") }}
+                  </div>
+                </div>
+              {% endif %}
+            </div>
           </form>
         </div>
       </div>
@@ -257,14 +389,21 @@
             >
               <div class="flex flex-col gap-4 px-4 pb-4">
                 {# Weight #}
-                {% if has_weight %}
-                  <div class="flex items-center gap-2">
-                    <dt class="text-muted-foreground text-body1">{{ _("Weight") }}:</dt>
-                    <dd class="text-foreground text-body1">
-                      {{ product.selected_product.weight.value }} {{ product.selected_product.weight.unit }}
-                    </dd>
-                  </div>
-                {% endif %}
+                <div
+                  class="{{ 'hidden' if not has_weight }} flex items-center gap-2"
+                  data-product-weight-wrapper
+                >
+                  <dt class="text-muted-foreground text-body1">{{ _("Weight") }}:</dt>
+                  <dd
+                    class="text-foreground text-body1"
+                    data-product-weight
+                  >
+                    {% if has_weight %}
+                      {{ product.selected_product.weight.value }}
+                      {{ product.selected_product.weight.unit }}
+                    {% endif %}
+                  </dd>
+                </div>
 
                 {# Metafields #}
                 {% if has_metafields %}
@@ -426,41 +565,9 @@
       if (window.initializeProductGallery) {
         window.initializeProductGallery("product-gallery");
       } else {
-        // Wait for the gallery script to load
         window.addEventListener("load", function () {
           if (window.initializeProductGallery) {
             window.initializeProductGallery("product-gallery");
-          }
-        });
-      }
-
-      // Buy Now functionality
-      const buyNowBtn = document.querySelector("[data-buy-now-btn]");
-
-      // Show Buy Now button when checkout dialog is available
-      window.addEventListener("load", function () {
-        if (window.checkout_dialog && buyNowBtn) {
-          buyNowBtn.classList.remove("hidden");
-        }
-      });
-
-      // Handle Buy Now click
-      if (buyNowBtn) {
-        buyNowBtn.addEventListener("click", async function () {
-          const originalContent = buyNowBtn.innerHTML;
-          const spinner =
-            '<span class="inline-flex items-center justify-center"><svg class="size-5 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg></span>';
-
-          try {
-            buyNowBtn.disabled = true;
-            buyNowBtn.innerHTML = spinner;
-
-            await window.zid.cart.buyNow({ form_id: "product-form" }, { showErrorNotification: true });
-          } catch (error) {
-            console.error("Buy Now failed:", error);
-          } finally {
-            buyNowBtn.disabled = false;
-            buyNowBtn.innerHTML = originalContent;
           }
         });
       }
