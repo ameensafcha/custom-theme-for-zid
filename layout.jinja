@@ -96,7 +96,7 @@
     class="min-h-dvh font-sans antialiased"
   >
     {% include 'header.jinja' %}
-
+    {% include 'components/dev/theme-switcher.jinja' %}
     <main id="main">{% block content %}{% endblock %}</main>
 
     {% include 'footer.jinja' %}
@@ -115,6 +115,10 @@
     <script
       defer
       src="{{ 'js/product-gallery-carousel.js' | asset_url }}"
+    ></script>
+     <script
+      defer
+      src="{{ 'js/wishlist.js' | asset_url }}"
     ></script>
     <script
       defer

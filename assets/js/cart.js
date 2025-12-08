@@ -143,6 +143,17 @@ class CartManager {
         this.handleQuantityAction(btn);
       });
     });
+
+    // Variant add to cart buttons (product page variant list)
+    document.querySelectorAll("[data-add-variant-to-cart]").forEach((btn) => {
+      if (btn.dataset.cartInit) return;
+      btn.dataset.cartInit = "true";
+
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        this.addVariantToCart(btn);
+      });
+    });
   }
 
   // ─────────────────────────────────────────────────────────────
@@ -223,6 +234,39 @@ class CartManager {
       // buyNow handles the redirect, so we don't need to restore button
     } catch (err) {
       console.error("Buy now failed:", err);
+      btn.innerHTML = originalContent;
+      btn.disabled = false;
+    }
+  }
+
+  /**
+   * Add variant to cart (product page variant list)
+   */
+  async addVariantToCart(btn) {
+    const variantId = btn.dataset.addVariantToCart;
+    if (!variantId || btn.disabled) return;
+
+    const originalContent = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = SPINNER;
+
+    try {
+      await window.zid.cart.addProduct({ product_id: variantId, quantity: 1 }, { showErrorNotification: true });
+
+      // Show success feedback briefly
+      const successIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+      const successText = btn.dataset.successText || "Added!";
+      btn.innerHTML = `${successIcon} ${successText}`;
+
+      window.dispatchEvent(new CustomEvent("cart:updated", { detail: { variantId, action: "add" } }));
+      this.refreshBadge();
+
+      setTimeout(() => {
+        btn.innerHTML = originalContent;
+        btn.disabled = false;
+      }, 1500);
+    } catch (err) {
+      console.error("Add variant to cart failed:", err);
       btn.innerHTML = originalContent;
       btn.disabled = false;
     }

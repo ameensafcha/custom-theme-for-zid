@@ -1,0 +1,405 @@
+{% macro timeFormat(value) %}
+  {%- if value -%}
+    {%- set parts = value.split(':') -%}
+    {%- if parts | length >= 2 -%}
+      {%- set hour = parts[0] | int -%}
+      {%- set minute = parts[1] -%}
+      {%- set period = 'AM' if hour < 12 else 'PM' -%}
+      {%- set display_hour = hour if hour <= 12 else hour - 12 -%}
+      {%- set display_hour = 12 if display_hour == 0 else display_hour -%}
+      {{- display_hour }}:{{ minute }}
+      {{ period -}}
+    {%- else -%}
+      {{- value -}}
+    {%- endif -%}
+  {%- endif -%}
+{% endmacro %}
+
+
+<div
+  class="cart-product-item flex gap-2 lg:gap-6"
+  data-cart-product-id="{{ product.id }}"
+>
+  <a
+    href="{{ product.url }}"
+    class="block size-20 shrink-0 overflow-hidden rounded"
+  >
+    {% if product.images and product.images | length > 0 %}
+      <img
+        src="{{ image_url(product.images[0].thumbs.fullSize, w=80, h=80, q=85, f='auto') }}"
+        srcset="
+          {{ image_url(product.images[0].thumbs.fullSize, w=80, h=80, q=85, f='auto') }} 1x,
+          {{ image_url(product.images[0].thumbs.fullSize, w=160, h=160, q=85, f='auto') }} 2x
+        "
+        alt="{{ product.name }}"
+        class="size-full object-cover"
+        loading="lazy"
+      />
+    {% else %}
+      <img
+        src="{{ 'images/placeholder-image.svg' | asset_url }}"
+        alt="{{ product.name }}"
+        class="bg-secondary size-full object-cover"
+      />
+    {% endif %}
+  </a>
+
+  {# Content Area - responsive layout switch #}
+  <div class="flex min-w-0 flex-1 flex-col gap-4 lg:flex-row lg:gap-6">
+    {# Column 1: Product Info (flex-1 on desktop) #}
+    <div class="flex min-w-0 flex-1 flex-col gap-1">
+      {# Row Header: Name + Price (mobile only - price positioned here) #}
+      <div class="flex items-start justify-between gap-2 lg:block">
+        {# Product Name & Variants #}
+        <div class="min-w-0 flex-1 lg:flex-none">
+          {# Product Name (H6 - 20px, max 2 lines) #}
+          <a
+            href="{{ product.url }}"
+            class="text-foreground text-h6 text-caps line-clamp-2 hover:underline"
+          >
+            {{ product.name }}
+          </a>
+
+          {# Variant Info / Custom Fields (Body 2 - 14px, secondary) #}
+          {% if product.custom_fields and product.custom_fields | length > 0 %}
+            <p class="text-muted text-body2 mt-0.5 truncate lg:mt-1">
+              {%- for custom_field in product.custom_fields -%}
+                {%- if custom_field.type == 'TEXT' or custom_field.type == 'NUMBER' -%}
+                  {{ custom_field.value | safe }}
+                {%- elif custom_field.type == 'DATE' -%}
+                  {{ custom_field.value }}
+                {%- elif custom_field.type == 'TIME' -%}
+                  {{ timeFormat(custom_field.value) }}
+                {%- elif custom_field.type == 'CHECKBOX' or custom_field.type == 'DROPDOWN' -%}
+                  {{ custom_field.name }}
+                {%- else -%}
+                  {{ custom_field.value | safe }}
+                {%- endif -%}
+                {%- if not loop.last %}/{% endif -%}
+              {%- endfor -%}
+            </p>
+          {% endif %}
+        </div>
+
+        {# Price (Mobile: top-right, Desktop: hidden here - shown in Column 3) #}
+        <div class="flex shrink-0 flex-col items-end lg:hidden">
+          <p class="text-foreground text-h6 text-caps">{{ product.total_string }}</p>
+          {% if product.total_before_string %}
+            <p class="text-destructive text-body2 text-caps line-through">{{ product.total_before_string }}</p>
+          {% endif %}
+        </div>
+      </div>
+
+      {# Bundle Offer Tag (if product has a bundle offer applied) #}
+      {% if product.meta and product.meta.bundle_offer %}
+        <div class="text-muted text-body2 flex items-center gap-1">
+          <svg
+            class="size-4"
+            viewBox="0 0 16 16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M13.333 7.333V4.667A.667.667 0 0012.667 4h-10A.667.667 0 002 4.667v2.666a1.333 1.333 0 010 2.667v2.667c0 .368.299.666.667.666h10a.667.667 0 00.666-.666V9.333a1.333 1.333 0 010-2.667zM6 10.667a.667.667 0 110-1.334.667.667 0 010 1.334zm0-2a.667.667 0 110-1.334.667.667 0 010 1.334zm0-2a.667.667 0 110-1.334.667.667 0 010 1.334z"
+              fill="currentColor"
+            ></path>
+          </svg>
+          <span>{{ product.meta.bundle_offer.name }}</span>
+        </div>
+
+        {# Bundle Sub-Items Toggle #}
+        {% if product.sub_items and product.sub_items | length > 0 %}
+          <button
+            type="button"
+            class="text-foreground text-caption flex items-center gap-1 hover:underline"
+            data-action="bundle-toggle"
+            data-bundle-id="bundle-{{ product.id }}"
+          >
+            <span>{{ product.sub_items | length }} {{ _("items included") }}</span>
+            <svg
+              class="size-3 transition-transform"
+              data-bundle-arrow="{{ product.id }}"
+              viewBox="0 0 16 16"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M4 6l4 4 4-4"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+
+          {# Bundle Sub-Items List (Collapsible) #}
+          <div
+            id="bundle-{{ product.id }}"
+            class="bg-secondary/50 mt-1 hidden flex-col gap-2 rounded p-2 lg:mt-0 lg:p-3"
+          >
+            {% for sub_item in product.sub_items %}
+              <div class="flex items-center gap-2">
+                {# Sub-item Image #}
+                <div class="size-10 shrink-0 overflow-hidden rounded">
+                  {% if sub_item.images and sub_item.images | length > 0 %}
+                    <img
+                      src="{{ image_url(sub_item.images[0].thumbs.fullSize, w=40, h=40, q=85, f='auto') }}"
+                      alt="{{ sub_item.name }}"
+                      class="size-full object-cover"
+                      loading="lazy"
+                    />
+                  {% else %}
+                    <img
+                      src="{{ 'images/placeholder-image.svg' | asset_url }}"
+                      alt="{{ sub_item.name }}"
+                      class="bg-secondary size-full object-cover"
+                    />
+                  {% endif %}
+                </div>
+
+                {# Sub-item Details #}
+                <div class="min-w-0 flex-1">
+                  <p class="text-foreground text-caption truncate">{{ sub_item.name }}</p>
+                  <div class="text-muted text-caption flex items-center gap-2">
+                    <span class="lg:hidden">{{ _("Qty") }}: {{ sub_item.quantity }}</span>
+                    <span class="hidden lg:inline">{{ _("Quantity") }}: {{ sub_item.quantity }}</span>
+                    {% if sub_item.price_string %}
+                      <span>{{ sub_item.price_string }}</span>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endif %}
+    </div>
+
+    {# Column 2: Quantity (w-48 on desktop, row on mobile) #}
+    <div class="flex items-center justify-between gap-4 lg:w-48 lg:flex-col lg:items-start lg:justify-start lg:gap-2">
+      {% if product.product_class != 'crowdfunding_project' %}
+        {# Quantity Input with −/+ buttons #}
+        <div
+          class="border-muted flex h-12 w-[180px] items-center overflow-hidden rounded border lg:w-full"
+          data-quantity-wrapper="{{ product.id }}"
+        >
+          {# Decrease Button #}
+          <button
+            type="button"
+            class="hover:bg-secondary flex size-8 shrink-0 items-center justify-center transition-colors"
+            data-action="quantity"
+            data-cart-id="{{ product.id }}"
+            data-product-id="{{ product.product_id }}"
+            data-delta="-1"
+            aria-label="{{ _('Decrease quantity') }}"
+          >
+            <svg
+              class="text-foreground size-4"
+              viewBox="0 0 16 16"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M3.333 8H12.667"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              />
+            </svg>
+          </button>
+
+          {# Quantity Display #}
+          <div class="text-foreground text-body2 flex min-w-12 flex-1 items-center justify-center">
+            <span data-quantity-value="{{ product.id }}">{{ product.quantity }}</span>
+          </div>
+
+          {# Increase Button #}
+          <button
+            type="button"
+            class="hover:bg-secondary flex size-8 shrink-0 items-center justify-center transition-colors"
+            data-action="quantity"
+            data-cart-id="{{ product.id }}"
+            data-product-id="{{ product.product_id }}"
+            data-delta="1"
+            aria-label="{{ _('Increase quantity') }}"
+          >
+            <svg
+              class="text-foreground size-4"
+              viewBox="0 0 16 16"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M8 3.333V12.667M3.333 8H12.667"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              />
+            </svg>
+          </button>
+        </div>
+
+        {# Stock Warning (optional) - shown below quantity on desktop, separate on mobile #}
+        {% if product.original_product_quantity and product.original_product_quantity <= 5 %}
+          <p class="text-muted text-caption hidden lg:block">
+            {{ _("Only %(count)s left!") | format(count=product.original_product_quantity) }}
+          </p>
+        {% endif %}
+      {% else %}
+        {# Crowdfunding/Donation Display #}
+        <div class="text-foreground text-body1">
+          {{ product.total | round(2, 'common') }} {{ session.currency.symbol }}
+        </div>
+      {% endif %}
+
+      {# Actions: Wishlist + Delete (Mobile only - shown here) #}
+      <div class="flex items-center gap-2 lg:hidden">
+        {# Wishlist Heart Icon #}
+        <button
+          type="button"
+          class="text-foreground flex size-8 items-center justify-center"
+          data-wishlist-btn
+          data-product-id="{{ product.product_id }}"
+          aria-label="{{ _('Add to wishlist') }}"
+        >
+          <svg
+            class="size-4"
+            viewBox="0 0 16 16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8 13.933l-1.033-.94C3.6 9.867 1.333 7.827 1.333 5.333 1.333 3.293 2.96 1.667 5 1.667c1.153 0 2.26.537 3 1.38a4.012 4.012 0 013-1.38c2.04 0 3.667 1.626 3.667 3.666 0 2.494-2.267 4.534-5.634 7.667L8 13.933z"
+              stroke="currentColor"
+              stroke-width="1.2"
+            />
+          </svg>
+        </button>
+
+        {# Delete Trash Icon #}
+        <button
+          type="button"
+          class="text-foreground flex size-8 items-center justify-center"
+          data-action="product-remove"
+          data-cart-product-id="{{ product.id }}"
+          data-product-id="{{ product.product_id }}"
+          data-template="template_for_cart_products_list"
+          aria-label="{{ _('Remove from cart') }}"
+        >
+          <svg
+            class="cart-product-delete-icon size-4"
+            viewBox="0 0 16 16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M2 4h12M5.333 4V2.667a1.333 1.333 0 011.334-1.334h2.666a1.333 1.333 0 011.334 1.334V4m2 0v9.333a1.333 1.333 0 01-1.334 1.334H4.667a1.333 1.333 0 01-1.334-1.334V4h9.334z"
+              stroke="currentColor"
+              stroke-width="1.2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <svg
+            class="cart-product-delete-spinner hidden size-4 animate-spin"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    {# Column 3: Price & Actions (w-48 on desktop, hidden on mobile - shown inline above) #}
+    <div class="hidden w-48 flex-col items-end gap-2.5 lg:flex">
+      {# Price Display #}
+      <div class="flex flex-col items-end gap-2">
+        <p class="text-foreground text-h6 text-caps">{{ product.total_string }}</p>
+        {% if product.total_before_string %}
+          <p class="text-destructive text-body2 text-caps line-through">{{ product.total_before_string }}</p>
+        {% endif %}
+      </div>
+
+      {# Action Icons #}
+      <div class="flex items-center gap-2">
+        {# Wishlist Heart Icon #}
+        <button
+          type="button"
+          class="text-foreground hover:bg-secondary flex size-8 items-center justify-center rounded transition-colors"
+          data-wishlist-btn
+          data-product-id="{{ product.product_id }}"
+          aria-label="{{ _('Add to wishlist') }}"
+        >
+          <svg
+            class="size-4"
+            viewBox="0 0 16 16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8 13.933l-1.033-.94C3.6 9.867 1.333 7.827 1.333 5.333 1.333 3.293 2.96 1.667 5 1.667c1.153 0 2.26.537 3 1.38a4.012 4.012 0 013-1.38c2.04 0 3.667 1.626 3.667 3.666 0 2.494-2.267 4.534-5.634 7.667L8 13.933z"
+              stroke="currentColor"
+              stroke-width="1.2"
+            />
+          </svg>
+        </button>
+
+        {# Delete Trash Icon #}
+        <button
+          type="button"
+          class="text-foreground hover:bg-secondary flex size-8 items-center justify-center rounded transition-colors"
+          data-action="product-remove"
+          data-cart-product-id="{{ product.id }}"
+          data-product-id="{{ product.product_id }}"
+          data-template="template_for_cart_products_list"
+          aria-label="{{ _('Remove from cart') }}"
+        >
+          <svg
+            class="cart-product-delete-icon size-4"
+            viewBox="0 0 16 16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M2 4h12M5.333 4V2.667a1.333 1.333 0 011.334-1.334h2.666a1.333 1.333 0 011.334 1.334V4m2 0v9.333a1.333 1.333 0 01-1.334 1.334H4.667a1.333 1.333 0 01-1.334-1.334V4h9.334z"
+              stroke="currentColor"
+              stroke-width="1.2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <svg
+            class="cart-product-delete-spinner hidden size-4 animate-spin"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{# Mobile Stock Warning (shown below the card) #}
+{% if product.product_class != 'crowdfunding_project' and product.original_product_quantity and product.original_product_quantity <= 5 %}
+  <p class="text-muted text-caption -mt-2 ps-[88px] pb-2 lg:hidden">
+    {{ _("Only %(count)s left!") | format(count=product.original_product_quantity) }}
+  </p>
+{% endif %}
+
+{# Tax Free Notice #}
+{% if product.is_taxable == false %}
+  <p class="text-success text-caption -mt-2 ps-[88px] pb-2 lg:ps-0">{{ _("Tax free") }}</p>
+{% endif %}
+
+{# Error Message #}
+{% if product.error_message %}
+  <p class="text-destructive text-caption -mt-2 ps-[88px] pb-2 lg:ps-0">{{ _(product.error_message) }}</p>
+{% endif %}

@@ -1,0 +1,43 @@
+<div
+  class="flex flex-col gap-2"
+  data-checkout-buttons
+>
+  {% if store.settings.general.availability.closed_now %}
+    {%
+      with
+      variant="filled",
+      size="lg",
+      disabled=true,
+      full_width=true,
+      content=_("Store is closed")
+    %}
+      {% include 'components/ui/button.jinja' %}
+    {% endwith %}
+  {% elif session.is_guest %}
+    {%
+      with
+      tag="a",
+      href="/auth/login?redirect_to=/checkout",
+      variant="filled",
+      size="lg",
+      full_width=true,
+      content=_("Checkout"),
+      attrs='data-action="login" data-redirect="/checkout"'
+    %}
+      {% include 'components/ui/button.jinja' %}
+    {% endwith %}
+  {% else %}
+    {%
+      with
+      tag="a",
+      href="/checkout",
+      variant="filled",
+      size="lg",
+      full_width=true,
+      content=_("Checkout")
+    %}
+      {% include 'components/ui/button.jinja' %}
+    {% endwith %}
+  {% endif %}
+  {{ template_for_cart_apple_pay_button }}
+</div>
