@@ -3,7 +3,13 @@
   <nav class="theme-container relative flex items-center justify-between">
     {% include 'components/header/mobile-drawer.jinja' %}
     <div class="flex items-center gap-8">
-      {% include 'components/header/logo.jinja' %}
+      <a
+        href="/"
+        class="shrink-0"
+        aria-label="{{ _('Home') }}"
+      >
+        {% include 'components/header/logo.jinja' %}
+      </a>
       {% include 'components/header/main-nav.jinja' %}
     </div>
     <ul class="flex items-center gap-1">
