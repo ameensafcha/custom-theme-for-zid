@@ -92,57 +92,72 @@
 {% endset %}
 
 {# Mobile view - single column only #}
-{%
-  with
-  name='grid_view_mobile',
-  separated=true,
-  wrapper_class='gap-2 md:hidden',
-  aria_label=_('Select grid layout'),
-  options=[
-    {
-      'icon': icon_one_col,
-      'value': 'one',
-      'icon_only': true,
-      'attrs': 'data-grid-btn="one" aria-label="' ~ _('1-column grid') ~ '"'
-    },
-    {
-      'icon': icon_list,
-      'value': 'list',
-      'icon_only': true,
-      'attrs': 'data-grid-btn="list" aria-label="' ~ _('List view') ~ '"'
-    }
-  ]
-%}
-  {% include 'components/ui/button-group.jinja' %}
-{% endwith %}
+<div
+  class="btn-group btn-group-separated md:!hidden"
+  role="radiogroup"
+  aria-label="{{ _('Select grid layout') }}"
+>
+  <label class="btn-group-item btn-group-item-icon">
+    <input
+      type="radio"
+      name="grid_view_mobile"
+      value="one"
+      class="sr-only"
+      data-grid-btn="one"
+      aria-label="{{ _('1-column grid') }}"
+    />
+    {{ icon_one_col }}
+  </label>
+  <label class="btn-group-item btn-group-item-icon">
+    <input
+      type="radio"
+      name="grid_view_mobile"
+      value="list"
+      class="sr-only"
+      data-grid-btn="list"
+      aria-label="{{ _('List view') }}"
+    />
+    {{ icon_list }}
+  </label>
+</div>
 
 {# Desktop view - two, four columns and list #}
-{%
-  with
-  name='grid_view_desktop',
-  separated=true,
-  wrapper_class='hidden gap-2 md:flex',
-  aria_label=_('Select grid layout'),
-  options=[
-    {
-      'icon': icon_two_col,
-      'value': 'two',
-      'icon_only': true,
-      'attrs': 'data-grid-btn="two" aria-label="' ~ _('2-column grid') ~ '"'
-    },
-    {
-      'icon': icon_four_col,
-      'value': 'four',
-      'icon_only': true,
-      'attrs': 'data-grid-btn="four" aria-label="' ~ _('4-column grid') ~ '"'
-    },
-    {
-      'icon': icon_list,
-      'value': 'list',
-      'icon_only': true,
-      'attrs': 'data-grid-btn="list" aria-label="' ~ _('List view') ~ '"'
-    }
-  ]
-%}
-  {% include 'components/ui/button-group.jinja' %}
-{% endwith %}
+<div
+  class="btn-group btn-group-separated !hidden md:!flex"
+  role="radiogroup"
+  aria-label="{{ _('Select grid layout') }}"
+>
+  <label class="btn-group-item btn-group-item-icon">
+    <input
+      type="radio"
+      name="grid_view_desktop"
+      value="two"
+      class="sr-only"
+      data-grid-btn="two"
+      aria-label="{{ _('2-column grid') }}"
+    />
+    {{ icon_two_col }}
+  </label>
+  <label class="btn-group-item btn-group-item-icon">
+    <input
+      type="radio"
+      name="grid_view_desktop"
+      value="four"
+      class="sr-only"
+      data-grid-btn="four"
+      aria-label="{{ _('4-column grid') }}"
+    />
+    {{ icon_four_col }}
+  </label>
+  <label class="btn-group-item btn-group-item-icon">
+    <input
+      type="radio"
+      name="grid_view_desktop"
+      value="list"
+      class="sr-only"
+      data-grid-btn="list"
+      aria-label="{{ _('List view') }}"
+    />
+    {{ icon_list }}
+  </label>
+</div>

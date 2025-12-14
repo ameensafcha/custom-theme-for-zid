@@ -369,3 +369,84 @@
 .form-control:has(input:disabled) {
   @apply cursor-not-allowed;
 }
+
+/* ========== BUTTON GROUP COMPONENT ========== */
+
+/* Button Group Container */
+.btn-group {
+  @apply flex w-fit items-center;
+}
+
+/* Button Group Item (label wrapping hidden input) */
+.btn-group-item {
+  @apply text-foreground border-input inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 border bg-transparent font-normal whitespace-nowrap transition-all;
+  padding: 8px 16px;
+  font-size: var(--font-body1--size);
+  line-height: var(--font-body1--line-height);
+}
+.btn-group-item svg {
+  @apply pointer-events-none size-6 shrink-0;
+}
+
+/* Connected style (default) - first/last get rounded corners */
+.btn-group .btn-group-item:first-child {
+  @apply rounded-s;
+}
+.btn-group .btn-group-item:last-child {
+  @apply rounded-e;
+}
+.btn-group .btn-group-item:not(:first-child) {
+  @apply -ms-px;
+}
+
+/* Separated modifier */
+.btn-group-separated {
+  @apply gap-2;
+}
+.btn-group-separated .btn-group-item {
+  @apply rounded;
+}
+.btn-group-separated .btn-group-item:not(:first-child) {
+  @apply ms-0;
+}
+
+/* ---------- Button Group States ---------- */
+
+/* Hover */
+.btn-group-item:hover:not(:has(:checked)):not(:has(:disabled)) {
+  @apply border-2;
+}
+
+/* Selected/Checked */
+.btn-group-item:has(:checked) {
+  @apply border-primary bg-primary text-primary-foreground;
+}
+.btn-group-item:has(:checked) svg {
+  @apply text-primary-foreground;
+}
+
+/* Disabled */
+.btn-group-item:has(:disabled) {
+  @apply border-border/50 text-muted-foreground/60 cursor-not-allowed line-through;
+}
+.btn-group-item:has(:disabled) svg {
+  @apply text-muted-foreground/60;
+}
+
+/* Selected & Disabled */
+.btn-group-item:has(:checked:disabled) {
+  @apply border-primary bg-primary text-muted-foreground/60;
+}
+.btn-group-item:has(:checked:disabled) svg {
+  @apply text-muted-foreground/60;
+}
+
+/* Focus visible */
+.btn-group-item:focus-within {
+  @apply border-ring ring-ring/50 relative z-10 ring-[3px];
+}
+
+/* ---------- Icon-only Button Group Item ---------- */
+.btn-group-item-icon {
+  @apply size-10 p-0;
+}
