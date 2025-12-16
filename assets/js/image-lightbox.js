@@ -122,6 +122,9 @@
    * Open lightbox at specific index
    */
   function openAtIndex(index) {
+    // Don't open lightbox if inside a dialog (e.g., quick view modal)
+    if (document.querySelector("dialog[open]")) return;
+
     if (lightbox && imageData.length > 0) {
       lightbox.loadAndOpen(index);
     }
