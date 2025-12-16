@@ -106,19 +106,17 @@
       {% endif %}
     </div>
 
-    {# Filters Section #}
-    {% with product=product %}
-      {% include 'components/products/review-filters.jinja' %}
-    {% endwith %}
-
-    {# Review Count #}
-    {% if product.reviews and product.reviews.results %}
-      <p class="text-foreground text-tagline">
-        {{ product.reviews.results|length }} {{ _("out of") }}
-        {{ product.reviews.count or product.reviews.results|length }}
-        {{ _("reviews") }}
-      </p>
-    {% endif %}
+    {# Divider #}
+    <div class="border-border border-y py-4">
+      {# Review Count #}
+      {% if product.reviews and product.reviews.results %}
+        <p class="text-foreground text-tagline">
+          {{ product.reviews.results|length }} {{ _("out of") }}
+          {{ product.reviews.count or product.reviews.results|length }}
+          {{ _("reviews") }}
+        </p>
+      {% endif %}
+    </div>
 
     {# Reviews List #}
     {% if product.reviews and product.reviews.results %}
