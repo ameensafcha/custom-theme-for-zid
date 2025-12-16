@@ -161,7 +161,7 @@ class ProductFilter {
    * Clear all filters except specified keys
    * @param {string[]} keepKeys - Keys to preserve
    */
-  async clearFilters(keepKeys = ["sort_by", "order", "page_size", "q"]) {
+  async clearFilters(keepKeys = ["page_size", "q"]) {
     const url = new URL(window.location.href);
     const keysToRemove = [];
 
@@ -300,7 +300,7 @@ class ProductFilter {
     const dialog = document.getElementById("filters-drawer");
     if (dialog) dialog.close();
 
-    this.clearFilters(["sort_by", "order", "page_size", "q"]);
+    this.clearFilters();
   }
 
   /**
