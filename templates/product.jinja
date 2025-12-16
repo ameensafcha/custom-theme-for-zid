@@ -218,100 +218,94 @@
                 class="form-label"
                 >{{ _('Quantity') }}</label
               >
-              {% with mode='product', quantity=1, min=1, max=product.quantity if not product.is_infinite else none %}
+              {% with id='product-quantity', quantity=1, min=1, max=product.quantity if not product.is_infinite else none, sync_target='sticky-qty' %}
                 {% include 'components/ui/quantity-input.jinja' %}
               {% endwith %}
             </div>
 
             {# Action Buttons #}
-            <div class="flex flex-col gap-3 pt-2">
-              {% if product.in_stock %}
-                <div data-in-stock>
-                  {# Add to Cart Button #}
-                  <button
-                    type="button"
-                    data-add-to-cart-form="product-form"
-                    data-success-text="{{ _('Added!') }}"
-                    class="btn btn-filled btn-lg w-full"
+            <div
+              class="flex flex-col gap-3 pt-2"
+              data-product-actions
+            >
+              {# In Stock State #}
+              <div
+                class="{{ 'hidden' if not product.in_stock }}"
+                data-in-stock
+              >
+                {# Add to Cart Button #}
+                <button
+                  type="button"
+                  data-add-to-cart-form="product-form"
+                  data-success-text="{{ _('Added!') }}"
+                  class="btn btn-filled btn-lg w-full"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <circle
-                        cx="8"
-                        cy="21"
-                        r="1"
-                      ></circle>
-                      <circle
-                        cx="19"
-                        cy="21"
-                        r="1"
-                      ></circle>
-                      <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
-                    </svg>
-                    {{ _("Add to cart") }}
-                  </button>
+                    <circle
+                      cx="8"
+                      cy="21"
+                      r="1"
+                    ></circle>
+                    <circle
+                      cx="19"
+                      cy="21"
+                      r="1"
+                    ></circle>
+                    <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
+                  </svg>
+                  {{ _("Add to cart") }}
+                </button>
+              </div>
 
-                  {# Buy Now Button (hidden until checkout_dialog is available) #}
-                  <button
-                    type="button"
-                    data-buy-now-form="product-form"
-                    class="bg-secondary text-foreground hover:bg-secondary/80 text-body1 hidden h-14 w-full items-center justify-center gap-2 rounded px-6 font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+              {# Out of Stock State #}
+              <div
+                class="{{ 'hidden' if product.in_stock }} flex flex-col gap-3"
+                data-out-of-stock
+              >
+                {# Disabled Add to Cart Button #}
+                <button
+                  type="button"
+                  disabled
+                  class="btn btn-lg bg-secondary text-muted-foreground w-full cursor-not-allowed border border-transparent"
+                >
+                  {{ _("Add to cart") }}
+                </button>
+
+                {# Notify Me Button #}
+                <button
+                  type="button"
+                  class="btn btn-filled btn-lg w-full"
+                  data-notify-me-btn
+                  command="show-modal"
+                  commandfor="notify-me-dialog"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <path d="M5 12h14"></path>
-                      <path d="m12 5 7 7-7 7"></path>
-                    </svg>
-                    {{ _("Buy now") }}
-                  </button>
-                </div>
-              {% else %}
-                <div data-out-of-stock>
-                  {# Out of Stock Message #}
-                  <div
-                    class="bg-destructive/10 text-destructive text-body1 flex h-14 w-full items-center justify-center gap-2 rounded px-6 font-medium"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <circle
-                        cx="12"
-                        cy="12"
-                        r="10"
-                      ></circle>
-                      <path d="m15 9-6 6"></path>
-                      <path d="m9 9 6 6"></path>
-                    </svg>
-                    {{ _("Out of stock") }}
-                  </div>
-                </div>
-              {% endif %}
+                    <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
+                    <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+                  </svg>
+                  {{ _("Notify me when available") }}
+                </button>
+              </div>
             </div>
 
             {% include 'vitrin:products/loyalty_points_widget.jinja' %}
@@ -532,8 +526,26 @@
     </div>
   </section>
 
+  {# Sticky Product Actions - shows when scrolling past the main add-to-cart button #}
+  {% with product=product %}
+    {% include 'components/products/sticky-product-actions.jinja' %}
+  {% endwith %}
+
+  {# Notify Me Dialog - for out-of-stock products #}
+  {% with product=product %}
+    {% include 'components/products/notify-me-dialog.jinja' %}
+  {% endwith %}
+
   <script src="{{ 'js/product-gallery-carousel.js' | asset_url }}"></script>
   <script src="{{ 'js/question-form.js' | asset_url }}"></script>
+  <script
+    src="{{ 'js/sticky-product-actions.js' | asset_url }}"
+    defer
+  ></script>
+  <script
+    src="{{ 'js/notify-me.js' | asset_url }}"
+    defer
+  ></script>
   <script>
     (function () {
       // Initialize product gallery

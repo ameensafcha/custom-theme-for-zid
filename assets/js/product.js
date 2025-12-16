@@ -167,10 +167,9 @@
         options += `<option value="${i}"${i === 1 ? " selected" : ""}>${i}</option>`;
       }
       quantityEl.innerHTML = options;
-    } else if (quantityEl.tagName === "INPUT") {
-      // Update input max
-      quantityEl.max = maxQuantity;
-      quantityEl.value = Math.min(parseInt(quantityEl.value) || 1, maxQuantity);
+    } else if (quantityEl.tagName === "INPUT" && window.updateQtyMax) {
+      // Delegate to qty-input.js
+      window.updateQtyMax("product-quantity", maxQuantity);
     }
   }
 
@@ -193,6 +192,7 @@
       `.product-gallery-thumbs[data-gallery-id="${GALLERY_ID}"] .product-gallery-thumbs__container`
     );
     const thumbsWrapper = document.querySelector(`.product-gallery-thumbs[data-gallery-id="${GALLERY_ID}"]`);
+    const lightboxGallery = document.getElementById("product-gallery-lightbox");
 
     if (!galleryContainer) return;
 
@@ -210,13 +210,34 @@
             <img
               src="${item.image?.medium || item.image?.full_size || ""}"
               alt="${selectedProduct.name || ""} - Image ${index + 1}"
-              class="aspect-[3/4] w-full rounded object-cover"
+              class="aspect-[3/4] w-full cursor-zoom-in rounded object-cover"
+              data-lightbox-trigger="${index}"
               ${index > 0 ? 'loading="lazy"' : ""}
             />
           </div>
         `
         )
         .join("");
+
+      // Build hidden lightbox gallery for PhotoSwipe
+      if (lightboxGallery) {
+        lightboxGallery.innerHTML = media
+          .map(
+            (item, index) => `
+            <a
+              href="${item.image?.full_size || item.image?.medium || ""}"
+              data-pswp-width="1600"
+              data-pswp-height="2133"
+            >
+              <img
+                src="${item.image?.thumbnail || item.image?.medium || ""}"
+                alt="${selectedProduct.name || ""} - Image ${index + 1}"
+              />
+            </a>
+          `
+          )
+          .join("");
+      }
 
       // Build thumbnails (if more than 1 image)
       if (thumbsContainer) {
@@ -290,66 +311,26 @@
   };
 
   // ─────────────────────────────────────────────────────────────
-  // Quantity Input Handlers
+  // Quantity Sync with productObj
   // ─────────────────────────────────────────────────────────────
 
-  function initQuantityHandlers() {
-    const quantityInput = document.querySelector("#product-quantity");
-    if (!quantityInput) return;
-
-    const wrapper = quantityInput.closest(".qty-input");
-    const decreaseBtn = wrapper?.querySelector('[data-quantity-action="decrease"]');
-    const increaseBtn = wrapper?.querySelector('[data-quantity-action="increase"]');
-
-    // Update productObj when quantity changes
-    const updateSelectedQuantity = () => {
-      if (window.productObj?.selected_product) {
-        window.productObj.selected_product.selected_quantity = Number(quantityInput.value) || 1;
+  function initProductObjSync() {
+    // Update productObj.selected_quantity when quantity changes
+    // Button handlers are managed by qty-input.js
+    document.addEventListener("qty:change", (e) => {
+      if (e.detail?.id === "product-quantity" && window.productObj?.selected_product) {
+        window.productObj.selected_product.selected_quantity = Number(e.detail.value) || 1;
       }
-    };
-
-    quantityInput.addEventListener("change", updateSelectedQuantity);
-    quantityInput.addEventListener("input", updateSelectedQuantity);
-
-    // Decrease button handler
-    if (decreaseBtn) {
-      decreaseBtn.addEventListener("click", () => {
-        const current = parseInt(quantityInput.value) || 1;
-        const min = parseInt(quantityInput.min) || 1;
-        if (current > min) {
-          quantityInput.value = current - 1;
-          quantityInput.dispatchEvent(new Event("change", { bubbles: true }));
-        }
-      });
-    }
-
-    // Increase button handler
-    if (increaseBtn) {
-      increaseBtn.addEventListener("click", () => {
-        const current = parseInt(quantityInput.value) || 1;
-        const max = quantityInput.max ? parseInt(quantityInput.max) : Infinity;
-        if (current < max) {
-          quantityInput.value = current + 1;
-          quantityInput.dispatchEvent(new Event("change", { bubbles: true }));
-        }
-      });
-    }
+    });
   }
 
   // ─────────────────────────────────────────────────────────────
   // Initialization
   // ─────────────────────────────────────────────────────────────
 
-  function init() {
-    initQuantityHandlers();
-  }
-
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
+    document.addEventListener("DOMContentLoaded", initProductObjSync);
   } else {
-    init();
+    initProductObjSync();
   }
-
-  // Re-init when quick view content loads
-  window.addEventListener("quick-view-content-loaded", initQuantityHandlers);
 })();

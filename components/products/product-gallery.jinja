@@ -3,6 +3,29 @@
 {% set gallery_id = gallery_id|default('product-gallery-' ~ range(1000, 9999)|random) %}
 {% set has_multiple_images = product.images and product.images|length > 1 %}
 
+{# Hidden lightbox gallery for PhotoSwipe #}
+<div id="product-gallery-lightbox" class="hidden">
+  {% if product.images and product.images|length > 0 %}
+    {% for image in product.images %}
+      {% set full_src = image.image.full_size if image.image else image %}
+      <a
+        href="{{ image_url(full_src, w=1600, q=90, f='auto') }}"
+        data-pswp-width="1600"
+        data-pswp-height="2133"
+      >
+        <img
+          src="{{ image_url(full_src, w=200, q=85, f='auto') }}"
+          alt="{{ product.name }} - {{ _('Image') }} {{ loop.index }}"
+          data-lightbox-item
+          data-lightbox-src="{{ image_url(full_src, w=1600, q=90, f='auto') }}"
+          data-lightbox-width="1600"
+          data-lightbox-height="2133"
+        />
+      </a>
+    {% endfor %}
+  {% endif %}
+</div>
+
 <div class="space-y-3">
   {# Main Gallery #}
   <div class="relative">
@@ -26,7 +49,8 @@
                 "
                 sizes="(max-width: 640px) 100vw, 50vw"
                 alt="{{ product.name }} - {{ _('Image') }} {{ loop.index }}"
-                class="aspect-[3/4] w-full rounded object-cover"
+                class="aspect-[3/4] w-full cursor-zoom-in rounded object-cover"
+                data-lightbox-trigger="{{ loop.index0 }}"
                 {% if loop.index > 1 %}loading="lazy"{% endif %}
               />
             </div>

@@ -45,7 +45,7 @@
             <li
               value="{{ choice }}"
               onclick="productOptionListItemClicked(event)"
-              class="product-options__item{% if is_selected %} active{% endif %}"
+              class="product-options__item{{ ' active' if is_selected else '' }}"
             >
               <span class="product-options__item-text">{{ choice }}</span>
             </li>
