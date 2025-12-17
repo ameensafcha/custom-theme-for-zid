@@ -96,10 +96,6 @@
             "ar": "اللون الأساسي",
             "en": "Primary Color"
           },
-          "info": {
-            "ar": "لون الأزرار والروابط والتحديد",
-            "en": "Buttons, links, and focus rings"
-          },
           "default": "#0B0A09"
         },
         {
@@ -108,10 +104,6 @@
           "label": {
             "ar": "نص اللون الأساسي",
             "en": "Primary Text Color"
-          },
-          "info": {
-            "ar": "لون النص على الأزرار",
-            "en": "Text color on buttons"
           },
           "default": "#FFFFFF"
         },
@@ -122,10 +114,6 @@
             "ar": "لون السطح",
             "en": "Surface Color"
           },
-          "info": {
-            "ar": "خلفية البطاقات والهيدر والفوتر",
-            "en": "Cards, header, and footer background"
-          },
           "default": "#F6F5F4"
         },
         {
@@ -134,10 +122,6 @@
           "label": {
             "ar": "لون التمييز",
             "en": "Accent Color"
-          },
-          "info": {
-            "ar": "شريط التقدم والعناصر المميزة",
-            "en": "Progress bars and highlights"
           },
           "default": "#A89C90"
         },
@@ -148,10 +132,6 @@
             "ar": "خلفية الصفحة",
             "en": "Page Background"
           },
-          "info": {
-            "ar": "الخلفية الرئيسية للصفحة",
-            "en": "Main page background"
-          },
           "default": "#FFFFFF"
         },
         {
@@ -160,10 +140,6 @@
           "label": {
             "ar": "لون النص",
             "en": "Text Color"
-          },
-          "info": {
-            "ar": "لون النص الرئيسي",
-            "en": "Primary text color"
           },
           "default": "#0B0A09"
         },
@@ -174,10 +150,6 @@
             "ar": "لون النص الثانوي",
             "en": "Muted Text Color"
           },
-          "info": {
-            "ar": "النص الثانوي وحدود الإدخال",
-            "en": "Secondary text and input borders"
-          },
           "default": "#545352"
         },
         {
@@ -186,10 +158,6 @@
           "label": {
             "ar": "لون الحدود",
             "en": "Border Color"
-          },
-          "info": {
-            "ar": "الحدود الافتراضية",
-            "en": "Default borders"
           },
           "default": "#B5B5B5"
         },
@@ -200,10 +168,6 @@
             "ar": "لون حدود الإدخال",
             "en": "Input Border Color"
           },
-          "info": {
-            "ar": "حدود حقول الإدخال",
-            "en": "Input field borders"
-          },
           "default": "#545352"
         },
         {
@@ -212,10 +176,6 @@
           "label": {
             "ar": "لون حلقة التركيز",
             "en": "Focus Ring Color"
-          },
-          "info": {
-            "ar": "حلقة التركيز للعناصر التفاعلية",
-            "en": "Focus ring for interactive elements"
           },
           "default": "#0B0A09"
         },

@@ -1,5 +1,4 @@
 {
-  "section_id": "uuid",
   "template": "sections/gallery.jinja",
   "name": {
     "ar": "معرض الصور",
@@ -23,10 +22,6 @@
         "en": "Images"
       },
       "max_items": 8,
-      "info": {
-        "ar": "أضف صور المعرض (حتى 8 صور)",
-        "en": "Add gallery images (up to 8 images)"
-      },
       "settings": [
         {
           "id": "src",
@@ -50,10 +45,6 @@
           "label": {
             "ar": "عنوان الصورة",
             "en": "Image title"
-          },
-          "info": {
-            "ar": "اختياري - يظهر في وسط الصورة",
-            "en": "Optional - displays centered on image"
           }
         },
         {
@@ -62,10 +53,6 @@
           "label": {
             "ar": "نص الزر الأساسي",
             "en": "Primary button text"
-          },
-          "info": {
-            "ar": "اختياري - زر بخلفية ملونة",
-            "en": "Optional - filled button"
           }
         },
         {
@@ -82,10 +69,6 @@
           "label": {
             "ar": "نص الزر الثانوي",
             "en": "Secondary button text"
-          },
-          "info": {
-            "ar": "اختياري - زر بحدود فقط",
-            "en": "Optional - outline button"
           }
         },
         {

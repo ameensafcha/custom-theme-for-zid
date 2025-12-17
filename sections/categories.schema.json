@@ -1,6 +1,5 @@
 {
-  "section_id": "uuid",
-  "template": "sections/categories-2.jinja",
+  "template": "sections/categories.jinja",
   "name": {
     "ar": "التصنيفات",
     "en": "Categories"
@@ -23,10 +22,6 @@
         "en": "Categories"
       },
       "max_items": 12,
-      "info": {
-        "ar": "أضف التصنيفات (حتى 12 تصنيف)",
-        "en": "Add categories (up to 12 categories)"
-      },
       "settings": [
         {
           "id": "category",

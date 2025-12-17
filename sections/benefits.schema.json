@@ -1,5 +1,4 @@
 {
-  "section_id": "uuid",
   "template": "sections/benefits.jinja",
   "name": {
     "ar": "خصائص المتجر",
@@ -14,10 +13,6 @@
         "en": "Features"
       },
       "max_items": 4,
-      "info": {
-        "ar": "أضف مزايا المتجر (حتى 4 مزايا)",
-        "en": "Add store benefits (up to 4 benefits)"
-      },
       "settings": [
         {
           "id": "image",

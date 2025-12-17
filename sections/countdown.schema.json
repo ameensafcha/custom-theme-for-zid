@@ -1,5 +1,4 @@
 {
-  "section_id": "uuid",
   "template": "sections/countdown.jinja",
   "name": {
     "ar": "العد التنازلي",
@@ -12,10 +11,6 @@
       "label": {
         "ar": "نص الشارة",
         "en": "Badge Text"
-      },
-      "info": {
-        "ar": "اتركه فارغًا لإخفاء الشارة",
-        "en": "Leave empty to hide badge"
       },
       "default": ""
     },
@@ -39,14 +34,10 @@
     },
     {
       "id": "end_date",
-      "type": "datetime-local",
+      "type": "text",
       "label": {
         "ar": "تاريخ الانتهاء",
         "en": "End Date"
-      },
-      "info": {
-        "ar": "بصيغة YYYY-MM-DD HH:MM (مثال: 2025-12-31 23:59)",
-        "en": "Format: YYYY-MM-DD HH:MM (example: 2025-12-31 23:59)"
       },
       "default": ""
     },

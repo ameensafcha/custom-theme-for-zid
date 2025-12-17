@@ -1,5 +1,4 @@
 {
-  "section_id": "uuid",
   "template": "sections/products.jinja",
   "name": {
     "ar": "قائمة المنتجات",

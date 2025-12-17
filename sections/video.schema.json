@@ -1,5 +1,4 @@
 {
-  "section_id": "uuid",
   "template": "sections/video.jinja",
   "name": {
     "ar": "فيديو",
@@ -12,10 +11,6 @@
       "label": {
         "ar": "العنوان",
         "en": "Title"
-      },
-      "info": {
-        "ar": "يظهر فقط عندما لا يكون التشغيل التلقائي مفعلاً",
-        "en": "Only shows when autoplay is disabled"
       },
       "default": ""
     },

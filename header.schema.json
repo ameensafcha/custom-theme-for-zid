@@ -14,28 +14,22 @@
       },
       "settings": [
         {
-          "id": "header_options",
-          "type": "checkboxes",
+          "id": "hide_language",
+          "type": "checkbox",
           "label": {
-            "ar": "الخيارات",
-            "en": "Options"
+            "ar": "إخفاء اللغة",
+            "en": "Hide language"
           },
-          "options": [
-            {
-              "label": {
-                "ar": "إخفاء اللغة",
-                "en": "Hide language"
-              },
-              "value": "hide_language"
-            },
-            {
-              "label": {
-                "ar": "إخفاء اسم الدولة",
-                "en": "Hide country"
-              },
-              "value": "hide_country"
-            }
-          ]
+          "default": false
+        },
+        {
+          "id": "hide_country",
+          "type": "checkbox",
+          "label": {
+            "ar": "إخفاء اسم الدولة",
+            "en": "Hide country"
+          },
+          "default": false
         }
       ]
     },
@@ -105,10 +99,6 @@
           "label": {
             "ar": "الرابط",
             "en": "Link URL"
-          },
-          "info": {
-            "ar": "في حال كان الحقل فارغًا لن يتم الانتقال للرابط عند الضغط",
-            "en": "If empty, clicking won't navigate to any link"
           },
           "default": ""
         },

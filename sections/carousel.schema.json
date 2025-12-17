@@ -1,5 +1,4 @@
 {
-  "section_id": "uuid",
   "template": "sections/carousel.jinja",
   "name": {
     "ar": "دوّار الصور",

@@ -1,5 +1,4 @@
 {
-  "section_id": "uuid",
   "template": "sections/hero.jinja",
   "name": {
     "ar": "البانر الرئيسي",
@@ -12,10 +11,6 @@
       "label": {
         "ar": "البانر الرئيسي",
         "en": "Primary Hero"
-      },
-      "info": {
-        "ar": "استخدم H1 للعنوان (يجب أن يكون هناك H1 واحد فقط في الصفحة)",
-        "en": "Use H1 for heading (there should be only one H1 per page)"
       },
       "default": true
     },

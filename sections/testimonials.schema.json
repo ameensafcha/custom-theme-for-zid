@@ -1,5 +1,4 @@
 {
-  "section_id": "uuid",
   "template": "sections/testimonials.jinja",
   "name": {
     "ar": "آراء العملاء",
