@@ -122,9 +122,13 @@
       defer
       src="{{ 'js/product-gallery-carousel.js' | asset_url }}"
     ></script>
-     <script
+    <script
       defer
       src="{{ 'js/wishlist.js' | asset_url }}"
+    ></script>
+    <script
+      defer
+      src="{{ 'js/qty-input.js' | asset_url }}"
     ></script>
     <script
       defer
@@ -132,10 +136,15 @@
     ></script>
     <script
       defer
+      src="{{ 'js/notify-me.js' | asset_url }}"
+    ></script>
+    <script
+      defer
       src="{{ 'js/search.js' | asset_url }}"
     ></script>
 
-  {# Layout config for header/locale functionality #}
+    {# Layout config for header/locale functionality #}
+    <!-- prettier-ignore-start -->
   <script>
     window.layoutConfig = {
       profileUrl: "{{ url_for('profile') }}",
@@ -144,11 +153,13 @@
       defaultCountryCode: "{{ store.default_locale.region.code | lower }}"
     };
   </script>
-  <script
-    defer
-    src="{{ 'js/layout.js' | asset_url }}"
-  ></script>
+  <!-- prettier-ignore-end -->
+    <script
+      defer
+      src="{{ 'js/layout.js' | asset_url }}"
+    ></script>
 
+    <!-- prettier-ignore-start -->
   <script defer>
     // Product translations (used by product.js for variant changes)
     window.productTranslations = {
@@ -159,10 +170,16 @@
     window.storeLowStockEnabled = {{ 'true' if store.settings.products.low_stock_enabled else 'false' }};
     window.storeLowStockThreshold = {{ store.settings.products.low_stock_threshold | default(5) }};
   </script>
+  <!-- prettier-ignore-end -->
 
-  <script defer src="{{ 'js/qty-input.js' | asset_url }}"></script>
-  <script defer src="{{ 'js/product.js' | asset_url }}"></script>
-  <script defer src="{{ 'js/image-lightbox.js' | asset_url }}"></script>
+    <script
+      defer
+      src="{{ 'js/product.js' | asset_url }}"
+    ></script>
+    <script
+      defer
+      src="{{ 'js/image-lightbox.js' | asset_url }}"
+    ></script>
     {% vitrin_body %}
     {% block footer_scripts %}
     {% endblock %}

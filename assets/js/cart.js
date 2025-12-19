@@ -133,17 +133,6 @@ class CartManager {
       });
     });
 
-    // Quantity action buttons (increase, decrease, remove)
-    document.querySelectorAll("[data-quantity-action]").forEach((btn) => {
-      if (btn.dataset.cartInit) return;
-      btn.dataset.cartInit = "true";
-
-      btn.addEventListener("click", (e) => {
-        e.preventDefault();
-        this.handleQuantityAction(btn);
-      });
-    });
-
     // Variant add to cart buttons (product page variant list)
     document.querySelectorAll("[data-add-variant-to-cart]").forEach((btn) => {
       if (btn.dataset.cartInit) return;
@@ -152,6 +141,20 @@ class CartManager {
       btn.addEventListener("click", (e) => {
         e.preventDefault();
         this.addVariantToCart(btn);
+      });
+    });
+
+    // Listen for qty:remove events from qty-input.js (product cards)
+    document.querySelectorAll("[data-qty-input]").forEach((wrapper) => {
+      if (wrapper.dataset.cartQtyInit) return;
+      wrapper.dataset.cartQtyInit = "true";
+
+      wrapper.addEventListener("qty:remove", (e) => {
+        this.handleQtyRemove(wrapper);
+      });
+
+      wrapper.addEventListener("qty:change", (e) => {
+        this.handleQtyChange(wrapper, e.detail.value);
       });
     });
   }
@@ -303,45 +306,60 @@ class CartManager {
   }
 
   // ─────────────────────────────────────────────────────────────
-  // Quantity Actions
+  // Quantity Actions (for qty-input.js integration)
   // ─────────────────────────────────────────────────────────────
-  async handleQuantityAction(btn) {
-    const wrapper = btn.closest("[data-quantity-input]");
-    if (!wrapper) return;
 
-    const action = btn.dataset.quantityAction;
-    if (!["increase", "decrease", "remove"].includes(action)) return;
-
+  /**
+   * Handle qty:remove event from qty-input.js
+   */
+  async handleQtyRemove(wrapper) {
     const productId = wrapper.dataset.productId;
-    const currentQty = parseInt(wrapper.dataset.quantity) || 1;
+    if (!productId) return;
 
     // Disable buttons and show spinner
     const buttons = wrapper.querySelectorAll("button");
-    const display = wrapper.querySelector("[data-quantity-display]");
-    const originalDisplay = display?.innerHTML;
+    const input = wrapper.querySelector("[data-qty-value]");
+    const originalValue = input?.value;
 
     buttons.forEach((b) => (b.disabled = true));
-    if (display) display.innerHTML = SPINNER;
+    if (input) input.disabled = true;
 
     try {
-      if (action === "increase") {
-        await this.updateQuantity(productId, currentQty + 1);
-        this.updateQuantityUI(wrapper, currentQty + 1);
-      } else if (action === "decrease" && currentQty > 1) {
-        await this.updateQuantity(productId, currentQty - 1);
-        this.updateQuantityUI(wrapper, currentQty - 1);
-      } else if (action === "remove") {
-        await this.removeFromCart(productId);
-        this.showAddButton(productId);
-      }
-
+      await this.removeFromCart(productId);
+      this.showAddButton(productId);
       this.refreshBadge();
     } catch (err) {
-      console.error("Quantity action failed:", err);
-      // Restore original display on error
-      if (display) display.innerHTML = originalDisplay;
+      console.error("Remove from cart failed:", err);
+      // Restore on error
+      if (input) input.value = originalValue;
     } finally {
       buttons.forEach((b) => (b.disabled = false));
+      if (input) input.disabled = false;
+    }
+  }
+
+  /**
+   * Handle qty:change event from qty-input.js
+   */
+  async handleQtyChange(wrapper, newQty) {
+    const productId = wrapper.dataset.productId;
+    if (!productId) return;
+
+    // Disable buttons during update
+    const buttons = wrapper.querySelectorAll("button");
+    const input = wrapper.querySelector("[data-qty-value]");
+
+    buttons.forEach((b) => (b.disabled = true));
+    if (input) input.disabled = true;
+
+    try {
+      await this.updateQuantity(productId, newQty);
+      this.refreshBadge();
+    } catch (err) {
+      console.error("Update quantity failed:", err);
+    } finally {
+      buttons.forEach((b) => (b.disabled = false));
+      if (input) input.disabled = false;
     }
   }
 
@@ -382,17 +400,16 @@ class CartManager {
   // UI Updates
   // ─────────────────────────────────────────────────────────────
   updateQuantityUI(wrapper, qty) {
-    wrapper.dataset.quantity = qty;
+    // Update the input value
+    const input = wrapper.querySelector("[data-qty-value]");
+    if (input) input.value = qty;
 
-    const display = wrapper.querySelector("[data-quantity-display]");
-    if (display) display.textContent = qty;
+    // Toggle delete/minus visibility (for qty-input component)
+    const removeBtn = wrapper.querySelector('[data-qty-action="remove"]');
+    const decreaseBtn = wrapper.querySelector('[data-qty-action="decrease"]');
 
-    // Toggle delete/minus visibility
-    const removeBtn = wrapper.querySelector('[data-quantity-action="remove"]');
-    const decreaseBtn = wrapper.querySelector('[data-quantity-action="decrease"]');
-
-    if (removeBtn) removeBtn.hidden = qty > 1;
-    if (decreaseBtn) decreaseBtn.hidden = qty === 1;
+    if (removeBtn) removeBtn.classList.toggle("hidden", qty > 1);
+    if (decreaseBtn) decreaseBtn.classList.toggle("hidden", qty <= 1);
   }
 
   showQuantityInput(productId, qty) {
@@ -407,9 +424,12 @@ class CartManager {
     if (quickViewBtn) quickViewBtn.hidden = true;
     if (qtySection) {
       qtySection.hidden = false;
-      const wrapper = qtySection.querySelector("[data-quantity-input]");
+      const wrapper = qtySection.querySelector("[data-qty-input]");
       if (wrapper) this.updateQuantityUI(wrapper, qty);
-      this.initButtons(); // Init new quantity buttons
+
+      // Initialize qty-input.js handlers for the newly visible input
+      if (window.initQtyInputs) window.initQtyInputs();
+      this.initButtons(); // Init cart event listeners
     }
   }
 

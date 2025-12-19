@@ -7,19 +7,11 @@
 (function () {
   "use strict";
 
-  const form = document.querySelector("[data-notify-me-form]");
-  if (!form) return;
+  // Track initialized forms to avoid double-init
+  const initializedForms = new WeakSet();
 
-  // Form elements
-  const productIdInput = document.querySelector("[data-notify-product-id]");
-  const nameInput = document.querySelector("[data-notify-name]");
-  const emailInput = document.querySelector("[data-notify-email]");
-  const countryCodeSelect = document.querySelector("[data-notify-country-code]");
-  const phoneInput = document.querySelector("[data-notify-phone]");
-  const submitBtn = document.querySelector("[data-notify-submit-btn]");
-  const submitText = document.querySelector("[data-notify-submit-text]");
-  const submitSpinner = document.querySelector("[data-notify-submit-spinner]");
-  const dialog = document.getElementById("notify-me-dialog");
+  // Form elements (will be set during init)
+  let form, productIdInput, nameInput, emailInput, countryCodeSelect, phoneInput, submitBtn, submitText, submitSpinner, dialog;
 
   // Show loading state
   function setLoading(loading) {
@@ -149,18 +141,39 @@
 
   // Initialize
   function init() {
+    // Find form (may be dynamically loaded)
+    form = document.querySelector("[data-notify-me-form]");
+    if (!form || initializedForms.has(form)) return;
+
+    // Mark as initialized
+    initializedForms.add(form);
+
+    // Query form elements
+    productIdInput = document.querySelector("[data-notify-product-id]");
+    nameInput = document.querySelector("[data-notify-name]");
+    emailInput = document.querySelector("[data-notify-email]");
+    countryCodeSelect = document.querySelector("[data-notify-country-code]");
+    phoneInput = document.querySelector("[data-notify-phone]");
+    submitBtn = document.querySelector("[data-notify-submit-btn]");
+    submitText = document.querySelector("[data-notify-submit-text]");
+    submitSpinner = document.querySelector("[data-notify-submit-spinner]");
+    dialog = document.getElementById("notify-me-dialog");
+
     // Form submission
     form.addEventListener("submit", submitStockAlert);
-
-    // Listen for customer data (if user is logged in)
-    document.addEventListener("zid-customer-fetched", function (event) {
-      const customer = event.detail?.customer;
-      autoFillCustomerData(customer);
-    });
 
     // Listen for variant changes to update product ID
     window.addEventListener("product:variant-changed", handleVariantChange);
   }
+
+  // Listen for customer data (if user is logged in) - only once
+  document.addEventListener("zid-customer-fetched", function (event) {
+    const customer = event.detail?.customer;
+    autoFillCustomerData(customer);
+  });
+
+  // Re-init when quick view content loads
+  window.addEventListener("quick-view-content-loaded", init);
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", init);

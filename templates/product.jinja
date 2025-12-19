@@ -312,6 +312,11 @@
             {% include 'vitrin:products/payment_widgets.jinja' %}
           </form>
         </div>
+
+        {# Notify Me Dialog - inside product-main-section for quick view support #}
+        {% with product=product %}
+          {% include 'components/products/notify-me-dialog.jinja' %}
+        {% endwith %}
       </div>
       <div
         id="additional-info"
@@ -531,19 +536,10 @@
     {% include 'components/products/sticky-product-actions.jinja' %}
   {% endwith %}
 
-  {# Notify Me Dialog - for out-of-stock products #}
-  {% with product=product %}
-    {% include 'components/products/notify-me-dialog.jinja' %}
-  {% endwith %}
-
   <script src="{{ 'js/product-gallery-carousel.js' | asset_url }}"></script>
   <script src="{{ 'js/question-form.js' | asset_url }}"></script>
   <script
     src="{{ 'js/sticky-product-actions.js' | asset_url }}"
-    defer
-  ></script>
-  <script
-    src="{{ 'js/notify-me.js' | asset_url }}"
     defer
   ></script>
   <script>
