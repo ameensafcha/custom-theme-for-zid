@@ -813,3 +813,100 @@ msgstr "الرجاء اختيار"
 
 msgid "Please enter"
 msgstr "الرجاء إدخال"
+
+# ==============================================================================
+# Shipping & Payment Page
+# ==============================================================================
+
+msgid "Shipping & Payment"
+msgstr "الشحن والدفع"
+
+msgid "Shipping Options"
+msgstr "خيارات الشحن"
+
+msgid "Payment Options"
+msgstr "خيارات الدفع"
+
+msgid "Bank Accounts"
+msgstr "الحسابات البنكية"
+
+msgid "Shipping Provider"
+msgstr "مزود الشحن"
+
+msgid "Supported Areas"
+msgstr "المناطق المدعومة"
+
+msgid "Shipping Charges"
+msgstr "رسوم الشحن"
+
+msgid "Cash on Delivery"
+msgstr "الدفع عند الاستلام"
+
+msgid "View supported areas"
+msgstr "عرض المناطق المدعومة"
+
+msgid "View areas"
+msgstr "عرض المناطق"
+
+msgid "All areas"
+msgstr "جميع المناطق"
+
+msgid "Available"
+msgstr "متاح"
+
+msgid "Not available"
+msgstr "غير متاح"
+
+msgid "No shipping options available"
+msgstr "لا توجد خيارات شحن متاحة"
+
+msgid "No payment methods available"
+msgstr "لا توجد طرق دفع متاحة"
+
+msgid "No bank accounts available"
+msgstr "لا توجد حسابات بنكية متاحة"
+
+msgid "Payment method"
+msgstr "طريقة الدفع"
+
+msgid "Beneficiary Name"
+msgstr "اسم المستفيد"
+
+msgid "IBAN"
+msgstr "رقم الآيبان"
+
+msgid "Account Number"
+msgstr "رقم الحساب"
+
+msgid "Copy"
+msgstr "نسخ"
+
+msgid "Search for a city"
+msgstr "ابحث عن مدينة"
+
+msgid "No areas found"
+msgstr "لم يتم العثور على مناطق"
+
+msgid "Covered Areas"
+msgstr "المناطق المغطاة"
+
+msgid "more"
+msgstr "مدينة أخرى"
+
+msgid "Not supported"
+msgstr "غير مدعوم"
+
+msgid "Beneficiary"
+msgstr "المستفيد"
+
+msgid "Account No."
+msgstr "رقم الحساب"
+
+msgid "Covered areas"
+msgstr "المناطق المغطاة"
+
+msgid "Shipping charges"
+msgstr "رسوم الشحن"
+
+msgid "Cash on delivery"
+msgstr "الدفع عند الاستلام"
