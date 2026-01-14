@@ -19,9 +19,9 @@
     {% if category.image_full_size or category.image %}
       <img
         {% if category.image_full_size %}
-          src="{{ image_url(category.image_full_size, w=400, q=90, f='auto') }}"
+          src="{{ image_url(category.image_full_size, w=320, q=80, f='auto') }}"
         {% else %}
-          src="{{ image_url(category.image, w=400, q=90, f='auto') }}"
+          src="{{ image_url(category.image, w=320, q=80, f='auto') }}"
         {% endif %}
         alt="{{ category.name }}"
         class="h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-105"

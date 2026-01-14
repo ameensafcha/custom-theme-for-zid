@@ -6,9 +6,10 @@
           {% for icon in method.icons %}
             <div class="border-border-light flex items-center rounded border px-4 py-3">
               <img
-                src="{{ icon }}"
+                src="{{ image_url(icon, w=96, q=85, f='auto') }}"
                 alt="{{ method.name if method.name else _('Payment method') }}"
                 class="h-6 w-auto object-contain"
+                loading="lazy"
               />
             </div>
           {% endfor %}

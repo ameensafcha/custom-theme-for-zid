@@ -27,6 +27,30 @@ function initAnnouncementBar() {
 // Login/Account Management
 // ─────────────────────────────────────────────────────────────
 
+// Store pending redirect for post-login navigation
+let pendingAuthRedirect = null;
+
+/**
+ * Setup listener for auth success event
+ * Handles redirect after successful OTP verification
+ */
+function setupAuthSuccessListener() {
+  window.addEventListener("vitrin:auth:success", function () {
+    // Update auth state
+    if (window.customerAuthState) {
+      window.customerAuthState.isAuthenticated = true;
+      window.customerAuthState.isGuest = false;
+    }
+
+    // Handle pending redirect
+    if (pendingAuthRedirect) {
+      const redirectUrl = pendingAuthRedirect;
+      pendingAuthRedirect = null;
+      window.location.href = redirectUrl;
+    }
+  });
+}
+
 /**
  * Login action handler - opens login dialog with optional redirect
  */
@@ -39,11 +63,22 @@ window.handleLoginAction = function (redirectTo, addToUrl) {
     return;
   }
 
-  if (typeof zid !== "undefined" && zid.customer && zid.customer.login) {
+  // Calculate final redirect URL and store for post-login navigation
+  const finalRedirect = addToUrl ? window.location.pathname + redirectTo : redirectTo;
+  if (finalRedirect) {
+    pendingAuthRedirect = finalRedirect;
+  }
+
+  // Use auth_dialog if available (preferred per Zid docs)
+  if (window.auth_dialog?.open && typeof window.auth_dialog.open === "function") {
+    window.auth_dialog.open();
+  } else if (typeof zid !== "undefined" && zid.customer && zid.customer.login) {
+    // Fallback to Zid SDK login
     zid.customer.login.open({
-      redirectTo: addToUrl ? window.location.pathname + redirectTo : redirectTo
+      redirectTo: finalRedirect
     });
   } else {
+    // Final fallback to page redirect
     window.location.href = window.layoutConfig?.profileUrl || "/account-profile";
   }
 };
@@ -146,6 +181,7 @@ export function init() {
   initLocaleForms();
   initLoginRedirectButtons();
   initCustomerGreeting();
+  setupAuthSuccessListener();
 }
 
 if (document.readyState === "loading") {

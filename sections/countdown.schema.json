@@ -34,10 +34,14 @@
     },
     {
       "id": "end_date",
-      "type": "text",
+      "type": "date",
       "label": {
         "ar": "تاريخ الانتهاء",
         "en": "End Date"
+      },
+      "info": {
+        "ar": "الصيغة المطلوبة: YYYY-MM-DD (مثال: 2025-12-31)",
+        "en": "Required format: YYYY-MM-DD (e.g., 2025-12-31)"
       },
       "default": ""
     },
@@ -63,12 +67,24 @@
       "id": "background_image",
       "type": "image",
       "label": {
-        "ar": "صورة الخلفية",
-        "en": "Background Image"
+        "ar": "صورة الخلفية (سطح المكتب)",
+        "en": "Background Image (Desktop)"
       },
       "info": {
         "ar": "اختياري",
         "en": "Optional"
+      }
+    },
+    {
+      "id": "background_image_mobile",
+      "type": "image",
+      "label": {
+        "ar": "صورة الخلفية (موبايل)",
+        "en": "Background Image (Mobile)"
+      },
+      "info": {
+        "ar": "اختياري - إذا لم يتم تحديده، سيتم استخدام صورة سطح المكتب",
+        "en": "Optional - Falls back to desktop image if not set"
       }
     },
     {

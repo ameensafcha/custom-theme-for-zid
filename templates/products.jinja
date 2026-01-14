@@ -29,7 +29,7 @@
         <div
           data-grid-root="true"
           data-grid="four"
-          class="group/grid grid gap-x-4 gap-y-10 data-[grid=four]:grid-cols-1 data-[grid=list]:grid-cols-1 data-[grid=one]:grid-cols-1 data-[grid=two]:grid-cols-1 data-[grid=four]:md:grid-cols-2 data-[grid=two]:md:grid-cols-2 data-[grid=four]:lg:grid-cols-4 data-[grid=two]:lg:grid-cols-2"
+          class="group/grid grid gap-x-4 gap-y-10 data-[grid=four]:grid-cols-1 data-[grid=list]:grid-cols-1 data-[grid=one]:grid-cols-1 data-[grid=four]:md:grid-cols-2 data-[grid=four]:lg:grid-cols-4"
         >
           {% for product in products.results %}
             {% include 'components/products/product-card.jinja' %}
@@ -61,8 +61,6 @@
 
       function initGridControls() {
         const gridRoot = document.querySelector("[data-grid-root]");
-        const desktopButtons = document.querySelectorAll("[data-grid-btn]:not([data-grid-btn='one'])");
-        const mobileButtons = document.querySelectorAll("[data-grid-btn='one'], [data-grid-btn='list']");
 
         if (!gridRoot) return;
 
@@ -73,7 +71,7 @@
         const allButtons = document.querySelectorAll("[data-grid-btn]");
         allButtons.forEach((btn) => {
           const mode = btn.dataset.gridBtn;
-          const isDesktopBtn = mode === "two" || mode === "four";
+          const isDesktopBtn = mode === "four";
           const isMobileBtn = mode === "one";
           const isListBtn = mode === "list";
 
@@ -97,7 +95,7 @@
         // Update the appropriate mode based on button type
         if (mode === "one") {
           mobileGridMode = mode;
-        } else if (mode === "two" || mode === "four") {
+        } else if (mode === "four") {
           desktopGridMode = mode;
         } else if (mode === "list") {
           // List mode updates based on current viewport

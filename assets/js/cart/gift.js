@@ -6,24 +6,22 @@
 
 /**
  * Handle login action for unauthenticated users
- * @param {string} redirectTo - Redirect URL after login
- * @param {boolean} addToUrl - Whether to add redirect to URL
+ * Uses the global handleLoginAction if available, otherwise opens auth dialog
  */
-function handleLoginAction(redirectTo = "", addToUrl = true) {
+function handleLoginAction() {
   if (window.customerAuthState && window.customerAuthState.isAuthenticated) {
     return;
   }
 
+  // Use global handleLoginAction if available (handles post-login redirect)
+  if (typeof window.handleLoginAction === "function") {
+    window.handleLoginAction("", false);
+    return;
+  }
+
+  // Fallback: Use auth_dialog directly
   if (window.auth_dialog?.open && typeof window.auth_dialog.open === "function") {
-    if (redirectTo && addToUrl) {
-      const currentUrl = new URL(window.location.href);
-      currentUrl.searchParams.set("redirect_to", redirectTo);
-      window.history.replaceState({}, "", currentUrl.toString());
-    }
     window.auth_dialog.open();
-  } else {
-    const redirectUrl = redirectTo ? "/auth/login?redirect_to=" + encodeURIComponent(redirectTo) : "/auth/login";
-    window.location.href = redirectUrl;
   }
 }
 

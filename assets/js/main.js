@@ -28,8 +28,8 @@ import "./features/phone-input.js";
 import "./features/product-filter.js";
 import "./features/price-slider.js";
 import "./features/bundle-offers.js";
-import "./features/loyalty-rewards.js";
 import "./features/notify-me.js";
+// Note: loyalty-rewards is loaded as standalone script AFTER vitrin_body in layout.jinja
 
 // Store for initialized carousel instances (for cleanup)
 const carouselInstances = new WeakMap();

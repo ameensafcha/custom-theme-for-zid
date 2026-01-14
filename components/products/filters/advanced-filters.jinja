@@ -42,7 +42,7 @@
       />
       <span class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded p-0.5">
         <img
-          src="{{ option.type_value.thumbnail }}"
+          src="{{ image_url(option.type_value.thumbnail, w=64, q=85, f='auto') }}"
           alt="{{ option.value }}"
           class="size-full rounded object-cover"
         />
@@ -57,8 +57,6 @@
   set sort_options = [
     { 'value': 'popularity_order-asc', 'label': _('Most popular'), 'sort_by': 'popularity_order', 'order': 'asc' },
     { 'value': 'created_at-desc', 'label': _('Newest'), 'sort_by': 'created_at', 'order': 'desc' },
-    { 'value': 'name-asc', 'label': _('Alphabetically, A-Z'), 'sort_by': 'name', 'order': 'asc' },
-    { 'value': 'name-desc', 'label': _('Alphabetically, Z-A'), 'sort_by': 'name', 'order': 'desc' },
     { 'value': 'price-asc', 'label': _('Price, low to high'), 'sort_by': 'price', 'order': 'asc' },
     { 'value': 'price-desc', 'label': _('Price, high to low'), 'sort_by': 'price', 'order': 'desc' }
   ]

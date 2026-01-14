@@ -1,16 +1,24 @@
+{% set is_lazy = settings.order > 2 %}
+
 <section
   section-id="{{ sectionId }}"
-  class="px-4 py-6 md:px-16 md:pt-0 md:pb-16"
+  class="px-4 py-6 md:px-16 md:py-16"
 >
   <div class="theme-container space-y-6">
     {% if settings.title %}
       <h2 class="text-foreground text-h4 md:text-h3">{{ settings.title }}</h2>
     {% endif %}
     {% if settings.store_partners %}
-      <div class="embla relative overflow-hidden">
+      <div
+        class="embla relative overflow-hidden"
+        data-carousel
+        data-carousel-loop="true"
+        data-carousel-dragfree="true"
+        data-carousel-autoscroll="0.5"
+      >
         <div class="fade-left pointer-events-none absolute top-0 z-10 h-full w-20 ltr:left-0 rtl:right-0"></div>
         <div class="fade-right pointer-events-none absolute top-0 z-10 h-full w-20 ltr:right-0 rtl:left-0"></div>
-        <div class="embla__viewport overflow-hidden">
+        <div class="embla__viewport overflow-hidden" data-carousel-viewport>
           <div class="embla__container">
             {% for partner in settings.store_partners %}
               <div class="embla__slide">
@@ -20,20 +28,40 @@
                       href="{{ partner.url }}"
                       class="flex h-full w-full items-center justify-center"
                     >
-                      <img
-                        src="{{ partner.image }}"
-                        alt="{{ partner.name }}"
-                        class="h-10 w-auto object-contain"
-                        loading="lazy"
-                      />
+                      <picture>
+                        {% if partner.image_mobile %}
+                          <source
+                            media="(max-width: 767px)"
+                            srcset="{{ image_url(partner.image_mobile, w=160, q=75, f='auto') }}"
+                          />
+                        {% endif %}
+                        <img
+                          src="{{ image_url(partner.image, w=160, q=75, f='auto') }}"
+                          alt="{{ partner.name }}"
+                          width="160"
+                          height="40"
+                          class="h-10 w-auto object-contain"
+                          {% if is_lazy %}loading="lazy"{% endif %}
+                        />
+                      </picture>
                     </a>
                   {% else %}
-                    <img
-                      src="{{ partner.image }}"
-                      alt="{{ partner.name }}"
-                      class="h-10 w-auto object-contain"
-                      loading="lazy"
-                    />
+                    <picture>
+                      {% if partner.image_mobile %}
+                        <source
+                          media="(max-width: 767px)"
+                          srcset="{{ image_url(partner.image_mobile, w=160, q=75, f='auto') }}"
+                        />
+                      {% endif %}
+                      <img
+                        src="{{ image_url(partner.image, w=160, q=75, f='auto') }}"
+                        alt="{{ partner.name }}"
+                        width="160"
+                        height="40"
+                        class="h-10 w-auto object-contain"
+                        {% if is_lazy %}loading="lazy"{% endif %}
+                      />
+                    </picture>
                   {% endif %}
                 </div>
               </div>
@@ -76,33 +104,3 @@
     }
   </style>
 </section>
-
-<script>
-  (function () {
-    const section = document.querySelector('[section-id="{{ sectionId }}"]');
-    if (!section) return;
-
-    const emblaRoot = section.querySelector(".embla");
-    const viewport = emblaRoot.querySelector(".embla__viewport");
-    const container = emblaRoot.querySelector(".embla__container");
-
-    if (!container || container.children.length === 0) return;
-
-    const autoScroll = EmblaCarouselAutoScroll({
-      speed: 0.5,
-      stopOnInteraction: false,
-      stopOnMouseEnter: true,
-      stopOnFocusIn: false
-    });
-
-    const embla = EmblaCarousel(
-      viewport,
-      {
-        direction: document.dir === "rtl" ? "rtl" : "ltr",
-        loop: true,
-        dragFree: true
-      },
-      [autoScroll]
-    );
-  })();
-</script>

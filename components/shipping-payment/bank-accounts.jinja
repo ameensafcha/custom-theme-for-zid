@@ -8,9 +8,10 @@
               class="border-border-light flex size-[42px] shrink-0 items-center justify-center overflow-hidden rounded border"
             >
               <img
-                src="{{ bank.bank.logo }}"
+                src="{{ image_url(bank.bank.logo, w=84, q=85, f='auto') }}"
                 alt="{{ bank.bank.name }}"
                 class="size-full object-contain"
+                loading="lazy"
               />
             </div>
           {% else %}

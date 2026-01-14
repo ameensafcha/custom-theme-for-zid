@@ -7,7 +7,9 @@
 // Module state
 const state = {
   loyaltyPoints: 0,
-  redemptionMethods: []
+  redemptionMethods: [],
+  config: null,
+  initialized: false
 };
 
 /**
@@ -18,26 +20,28 @@ const state = {
  * @param {Object} config.translations - Translation strings
  */
 export function initLoyaltyProgram(config) {
+  // Store config for re-init after cart updates (use passed config or stored config)
+  if (config) {
+    state.config = config;
+  }
+
+  const cfg = state.config;
+  if (!cfg) return;
+
   // Calculate points for this purchase
-  calculateLoyaltyPoints(config.cartTotalValue);
+  calculateLoyaltyPoints(cfg.cartTotalValue);
 
   // If logged in, get customer points and redemption methods
   if (window.customerAuthState && window.customerAuthState.isAuthenticated) {
     getCustomerLoyaltyPoints(() => {
-      getRedemptionMethods(config.storeCurrencyCode, config.cartCurrencyCode, config.translations);
+      getRedemptionMethods(cfg.storeCurrencyCode, cfg.cartCurrencyCode, cfg.translations);
     });
   }
 
-  // Setup redemption select change handler
-  const select = document.querySelector("[data-loyalty-redemption-select]");
-  const applyBtn = document.querySelector("[data-loyalty-apply-btn]");
-
-  if (select) {
-    select.addEventListener("change", () => {
-      if (applyBtn) {
-        applyBtn.disabled = !select.value;
-      }
-    });
+  // Listen for cart-updated event only once
+  if (!state.initialized) {
+    state.initialized = true;
+    window.addEventListener("cart-updated", () => initLoyaltyProgram());
   }
 }
 
@@ -145,7 +149,8 @@ function populateRedemptionSelect(methods, cartCurrencyCode, translations) {
         .replace("%(discount)s", discountValue + " " + cartCurrencyCode);
 
       const option = document.createElement("el-option");
-      option.value = method.id;
+      // Use setAttribute for custom elements, not property assignment
+      option.setAttribute("value", method.id);
       option.className = `text-foreground text-body1 hover:bg-secondary aria-selected:bg-secondary block w-full cursor-pointer px-4 py-3 text-start transition-colors ${isDisabled ? "opacity-50 pointer-events-none" : ""}`;
       option.textContent = label;
 
@@ -156,6 +161,14 @@ function populateRedemptionSelect(methods, cartCurrencyCode, translations) {
       optionsContainer.appendChild(option);
     }
   });
+
+  // Setup change handler using the element's onchange pattern (like sort-filter)
+  select.onchange = function () {
+    const applyBtn = document.querySelector("[data-loyalty-apply-btn]");
+    if (applyBtn) {
+      applyBtn.disabled = !this.value;
+    }
+  };
 }
 
 /**
@@ -171,42 +184,53 @@ export function applyLoyaltyRedemption(onSuccess) {
   if (!select || !select.value || !btn) return;
   if (btn.disabled) return;
 
-  // Find selected method
-  const selectedMethod = state.redemptionMethods.find((m) => m.id === select.value);
+  // Get selected redemption method ID
+  const id = select.value;
 
-  if (!selectedMethod) {
-    console.error("Redemption method not found");
+  if (!id) {
+    console.error("No redemption method selected");
     return;
   }
+
+  // Helper to reset button state
+  const resetButton = () => {
+    btn.disabled = false;
+    if (text) text.classList.remove("hidden");
+    if (spinner) spinner.classList.add("hidden");
+  };
 
   // Show loading state
   btn.disabled = true;
   if (text) text.classList.add("hidden");
   if (spinner) spinner.classList.remove("hidden");
 
+  // Pass object with id property as per SDK documentation
   window.zid.cart
-    .addRedemptionMethod(selectedMethod, { showErrorNotification: true })
-    .then((response) => {
+    .addRedemptionMethod({ id })
+    .then(async (response) => {
       if (response.ok) {
+        // Success - refresh the cart page
         if (onSuccess) onSuccess();
       } else {
-        return response.json();
+        // Error response - parse and show error
+        const data = await response.json();
+        if (data && data.message) {
+          // Show error using toastr if available
+          if (window.toastr) {
+            window.toastr.error(data.message.description || data.message.name, data.message.name);
+          } else {
+            console.error("Redemption error:", data.message.description || data.message.name);
+          }
+        }
+        resetButton();
       }
-    })
-    .then((data) => {
-      if (data && data.message) {
-        console.error("Redemption error:", data.message);
-      }
-      // Reset button state
-      btn.disabled = false;
-      if (text) text.classList.remove("hidden");
-      if (spinner) spinner.classList.add("hidden");
     })
     .catch((err) => {
       console.error("Error applying redemption:", err);
-      btn.disabled = false;
-      if (text) text.classList.remove("hidden");
-      if (spinner) spinner.classList.add("hidden");
+      if (window.toastr) {
+        window.toastr.error(err.message || "Failed to apply redemption");
+      }
+      resetButton();
     });
 }
 
@@ -221,31 +245,41 @@ export function removeLoyaltyRedemption(onSuccess) {
 
   if (!btn) return;
 
+  // Helper to reset button state
+  const resetButton = () => {
+    if (icon) icon.classList.remove("hidden");
+    if (spinner) spinner.classList.add("hidden");
+  };
+
   // Show loading state
   if (icon) icon.classList.add("hidden");
   if (spinner) spinner.classList.remove("hidden");
 
   window.zid.cart
-    .removeRedemptionMethod({ showErrorNotification: true })
-    .then((response) => {
+    .removeRedemptionMethod()
+    .then(async (response) => {
       if (response.ok) {
+        // Success - refresh the cart page
         if (onSuccess) onSuccess();
       } else {
-        return response.json();
+        // Error response - parse and show error
+        const data = await response.json();
+        if (data && data.message) {
+          if (window.toastr) {
+            window.toastr.error(data.message.description || data.message.name, data.message.name);
+          } else {
+            console.error("Remove redemption error:", data.message.description || data.message.name);
+          }
+        }
+        resetButton();
       }
-    })
-    .then((data) => {
-      if (data && data.message) {
-        console.error("Remove redemption error:", data.message);
-      }
-      // Reset button state
-      if (icon) icon.classList.remove("hidden");
-      if (spinner) spinner.classList.add("hidden");
     })
     .catch((err) => {
       console.error("Error removing redemption:", err);
-      if (icon) icon.classList.remove("hidden");
-      if (spinner) spinner.classList.add("hidden");
+      if (window.toastr) {
+        window.toastr.error(err.message || "Failed to remove redemption");
+      }
+      resetButton();
     });
 }
 

@@ -1,3 +1,5 @@
+{% set is_lazy = settings.order > 2 %}
+
 <section
   section-id="{{ sectionId }}"
   class="bg-background px-4 py-6 md:p-16"
@@ -15,11 +17,20 @@
         {% for item in settings.gallery %}
           <div class="group relative overflow-hidden rounded">
             <div class="media-wrap">
-              <img
-                src="{{ item.src }}"
-                alt="{{ item.alt }}"
-                class="h-full w-full object-cover"
-              />
+              <picture>
+                {% if item.src_mobile %}
+                  <source
+                    media="(max-width: 767px)"
+                    srcset="{{ image_url(item.src_mobile, w=400, q=80, f='auto') }}"
+                  />
+                {% endif %}
+                <img
+                  src="{{ image_url(item.src, w=800, q=85, f='auto') }}"
+                  alt="{{ item.alt }}"
+                  class="h-full w-full object-cover"
+                  {% if is_lazy or not loop.first %}loading="lazy"{% endif %}
+                />
+              </picture>
             </div>
 
             {% if item.image_title or item.primary_button_text or item.secondary_button_text %}

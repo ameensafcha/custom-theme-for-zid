@@ -52,7 +52,7 @@
           data-image-index="{{ loop.index0 }}"
         >
           <img
-            src="{{ image.path or image.small or image.url or image }}"
+            src="{{ image_url(image.path or image.small or image.url or image, w=160, q=85, f='auto') }}"
             alt="{{ _('Review image') }}"
             class="size-full object-cover"
             loading="lazy"
@@ -70,7 +70,7 @@
         <div class="flex items-center gap-3">
           {% if store.logo %}
             <img
-              src="{{ store.logo }}"
+              src="{{ image_url(store.logo, w=160, q=90, f='auto') }}"
               alt="{{ store.name }}"
               width="80"
               height="32"
@@ -106,7 +106,7 @@
               data-image-index="{{ loop.index0 }}"
             >
               <img
-                src="{{ image.path or image.small or image.url or image }}"
+                src="{{ image_url(image.path or image.small or image.url or image, w=160, q=85, f='auto') }}"
                 alt="{{ _('Reply image') }}"
                 class="size-full object-cover"
                 loading="lazy"

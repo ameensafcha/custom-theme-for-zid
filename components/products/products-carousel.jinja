@@ -7,7 +7,14 @@
   - more_url: string (optional) - URL for "See more" link
   - more_text: string (optional) - text for "See more" link
   - carousel_id: string (required) - unique ID for the carousel
+  - columns_desktop: string (optional) - number of visible columns on desktop ('2', '3', '4')
+  - columns_mobile: string (optional) - number of visible columns on mobile ('1', '2')
+  - image_aspect_ratio: string (optional) - product card image aspect ratio ('adapt', 'square', 'portrait')
 #}
+
+{% set columns_desktop = columns_desktop | default(card_columns_desktop) | default('4') %}
+{% set columns_mobile = columns_mobile | default(card_columns_mobile) | default('1') %}
+{% set image_aspect_ratio = image_aspect_ratio | default(card_image_aspect_ratio) | default('adapt') %}
 
 {% set carousel_id = carousel_id or 'products-carousel-' ~ range(1000, 9999) | random %}
 
@@ -15,6 +22,8 @@
   <div
     class="flex flex-col gap-6"
     data-products-carousel="{{ carousel_id }}"
+    data-carousel
+    data-carousel-align="start"
   >
     {# Header #}
     {% if title %}
@@ -45,11 +54,7 @@
     {% endif %}
 
     {# Carousel #}
-    <div
-      class="products-embla"
-      data-carousel
-      data-carousel-align="start"
-    >
+    <div class="products-embla">
       <div
         class="products-embla__viewport overflow-hidden"
         data-carousel-viewport
@@ -57,7 +62,7 @@
         <div class="products-embla__container">
           {% for item in products %}
             <div class="products-embla__slide">
-              {% with product=item, index=loop.index0 %}
+              {% with product=item, index=loop.index0, card_image_aspect_ratio=image_aspect_ratio, is_priority=(loop.first and is_priority_section | default(false)) %}
                 {% include 'components/products/product-card.jinja' %}
               {% endwith %}
             </div>
@@ -142,7 +147,12 @@
   <style>
     [data-products-carousel="{{ carousel_id }}"] .products-embla {
       --slide-spacing: 1rem;
-      --slide-size: 280px;
+      /* Mobile: based on columns_mobile setting */
+      {% if columns_mobile == '2' %}
+        --slide-size: 50%;
+      {% else %}
+        --slide-size: 100%;
+      {% endif %}
     }
 
     [data-products-carousel="{{ carousel_id }}"] .products-embla__container {
@@ -160,13 +170,25 @@
 
     @media (min-width: 768px) {
       [data-products-carousel="{{ carousel_id }}"] .products-embla {
-        --slide-size: 320px;
+        /* Tablet: show 3 cards */
+        --slide-size: calc(100% / 3);
       }
     }
 
     @media (min-width: 1024px) {
       [data-products-carousel="{{ carousel_id }}"] .products-embla {
-        --slide-size: 380px;
+        /* Desktop: based on columns_desktop setting */
+        {% if columns_desktop == '2' %}
+          --slide-size: calc(100% / 2);
+        {% elif columns_desktop == '3' %}
+          --slide-size: calc(100% / 3);
+        {% elif columns_desktop == '5' %}
+          --slide-size: calc(100% / 5);
+        {% elif columns_desktop == '6' %}
+          --slide-size: calc(100% / 6);
+        {% else %}
+          --slide-size: calc(100% / 4);
+        {% endif %}
       }
     }
   </style>

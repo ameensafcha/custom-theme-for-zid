@@ -330,7 +330,7 @@
               </div>
             </div>
 
-            {#{% include 'vitrin:products/loyalty_points_widget.jinja' %}#}
+            {% include 'vitrin:products/loyalty_points_widget.jinja' %}
             {% include 'vitrin:products/payment_widgets.jinja' %}
             {% include 'vitrin:checkout/apple-pay-quick-checkout.jinja' %}
 
@@ -507,92 +507,67 @@
           </div>
         {% endif %}
 
-        {# Bundle Offer Details Section #}
-        {% if product.bundle_offer %}
-          <div class="bg-secondary rounded-lg p-4">
-            <div class="flex items-start gap-3">
-              {# Gift Icon #}
-              <div
-                class="bg-destructive/10 text-destructive flex size-10 shrink-0 items-center justify-center rounded-full"
+        {# Bundle Offer Details Section - Disclosure with Carousel #}
+        {% if product.bundle_offer and product.bundle_offer.products and product.bundle_offer.products.results %}
+          <div>
+            <button
+              type="button"
+              command="--toggle"
+              commandfor="bundle-offer-products"
+              class="bg-secondary group flex w-full items-center justify-between gap-3 rounded px-4 py-2"
+              aria-expanded="false"
+            >
+              <div class="flex flex-col items-start gap-1">
+                <div class="flex items-center gap-3">
+                  <span class="text-foreground text-h6">{{ product.bundle_offer.name }}</span>
+                  <span class="badge badge-outlined text-destructive border-destructive">
+                    {{ product.bundle_offer.products.results|length }} {{ _("Products") }}
+                  </span>
+                </div>
+                {% if product.bundle_offer.description %}
+                  <p class="text-body2 text-muted text-start">{{ product.bundle_offer.description }}</p>
+                {% endif %}
+              </div>
+              <span
+                class="text-foreground inline-flex size-10 shrink-0 items-center justify-center rounded bg-white/10 p-2.5 backdrop-blur-sm"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
+                  width="24"
+                  height="24"
                   viewBox="0 0 24 24"
                   fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  class="transition-transform duration-200 group-aria-expanded:rotate-180"
                 >
-                  <polyline points="20 12 20 22 4 22 4 12"></polyline>
-                  <rect
-                    x="2"
-                    y="7"
-                    width="20"
-                    height="5"
-                  ></rect>
-                  <line
-                    x1="12"
-                    y1="22"
-                    x2="12"
-                    y2="7"
-                  ></line>
-                  <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
-                  <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
+                  <path
+                    d="M11.999 8.70312C12.0929 8.70312 12.1689 8.73142 12.249 8.81152L17.1924 13.7559C17.2744 13.8378 17.3008 13.9117 17.3008 13.999C17.3008 14.0863 17.2743 14.1602 17.1924 14.2422C17.1143 14.3202 17.0374 14.3506 16.9365 14.3506C16.8359 14.3505 16.7596 14.32 16.6816 14.2422L16.6807 14.2412L12.3516 9.9375L11.998 9.58594L7.31738 14.2666C7.23964 14.3443 7.17341 14.3662 7.09277 14.3633C6.99851 14.3598 6.91711 14.3282 6.83105 14.2422C6.75294 14.1641 6.72266 14.0872 6.72266 13.9863C6.72267 13.8854 6.75294 13.8086 6.83105 13.7305L11.75 8.81152C11.83 8.73152 11.9054 8.7032 11.999 8.70312Z"
+                    fill="currentColor"
+                    stroke="currentColor"
+                  ></path>
                 </svg>
+              </span>
+            </button>
+            <el-disclosure
+              id="bundle-offer-products"
+              hidden
+              class="transition duration-200 data-closed:opacity-0"
+            >
+              <div class="mt-4 px-4 pb-4">
+                {%
+                  with
+                  products=product.bundle_offer.products.results,
+                  carousel_id="bundle-offer-carousel"
+                %}
+                  {% include 'components/products/products-carousel.jinja' %}
+                {% endwith %}
               </div>
-              <div class="flex-1">
-                <h3 class="text-subtitle1 text-foreground">{{ product.bundle_offer.name }}</h3>
-                {% if product.bundle_offer.description %}
-                  <p class="text-body2 text-muted mt-1">{{ product.bundle_offer.description }}</p>
-                {% endif %}
-              </div>
-            </div>
-
-            {# Bundle Products Grid #}
-            {% if product.bundle_offer.products and product.bundle_offer.products.results %}
-              <div class="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-5">
-                {% for bundle_product in product.bundle_offer.products.results[:5] %}
-                  <a
-                    href="{{ bundle_product.html_url }}"
-                    class="bg-background hover:border-primary group flex flex-col overflow-hidden rounded border border-transparent p-2 transition-colors"
-                  >
-                    <img
-                      src="{{ image_url(bundle_product.images[0] if bundle_product.images else ('images/placeholder.png' | asset_url), w=150, q=85, f='auto') }}"
-                      alt="{{ bundle_product.name }}"
-                      class="aspect-square w-full rounded object-cover"
-                      loading="lazy"
-                    />
-                    <span class="text-caption text-foreground mt-2 line-clamp-2">{{ bundle_product.name }}</span>
-                    <span class="text-caption text-muted"
-                      >{{ bundle_product.formatted_sale_price or bundle_product.formatted_price }}</span
-                    >
-                  </a>
-                {% endfor %}
-              </div>
-
-              {# Show all products link #}
-              {% if product.bundle_offer.products.results|length > 5 %}
-                <div class="mt-3 text-center">
-                  <button
-                    type="button"
-                    class="text-body2 text-primary hover:underline"
-                    command="show-modal"
-                    commandfor="bundle-products-modal"
-                  >
-                    {{ _("Display all products") }} ({{ product.bundle_offer.products.results|length }})
-                  </button>
-                </div>
-              {% endif %}
-            {% endif %}
+            </el-disclosure>
           </div>
         {% endif %}
 
         {# Grouped Products (products bundled together) #}
         {% if product.group_products %}
-          {% include 'vitrin:products/grouped-product.jinja' %}
+          {% include 'components/products/grouped-product.jinja' %}
         {% endif %}
 
         {# Product Options Disclosure #}
@@ -750,71 +725,4 @@
     };
   </script>
   <!-- prettier-ignore-end -->
-
-  {# Bundle Products Modal #}
-  {% if product.bundle_offer and product.bundle_offer.products and product.bundle_offer.products.results|length > 5 %}
-    <dialog
-      id="bundle-products-modal"
-      class="bg-background open:animate-dialog-show w-full max-w-3xl rounded-lg p-0 backdrop:bg-black/50 backdrop:backdrop-blur-sm"
-    >
-      <div class="flex items-center justify-between border-b p-4">
-        <h2 class="text-h6 text-foreground">{{ product.bundle_offer.name }}</h2>
-        <button
-          type="button"
-          class="text-muted-foreground hover:text-foreground"
-          command="close"
-          commandfor="bundle-products-modal"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <line
-              x1="18"
-              y1="6"
-              x2="6"
-              y2="18"
-            ></line>
-            <line
-              x1="6"
-              y1="6"
-              x2="18"
-              y2="18"
-            ></line>
-          </svg>
-        </button>
-      </div>
-      <div class="max-h-[70vh] overflow-y-auto p-4">
-        {% if product.bundle_offer.description %}
-          <p class="text-body2 text-muted mb-4">{{ product.bundle_offer.description }}</p>
-        {% endif %}
-        <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
-          {% for bundle_product in product.bundle_offer.products.results %}
-            <a
-              href="{{ bundle_product.html_url }}"
-              class="bg-secondary hover:border-primary group flex flex-col overflow-hidden rounded border border-transparent p-2 transition-colors"
-            >
-              <img
-                src="{{ image_url(bundle_product.images[0] if bundle_product.images else ('images/placeholder.png' | asset_url), w=200, q=85, f='auto') }}"
-                alt="{{ bundle_product.name }}"
-                class="aspect-square w-full rounded object-cover"
-                loading="lazy"
-              />
-              <span class="text-body2 text-foreground mt-2 line-clamp-2">{{ bundle_product.name }}</span>
-              <span class="text-caption text-muted"
-                >{{ bundle_product.formatted_sale_price or bundle_product.formatted_price }}</span
-              >
-            </a>
-          {% endfor %}
-        </div>
-      </div>
-    </dialog>
-  {% endif %}
 {% endblock %}

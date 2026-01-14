@@ -24,6 +24,7 @@ const LOYALTY_ICON_SVG = `
 
 let redemptionMethods = [];
 let customerPoints = 0;
+let isPopupPopulated = false;
 
 // ─────────────────────────────────────────────────────────────
 // Floating Button
@@ -94,24 +95,33 @@ function createFloatingButton() {
 
 async function getRedemptionMethods() {
   const config = window.loyaltyConfig;
-  if (!config) return;
-
-  if (!window.zid?.cart?.getRedemptionMethods) {
-    console.warn("Zid SDK not available for getRedemptionMethods");
+  if (!config) {
+    console.log("[Loyalty] getRedemptionMethods: No config");
     return;
   }
+
+  if (!window.zid?.cart?.getRedemptionMethods) {
+    console.warn("[Loyalty] Zid SDK not available for getRedemptionMethods");
+    return;
+  }
+
+  console.log("[Loyalty] Fetching redemption methods...");
 
   try {
     const response = await zid.cart.getRedemptionMethods(config.currencyCode, {
       showErrorNotification: false
     });
 
+    console.log("[Loyalty] API Response:", response);
+
     if (response?.options) {
       redemptionMethods = response.options;
+      console.log("[Loyalty] Got", redemptionMethods.length, "methods");
+      // Try to populate immediately (may not work if popup not in DOM yet)
       populateRewardsPopup();
     }
   } catch (error) {
-    console.error("Failed to get redemption methods:", error);
+    console.error("[Loyalty] Failed to get redemption methods:", error);
   }
 }
 
@@ -140,10 +150,47 @@ async function getCustomerLoyaltyPoints() {
 
 function populateRewardsPopup() {
   const config = window.loyaltyConfig;
-  if (!config) return;
+  if (!config) {
+    console.log("[Loyalty] No config");
+    return;
+  }
 
-  const rewardsContainer = document.querySelector(".loyalty-rewards-popup__rewards");
-  if (!rewardsContainer) return;
+  // Skip if already populated
+  if (isPopupPopulated) {
+    console.log("[Loyalty] Already populated");
+    return;
+  }
+
+  if (redemptionMethods.length === 0) {
+    console.log("[Loyalty] No redemption methods");
+    return;
+  }
+
+  console.log("[Loyalty] Looking for container...");
+  console.log("[Loyalty] Methods:", redemptionMethods);
+
+  // Try multiple possible selectors
+  let rewardsContainer = document.querySelector(".loyalty-rewards-popup__rewards");
+
+  if (!rewardsContainer) {
+    // Try finding the popup and looking for any container inside
+    const popup = document.querySelector(".loyalty-rewards-popup");
+    if (popup) {
+      console.log("[Loyalty] Popup found, innerHTML:", popup.innerHTML.substring(0, 500));
+      // Try to find or create a container
+      rewardsContainer = popup.querySelector(".loyalty-rewards-popup__rewards");
+      if (!rewardsContainer) {
+        // Look for any element that could be the container
+        const possibleContainers = popup.querySelectorAll("div");
+        console.log("[Loyalty] Possible containers:", possibleContainers.length);
+      }
+    } else {
+      console.log("[Loyalty] Popup not found in DOM");
+    }
+    return;
+  }
+
+  console.log("[Loyalty] Container found, populating...");
 
   redemptionMethods.forEach((method) => {
     if (method.is_active) {
@@ -169,6 +216,8 @@ function populateRewardsPopup() {
       rewardsContainer.appendChild(row);
     }
   });
+
+  isPopupPopulated = true;
 }
 
 function updateCustomerPointsDisplay() {
@@ -188,15 +237,31 @@ function updateCustomerPointsDisplay() {
 // ─────────────────────────────────────────────────────────────
 
 window.popupLoyaltyReward = function () {
+  console.log("[Loyalty] popupLoyaltyReward called");
+
   const popupInit = document.querySelector(".loyalty-rewards-popup-init");
   const popup = document.querySelector(".loyalty-rewards-popup");
 
+  console.log("[Loyalty] popupInit:", popupInit);
+  console.log("[Loyalty] popup:", popup);
+
   if (popupInit) {
+    console.log("[Loyalty] Moving popup to body");
     document.body.appendChild(popupInit);
     popupInit.classList.remove("loyalty-rewards-popup-init");
     popupInit.classList.remove("loyalty-rewards-popup-hidden");
+    // Populate rewards after moving popup to body
+    populateRewardsPopup();
   } else if (popup) {
+    const isHidden = popup.classList.contains("loyalty-rewards-popup-hidden");
+    console.log("[Loyalty] Popup isHidden:", isHidden);
     popup.classList.toggle("loyalty-rewards-popup-hidden");
+    // Populate rewards when showing popup
+    if (isHidden) {
+      populateRewardsPopup();
+    }
+  } else {
+    console.log("[Loyalty] No popup found!");
   }
 };
 
@@ -213,7 +278,12 @@ window.closeLoyaltyRewardsWindow = function () {
 
 export function init() {
   // Only initialize if loyaltyConfig is set
-  if (!window.loyaltyConfig) return;
+  if (!window.loyaltyConfig) {
+    console.log("[Loyalty] Init skipped - no loyaltyConfig");
+    return;
+  }
+
+  console.log("[Loyalty] Initializing...", window.loyaltyConfig);
 
   createFloatingButton();
   getRedemptionMethods();

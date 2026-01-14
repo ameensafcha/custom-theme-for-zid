@@ -29,7 +29,7 @@
                 {% for image in question.answers[0].images %}
                   <div class="size-20 shrink-0 overflow-hidden rounded">
                     <img
-                      src="{{ image.image.medium if image.image else ('images/placeholder-image.svg' | asset_url) }}"
+                      src="{{ image_url(image.image.medium, w=160, q=85, f='auto') if image.image else image_url(('images/placeholder-image.svg' | asset_url), w=160, q=85, f='auto') }}"
                       alt="{{ question.question }}"
                       class="size-full object-cover"
                       loading="lazy"

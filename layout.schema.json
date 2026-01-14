@@ -5,6 +5,119 @@
   },
   "groups": [
     {
+      "id": "product_card",
+      "icon": "fa fa-th-large",
+      "name": {
+        "ar": "بطاقة المنتج",
+        "en": "Product Card"
+      },
+      "settings": [
+        {
+          "id": "columns_desktop",
+          "type": "select",
+          "label": {
+            "ar": "عدد الأعمدة (سطح المكتب)",
+            "en": "Columns (Desktop)"
+          },
+          "options": [
+            {
+              "value": "2",
+              "label": {
+                "ar": "2 أعمدة",
+                "en": "2 Columns"
+              }
+            },
+            {
+              "value": "3",
+              "label": {
+                "ar": "3 أعمدة",
+                "en": "3 Columns"
+              }
+            },
+            {
+              "value": "4",
+              "label": {
+                "ar": "4 أعمدة",
+                "en": "4 Columns"
+              }
+            },
+            {
+              "value": "5",
+              "label": {
+                "ar": "5 أعمدة",
+                "en": "5 Columns"
+              }
+            },
+            {
+              "value": "6",
+              "label": {
+                "ar": "6 أعمدة",
+                "en": "6 Columns"
+              }
+            }
+          ],
+          "default": "4"
+        },
+        {
+          "id": "columns_mobile",
+          "type": "select",
+          "label": {
+            "ar": "عدد الأعمدة (موبايل)",
+            "en": "Columns (Mobile)"
+          },
+          "options": [
+            {
+              "value": "1",
+              "label": {
+                "ar": "1 عمود",
+                "en": "1 Column"
+              }
+            },
+            {
+              "value": "2",
+              "label": {
+                "ar": "2 أعمدة",
+                "en": "2 Columns"
+              }
+            }
+          ],
+          "default": "1"
+        },
+        {
+          "id": "image_aspect_ratio",
+          "type": "select",
+          "label": {
+            "ar": "نسبة أبعاد الصورة",
+            "en": "Image Aspect Ratio"
+          },
+          "options": [
+            {
+              "value": "adapt",
+              "label": {
+                "ar": "تكيّف مع الصورة",
+                "en": "Adapt to image"
+              }
+            },
+            {
+              "value": "portrait",
+              "label": {
+                "ar": "طولي (3:4)",
+                "en": "Portrait (3:4)"
+              }
+            },
+            {
+              "value": "square",
+              "label": {
+                "ar": "مربع (1:1)",
+                "en": "Square (1:1)"
+              }
+            }
+          ],
+          "default": "adapt"
+        }
+      ]
+    },
+    {
       "id": "font",
       "icon": "fa fa-font",
       "name": {

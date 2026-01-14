@@ -44,7 +44,7 @@
           </dt>
           <dd>
             <img
-              src="{{ item.value.small }}"
+              src="{{ image_url(item.value.small, w=400, q=85, f='auto') }}"
               alt="{{ item.name[session.lang] if item.name[session.lang] else item.name.ar }}"
               class="max-w-full rounded"
               loading="lazy"
@@ -204,7 +204,7 @@
                           </a>
                         {% elif cell.value and cell.value.small %}
                           <img
-                            src="{{ cell.value.small }}"
+                            src="{{ image_url(cell.value.small, w=64, q=85, f='auto') }}"
                             alt=""
                             class="size-8 rounded object-cover"
                             loading="lazy"

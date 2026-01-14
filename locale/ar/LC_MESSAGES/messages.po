@@ -18,6 +18,16 @@ msgstr ""
 "Generated-By: Manual\n"
 
 # ==============================================================================
+# 404 Page
+# ==============================================================================
+
+msgid "Page Not Found"
+msgstr "الصفحة غير موجودة"
+
+msgid "Back to Home"
+msgstr "العودة للرئيسية"
+
+# ==============================================================================
 # Navigation & Layout
 # ==============================================================================
 
@@ -246,6 +256,31 @@ msgstr "الكمية"
 msgid "Qty"
 msgstr "الكمية"
 
+msgid "Products"
+msgstr "المنتجات"
+
+# ==============================================================================
+# Product Sharing
+# ==============================================================================
+
+msgid "Share product"
+msgstr "مشاركة المنتج"
+
+msgid "Check Out this Product"
+msgstr "شاهد هذا المنتج"
+
+msgid "Share on WhatsApp"
+msgstr "مشاركة عبر واتساب"
+
+msgid "Share on Twitter"
+msgstr "مشاركة عبر تويتر"
+
+msgid "Share on Facebook"
+msgstr "مشاركة عبر فيسبوك"
+
+msgid "Copy link"
+msgstr "نسخ الرابط"
+
 # ==============================================================================
 # Product Gallery
 # ==============================================================================
@@ -305,6 +340,15 @@ msgstr "رقم الهاتف طويل جداً"
 
 msgid "Invalid phone number"
 msgstr "رقم الهاتف غير صحيح"
+
+msgid "Select country code"
+msgstr "اختر رمز الدولة"
+
+msgid "Search country..."
+msgstr "ابحث عن دولة..."
+
+msgid "No country found"
+msgstr "لم يتم العثور على دولة"
 
 msgid "You will be notified when this product is back in stock!"
 msgstr "سيتم إشعارك عند توفر هذا المنتج!"
@@ -602,6 +646,12 @@ msgstr "%(count)s منتج"
 msgid "items included"
 msgstr "منتجات مضمنة"
 
+msgid "items"
+msgstr "منتجات"
+
+msgid "options selected"
+msgstr "خيارات محددة"
+
 msgid "View bundle items"
 msgstr "عرض منتجات الباقة"
 
@@ -638,9 +688,6 @@ msgstr "تحميل"
 # ==============================================================================
 
 msgid "Order summary"
-msgstr "ملخص الطلب"
-
-msgid "Order Summary"
 msgstr "ملخص الطلب"
 
 #, python-format
@@ -920,9 +967,6 @@ msgstr "لم يتم العثور على مناطق"
 msgid "Covered Areas"
 msgstr "المناطق المغطاة"
 
-msgid "more"
-msgstr "مدينة أخرى"
-
 msgid "Not supported"
 msgstr "غير مدعوم"
 
@@ -932,6 +976,7 @@ msgstr "المستفيد"
 msgid "Account No."
 msgstr "رقم الحساب"
 
+# Mobile shipping cards (lowercase variants)
 msgid "Covered areas"
 msgstr "المناطق المغطاة"
 
@@ -941,6 +986,9 @@ msgstr "رسوم الشحن"
 msgid "Cash on delivery"
 msgstr "الدفع عند الاستلام"
 
+msgid "more"
+msgstr "أخرى"
+
 # ==============================================================================
 # Loyalty Rewards
 # ==============================================================================
@@ -948,6 +996,61 @@ msgstr "الدفع عند الاستلام"
 msgid "Rewards"
 msgstr "المكافآت"
 
-#, python-brace-format
 msgid "For {points} get a discount {percentage}"
 msgstr "مقابل {points} نقطة احصل على خصم {percentage}"
+
+msgid "FAQs"
+msgstr "الأسئلة الشائعة"
+
+msgid "Frequently Asked Questions"
+msgstr "الأسئلة الشائعة"
+
+msgid "No FAQs available"
+msgstr "لا توجد أسئلة شائعة"
+
+msgid "Check back later for frequently asked questions."
+msgstr "تحقق لاحقاً للاطلاع على الأسئلة الشائعة."
+
+msgid "Add review"
+msgstr "أضف تقييم"
+
+msgid "No reviews yet"
+msgstr "لا توجد تقييمات بعد"
+
+msgid "Be the first to review this product"
+msgstr "كن أول من يقيم هذا المنتج"
+
+# ==============================================================================
+# Questions Page
+# ==============================================================================
+
+msgid "Questions"
+msgstr "الأسئلة"
+
+msgid "Have a question?"
+msgstr "لديك سؤال؟"
+
+msgid "Ask about this product and get an answer from the store."
+msgstr "اسأل عن هذا المنتج واحصل على إجابة من المتجر."
+
+msgid "Awaiting answer from the store"
+msgstr "في انتظار الرد من المتجر"
+
+msgid "No questions yet"
+msgstr "لا توجد أسئلة بعد"
+
+msgid "Be the first to ask a question about this product"
+msgstr "كن أول من يسأل عن هذا المنتج"
+
+msgid "Answer image"
+msgstr "صورة الإجابة"
+
+# ==============================================================================
+# Grouped Products
+# ==============================================================================
+
+msgid "Bundle consist of"
+msgstr "الباقة تتكون من"
+
+msgid "Included products"
+msgstr "المنتجات المضمنة"

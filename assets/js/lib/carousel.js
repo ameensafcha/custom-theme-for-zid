@@ -56,12 +56,13 @@ export function createCarousel(container, options = {}) {
   const viewport =
     containerEl.querySelector("[data-carousel-viewport]") ||
     containerEl.querySelector(".embla__viewport") ||
+    containerEl.querySelector(".products-embla__viewport") ||
     containerEl.querySelector(".embla") ||
     containerEl;
 
   // Check if we have slides
   const slides = viewport.querySelectorAll(
-    ".embla__slide, .product-gallery__slide, .product-gallery-thumbs__slide, [data-carousel-slide]"
+    ".embla__slide, .products-embla__slide, .product-gallery__slide, .product-gallery-thumbs__slide, [data-carousel-slide]"
   );
   if (slides.length <= 1 && !options.forceInit) {
     return null;

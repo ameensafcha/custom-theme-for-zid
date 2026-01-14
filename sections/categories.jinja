@@ -1,6 +1,8 @@
+{% set is_lazy = settings.order > 2 %}
+
 <section
   section-id="{{ sectionId }}"
-  class="px-4 pb-6 md:px-16 md:pb-16"
+  class="px-4 py-6 md:px-16 md:py-16"
 >
   <div class="theme-container space-y-6">
     <div class="md:flex md:items-center md:justify-between">
@@ -29,41 +31,44 @@
         </a>
       {% endif %}
     </div>
-    <div class="embla">
-      <div class="embla__viewport overflow-hidden">
-        <div class="embla__container">
-          {% for categoryItem in safeget(settings, "categories", []) %}
-            <div class="embla__slide">
-              <a
-                href="/categories/{{ categoryItem.category.id }}/{{ categoryItem.category.slug }}"
-                class="group flex flex-col gap-4"
-              >
-                <div class="overflow-hidden rounded">
-                  <img
-                    {% if categoryItem.category.image %}
-                      src="{{ image_url(categoryItem.category.image_full_size, w=400, q=100, f='auto') }}"
-                    {% else %}
-                      src="{{ image_url(('images/product-img.svg' | asset_url), w=235, q=100, f='auto') }}"
-                    {% endif %}
-                    alt="{{ categoryItem.category.name }}"
-                    class="aspect-[4/5] w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    {% if loop.index0 > 0 %}loading="lazy"{% endif %}
-                  />
-                </div>
-                <h3 class="text-foreground text-h5 md:text-h4 text-start md:text-center">
-                  {{ categoryItem.category.name }}
-                </h3>
-              </a>
-            </div>
-          {% endfor %}
+    {# Wrapper for carousel + controls so data-carousel can find all elements #}
+    <div class="embla-wrapper space-y-6" data-carousel data-carousel-align="start">
+      <div class="embla">
+        <div class="embla__viewport overflow-hidden" data-carousel-viewport>
+          <div class="embla__container">
+            {% for categoryItem in safeget(settings, "categories", []) %}
+              <div class="embla__slide">
+                <a
+                  href="/categories/{{ categoryItem.category.id }}/{{ categoryItem.category.slug }}"
+                  class="group flex flex-col gap-4"
+                >
+                  <div class="overflow-hidden rounded">
+                    <img
+                      {% if categoryItem.category.image %}
+                        src="{{ image_url(categoryItem.category.image_full_size, w=400, q=100, f='auto') }}"
+                      {% else %}
+                        src="{{ image_url(('images/product-img.svg' | asset_url), w=235, q=100, f='auto') }}"
+                      {% endif %}
+                      alt="{{ categoryItem.category.name }}"
+                      class="aspect-[4/5] w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      {% if is_lazy or not loop.first %}loading="lazy"{% endif %}
+                    />
+                  </div>
+                  <h3 class="text-foreground text-h5 md:text-h4 text-start md:text-center">
+                    {{ categoryItem.category.name }}
+                  </h3>
+                </a>
+              </div>
+            {% endfor %}
+          </div>
         </div>
       </div>
-    </div>
-    <div class="flex items-center gap-2">
+      <div class="flex items-center gap-2">
       <div class="embla__progress bg-secondary h-1 w-full rounded">
         <div
           class="embla__progress-bar bg-accent h-1 rounded-sm"
           style="width: 0%"
+          data-carousel-progress
         ></div>
       </div>
       <div class="hidden items-center gap-2 md:flex">
@@ -127,6 +132,7 @@
         </a>
       {% endif %}
     </div>
+    </div>
   </div>
 </section>
 
@@ -155,50 +161,3 @@
     }
   }
 </style>
-
-<script>
-  (function () {
-    const section = document.querySelector('[section-id="{{ sectionId }}"]');
-    if (!section) return;
-
-    const emblaRoot = section.querySelector(".embla");
-    if (!emblaRoot) return;
-
-    const viewport = emblaRoot.querySelector(".embla__viewport");
-    const container = emblaRoot.querySelector(".embla__container");
-    const prevBtn = section.querySelector(".embla__prev");
-    const nextBtn = section.querySelector(".embla__next");
-    const progressBar = section.querySelector(".embla__progress-bar");
-
-    if (!container || container.children.length <= 1) return;
-
-    const embla = EmblaCarousel(viewport, {
-      direction: document.dir === "rtl" ? "rtl" : "ltr",
-      loop: false,
-      align: "start",
-      slidesToScroll: 1,
-      skipSnaps: false,
-      containScroll: "trimSnaps",
-      breakpoints: {
-        "(min-width: 1024px)": {
-          slidesToScroll: 2
-        }
-      }
-    });
-
-    if (prevBtn) prevBtn.onclick = () => embla.scrollPrev();
-    if (nextBtn) nextBtn.onclick = () => embla.scrollNext();
-
-    const clamp = (n, min, max) => Math.max(min, Math.min(n, max));
-    const updateProgress = () => {
-      const p = clamp(embla.scrollProgress(), 0, 1);
-      if (progressBar) progressBar.style.width = `${p * 100}%`;
-      if (prevBtn) prevBtn.disabled = !embla.canScrollPrev();
-      if (nextBtn) nextBtn.disabled = !embla.canScrollNext();
-    };
-
-    embla.on("init", updateProgress);
-    embla.on("scroll", updateProgress);
-    embla.on("reInit", updateProgress);
-  })();
-</script>

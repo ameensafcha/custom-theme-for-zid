@@ -36,7 +36,7 @@
       />
     {% else %}
       <img
-        src="{{ 'images/placeholder-image.svg' | asset_url }}"
+        src="{{ image_url(('images/placeholder-image.svg' | asset_url), w=400, q=100, f='auto') }}"
         alt="{{ product.name }}"
         class="bg-secondary size-full object-cover"
       />
@@ -59,38 +59,67 @@
             {{ product.name }}
           </a>
 
-          {# Variant Info / Custom Fields (Body 2 - 14px, secondary) #}
+          {# Variant Info / Custom Fields - Disclosure Pattern #}
           {% if product.custom_fields and product.custom_fields | length > 0 %}
-            <div class="text-muted text-body2 mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-1 lg:mt-1">
-              {%- for custom_field in product.custom_fields -%}
-                <span class="inline-flex items-center gap-1">
+            <button
+              type="button"
+              class="text-foreground text-caption mt-1 flex items-center gap-1 hover:underline"
+              data-action="custom-fields-toggle"
+              data-custom-fields-id="custom-fields-{{ product.id }}"
+            >
+              <span>{{ product.custom_fields | length }} {{ _("options selected") }}</span>
+              <svg
+                class="size-3 transition-transform"
+                data-custom-fields-arrow="{{ product.id }}"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M4 6l4 4 4-4"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+
+            {# Custom Fields List (Collapsible) #}
+            <div
+              id="custom-fields-{{ product.id }}"
+              class="bg-secondary/50 mt-1 hidden flex-col gap-2 rounded p-2 lg:mt-0 lg:p-3"
+            >
+              {% for custom_field in product.custom_fields %}
+                <div class="text-body2 flex items-start gap-2">
                   {%- if custom_field.type == 'TEXT' or custom_field.type == 'NUMBER' -%}
-                    <span class="text-muted-foreground">{{ custom_field.name }}:</span>
-                    <span>{{ custom_field.value | safe }}</span>
+                    <span class="text-muted-foreground shrink-0">{{ custom_field.name }}:</span>
+                    <span class="text-foreground">{{ custom_field.value | safe }}</span>
                   {%- elif custom_field.type == 'DATE' -%}
-                    <span class="text-muted-foreground">{{ custom_field.name }}:</span>
-                    <span>{{ custom_field.value }}</span>
+                    <span class="text-muted-foreground shrink-0">{{ custom_field.name }}:</span>
+                    <span class="text-foreground">{{ custom_field.value }}</span>
                   {%- elif custom_field.type == 'TIME' -%}
-                    <span class="text-muted-foreground">{{ custom_field.name }}:</span>
-                    <span>{{ timeFormat(custom_field.value) }}</span>
+                    <span class="text-muted-foreground shrink-0">{{ custom_field.name }}:</span>
+                    <span class="text-foreground">{{ timeFormat(custom_field.value) }}</span>
                   {%- elif custom_field.type == 'CHECKBOX' or custom_field.type == 'DROPDOWN' -%}
-                    <span class="text-muted-foreground">{{ custom_field.label }}:</span>
-                    <span>{{ custom_field.name }}</span>
+                    <span class="text-muted-foreground shrink-0">{{ custom_field.label }}:</span>
+                    <span class="text-foreground">{{ custom_field.name }}</span>
                   {%- elif custom_field.type == 'IMAGE' -%}
-                    <span class="text-muted-foreground">{{ custom_field.name }}:</span>
+                    <span class="text-muted-foreground shrink-0">{{ custom_field.name }}:</span>
                     <a
                       href="{{ custom_field.formatted_value }}"
                       target="_blank"
                       class="block size-10 shrink-0 overflow-hidden rounded border"
                     >
                       <img
-                        src="{{ custom_field.formatted_value }}"
+                        src="{{ image_url(custom_field.formatted_value, w=80, q=85, f='auto') }}"
                         alt="{{ custom_field.name }}"
                         class="size-full object-cover"
+                        loading="lazy"
                       />
                     </a>
                   {%- elif custom_field.type == 'FILE' -%}
-                    <span class="text-muted-foreground">{{ custom_field.name }}:</span>
+                    <span class="text-muted-foreground shrink-0">{{ custom_field.name }}:</span>
                     <a
                       href="{{ custom_field.formatted_value }}"
                       target="_blank"
@@ -99,14 +128,13 @@
                       {{ _('Download') }}
                     </a>
                   {%- else -%}
-                    <span>{{ custom_field.value | safe }}</span>
+                    <span class="text-foreground">{{ custom_field.value | safe }}</span>
                   {%- endif -%}
                   {%- if custom_field.additions_price -%}
-                    <span class="text-accent">(+{{ custom_field.additions_price_string }})</span>
+                    <span class="text-accent shrink-0">(+{{ custom_field.additions_price_string }})</span>
                   {%- endif -%}
-                </span>
-                {%- if not loop.last %}<span class="text-border">|</span>{% endif -%}
-              {%- endfor -%}
+                </div>
+              {% endfor %}
             </div>
           {% endif %}
         </div>
@@ -184,7 +212,7 @@
                     />
                   {% else %}
                     <img
-                      src="{{ 'images/placeholder-image.svg' | asset_url }}"
+                      src="{{ image_url(('images/placeholder-image.svg' | asset_url), w=128, q=100, f='auto') }}"
                       alt="{{ sub_item.name }}"
                       class="bg-secondary size-full object-cover"
                     />

@@ -174,8 +174,39 @@ function handleVariantChange(event) {
   }
 }
 
+function openNotifyMeDialog(productId) {
+  dialog = document.getElementById("notify-me-dialog");
+  productIdInput = document.querySelector("[data-notify-product-id]");
+
+  if (dialog && productIdInput) {
+    productIdInput.value = productId;
+
+    // Use el-dialog's open method or command API
+    const dialogWrapper = document.getElementById("notify-me-dialog-wrapper");
+    if (dialogWrapper && dialogWrapper.open) {
+      dialogWrapper.open();
+    } else if (dialog.showModal) {
+      dialog.showModal();
+    }
+  }
+}
+
+function handleNotifyMeTriggerClick(event) {
+  const trigger = event.target.closest("[data-notify-me-trigger]");
+  if (trigger) {
+    event.preventDefault();
+    const productId = trigger.dataset.notifyMeTrigger;
+    openNotifyMeDialog(productId);
+  }
+}
+
 function initNotifyMe() {
   form = document.querySelector("[data-notify-me-form]");
+
+  // Always set up trigger click handler (for product cards)
+  document.removeEventListener("click", handleNotifyMeTriggerClick);
+  document.addEventListener("click", handleNotifyMeTriggerClick);
+
   if (!form || initializedForms.has(form)) return;
 
   initializedForms.add(form);

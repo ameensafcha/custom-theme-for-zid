@@ -84,8 +84,9 @@
   }
 
   /* ---------- Button Sizes ---------- */
+  /* old: @apply px-4 py-3; */
   .btn-lg {
-    @apply px-4 py-3;
+    @apply h-12 px-4;
     font-size: var(--font-body1--size);
     line-height: var(--font-body1--line-height);
   }
@@ -532,11 +533,11 @@
   /* ========== QUANTITY INPUT COMPONENT ========== */
   /* Container */
   .qty-input {
-    @apply border-input inline-flex h-12 items-center gap-2 rounded border px-3 transition-all;
+    @apply border-foreground inline-flex h-12 items-center gap-2 rounded border px-3 transition-all;
   }
 
   .qty-input:hover {
-    @apply ring-input ring-1;
+    @apply ring-foreground ring-1;
   }
 
   .qty-input:focus-within {

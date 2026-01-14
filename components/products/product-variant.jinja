@@ -1,7 +1,7 @@
 <div class="flex items-center justify-between gap-4">
   <div class="size-20 shrink-0 overflow-hidden rounded">
     <img
-      src="{{ variant.images[0].image.medium if variant.images and variant.images | length > 0 else image_url(('images/placeholder-image.svg' | asset_url)) }}"
+      src="{{ image_url(variant.images[0].image.medium, w=160, q=85, f='auto') if variant.images and variant.images | length > 0 else image_url(('images/placeholder-image.svg' | asset_url), w=160, q=85, f='auto') }}"
       alt="{{ variant.images[0].alt_text if variant.images and variant.images | length > 0 and variant.images[0].alt_text else variant.name }}"
       class="size-full object-cover"
     />

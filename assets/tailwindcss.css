@@ -1,5 +1,7 @@
 @import "tailwindcss";
 @import "./components.css";
+@import "nouislider/dist/nouislider.css";
+@import "photoswipe/dist/photoswipe.css";
 @plugin "@tailwindcss/typography";
 
 :root {
@@ -931,3 +933,13 @@ body {
     background: var(--secondary);
   }
 }
+
+/* ========================================
+   SAFELIST - Dynamic classes used in templates
+   These classes are generated dynamically via Jinja
+   and need to be included for Tailwind JIT to scan
+   ======================================== */
+/* Product card aspect ratios & image fit */
+/* aspect-square aspect-[3/4] h-auto h-full object-cover */
+/* Category hero dynamic classes */
+/* min-h-[300px] md:min-h-[400px] md:py-16 md:py-8 */

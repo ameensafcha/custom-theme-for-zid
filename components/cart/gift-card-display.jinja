@@ -24,7 +24,7 @@
       </svg>
     </div>
     <img
-      src="{{ cart.gift_card_details.card_design if cart.gift_card_details and cart.gift_card_details.card_design else '' }}"
+      src="{{ image_url(cart.gift_card_details.card_design, w=160, q=85, f='auto') if cart.gift_card_details and cart.gift_card_details.card_design else '' }}"
       alt="{{ _('Gift') }}"
       class="{{ 'hidden' if not cart.gift_card_details or not cart.gift_card_details.card_design }} size-full object-cover"
       data-gift-image

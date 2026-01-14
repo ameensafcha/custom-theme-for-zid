@@ -1,23 +1,27 @@
+{# Image aspect ratio: adapt (natural), square (1/1), portrait (3/4) #}
+{% set aspect_ratio = card_image_aspect_ratio | default('adapt') %}
+{% set aspect_class = '' if aspect_ratio == 'adapt' else ('aspect-square' if aspect_ratio == 'square' else 'aspect-[3/4]') %}
+
 <div
   class="group relative flex h-full flex-col gap-4 group-data-[grid=list]/grid:grid group-data-[grid=list]/grid:grid-cols-2 group-data-[grid=list]/grid:grid-rows-[1fr_auto] group-data-[grid=list]/grid:gap-4 md:group-data-[grid=list]/grid:grid-cols-[auto_1fr] md:group-data-[grid=list]/grid:grid-rows-[auto_auto]"
   data-product-card="{{ product.id }}"
 >
   <a
     href="{{ url_for('product_details', slug=product.slug) }}"
-    class="relative block aspect-[3/4] w-full overflow-hidden rounded group-data-[grid=list]/grid:col-span-1 group-data-[grid=list]/grid:row-span-1 group-data-[grid=list]/grid:aspect-square md:group-data-[grid=list]/grid:row-span-2 md:group-data-[grid=list]/grid:h-80"
+    class="{{ aspect_class }} relative block w-full overflow-hidden rounded group-data-[grid=list]/grid:col-span-1 group-data-[grid=list]/grid:row-span-1 group-data-[grid=list]/grid:aspect-square md:group-data-[grid=list]/grid:row-span-2 md:group-data-[grid=list]/grid:h-80"
   >
     <img
       {% if product.main_image and product.main_image.image %}
-        src="{{ product.main_image.image.small }}"
+        src="{{ image_url(product.main_image.image.full_size, w=300, q=75, f='auto') }}"
       {% elif product.images and product.images|length > 0 %}
-        src="{{ product.images[0].image.small }}"
+        src="{{ image_url(product.images[0].image.full_size, w=300, q=75, f='auto') }}"
       {% else %}
-        src="{{ image_url(('images/product-img.svg' | asset_url), w=235, q=100, f='auto') }}"
+        src="{{ image_url(('images/product-img.svg' | asset_url), w=300, q=100, f='auto') }}"
       {% endif %}
       alt="{{ product.name }}"
-      class="h-full w-full object-cover object-center"
+      class="{{ 'h-auto' if aspect_ratio == 'adapt' else 'h-full object-cover' }} w-full object-center"
       {% set img_index = index if index is defined else (loop.index0 if loop is defined else 0) %}
-      {% if img_index > 3 %}loading="lazy"{% endif %}
+      {% if img_index > 3 %}loading="lazy"{% elif img_index == 0 and is_priority | default(false) %}fetchpriority="high"{% endif %}
     />
     <div class="absolute top-4 flex flex-col gap-2 ltr:left-4 rtl:right-4">
       {# Merchant custom badge #}
@@ -112,28 +116,40 @@
   <div
     class="mt-auto group-data-[grid=list]/grid:col-span-2 group-data-[grid=list]/grid:row-span-1 group-data-[grid=list]/grid:mt-0 md:group-data-[grid=list]/grid:col-span-1 md:group-data-[grid=list]/grid:col-start-2 md:group-data-[grid=list]/grid:self-start"
   >
-    {# Add to Cart / Quick View Button #}
-    {% set has_options = product.has_options or product.has_fields %}
-    <button
-      class="btn btn-outlined btn-lg w-full md:group-data-[grid=list]/grid:w-1/2"
-      {% if has_options %}
-        data-open-quick-view="true" data-product-id="{{ product.id }}"
-      {% else %}
-        data-add-to-cart="{{ product.id }}"
-      {% endif %}
-    >
-      {{ _("Select options") if has_options else _("Add to cart") }}
-    </button>
+    {% set is_out_of_stock = product.in_stock == false or (product.is_infinite == false and product.quantity is not none and product.quantity <= 0) %}
 
-    {# Quantity Input (hidden, shown after adding to cart) #}
-    <div
-      class="w-full md:group-data-[grid=list]/grid:w-1/2"
-      data-quantity-section
-      hidden
-    >
-      {% with id='card-qty-' ~ product.id, product_id=product.id, quantity=1, show_delete=true, full_width=true %}
-        {% include 'components/ui/quantity-input.jinja' %}
-      {% endwith %}
-    </div>
+    {% if is_out_of_stock %}
+      {# Notify Me Button - shown when out of stock #}
+      <button
+        class="btn btn-outlined btn-lg w-full md:group-data-[grid=list]/grid:w-1/2"
+        data-notify-me-trigger="{{ product.id }}"
+      >
+        {{ _("Notify me when available") }}
+      </button>
+    {% else %}
+      {# Add to Cart / Quick View Button #}
+      {% set has_options = product.has_options or product.has_fields %}
+      <button
+        class="btn btn-outlined btn-lg w-full md:group-data-[grid=list]/grid:w-1/2"
+        {% if has_options %}
+          data-open-quick-view="true" data-product-id="{{ product.id }}"
+        {% else %}
+          data-add-to-cart="{{ product.id }}"
+        {% endif %}
+      >
+        {{ _("Select options") if has_options else _("Add to cart") }}
+      </button>
+
+      {# Quantity Input (hidden, shown after adding to cart) #}
+      <div
+        class="w-full md:group-data-[grid=list]/grid:w-1/2"
+        data-quantity-section
+        hidden
+      >
+        {% with id='card-qty-' ~ product.id, product_id=product.id, quantity=1, show_delete=true, full_width=true %}
+          {% include 'components/ui/quantity-input.jinja' %}
+        {% endwith %}
+      </div>
+    {% endif %}
   </div>
 </div>

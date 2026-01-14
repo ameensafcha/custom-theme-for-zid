@@ -27,8 +27,20 @@
           "id": "src",
           "type": "image",
           "label": {
-            "ar": "الصورة",
-            "en": "Image"
+            "ar": "الصورة (سطح المكتب)",
+            "en": "Image (Desktop)"
+          }
+        },
+        {
+          "id": "src_mobile",
+          "type": "image",
+          "label": {
+            "ar": "الصورة (موبايل)",
+            "en": "Image (Mobile)"
+          },
+          "info": {
+            "ar": "اختياري - يستخدم صورة سطح المكتب إذا لم يتم تحديده",
+            "en": "Optional - Falls back to desktop image"
           }
         },
         {

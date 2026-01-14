@@ -1,3 +1,8 @@
+{# Global Product Card Settings #}
+{% set card_columns_desktop = settings.product_card_columns_desktop | default('4') %}
+{% set card_columns_mobile = settings.product_card_columns_mobile | default('1') %}
+{% set card_image_aspect_ratio = settings.product_card_image_aspect_ratio | default('adapt') %}
+
 <!DOCTYPE html>
 <html
   class="no-js"
@@ -31,11 +36,6 @@
       onload="this.onload=null;this.media='all'"
       href="https://fonts.googleapis.com/css2?family={{ settings.font_family | default('Roboto') }}:wght@300;400;500;700&display=swap"
     />
-    {# PhotoSwipe Lightbox #}
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.min.css"
-    />
     {#
       Prettier ignore is needed here because the CSS contains Jinja template variables
       which cause Prettier's PostCSS parser to fail with "Cannot read properties of undefined (reading 'raw')"
@@ -46,7 +46,7 @@
         /* Font */
         --font-family: {{ (settings.font_family | default('Roboto')).replace('+', ' ') }}, sans-serif;
 
-        /* ========== MERCHANT CUSTOMIZABLE COLORS ========== */
+        /* ========== LIGHT MODE COLORS (Default) ========== */
         --background: {{ settings.theme_background | default('#FFFFFF') }};
         --foreground: {{ settings.theme_foreground | default('#0B0A09') }};
         --primary: {{ settings.theme_primary | default('#0B0A09') }};
@@ -70,26 +70,12 @@
       href="{{ 'styles.css' | asset_url }}"
     />
 
-    {# noUiSlider - For price range slider #}
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/nouislider@15.8.1/dist/nouislider.min.css"
-    />
-
-    {# TailwindPlus Elements #}
+    {# TailwindPlus Elements - pinned version for better caching #}
     <script
-      src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1"
+      src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1.0.22"
       type="module"
     ></script>
 
-    {# noUiSlider JS #}
-    <script src="https://cdn.jsdelivr.net/npm/nouislider@15.8.1/dist/nouislider.min.js"></script>
-
-    {# Embla Carousel - Correct versions for fade + autoplay #}
-    <script src="https://cdn.jsdelivr.net/npm/embla-carousel@8.1.6/embla-carousel.umd.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/embla-carousel-autoplay@8.1.6/embla-carousel-autoplay.umd.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/embla-carousel-fade@8.1.6/embla-carousel-fade.umd.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/embla-carousel-auto-scroll@8.1.6/embla-carousel-auto-scroll.umd.js"></script>
 
     {% if user_custom_css %}
       <link
@@ -109,6 +95,10 @@
 
     {% include 'footer.jinja' %}
     {% include "vitrin:shared/region_settings_dialog.jinja" %}
+    {# Global Notify Me Dialog - for product cards on any page #}
+    {% include 'components/products/notify-me-dialog.jinja' %}
+    {# Global Quick View Modal - for product cards on any page #}
+    {% include 'components/products/quick-view-modal.jinja' %}
     <script>
       window.zidOpenRegionSettingDialog = () => {
         region_settings_dialog?.open();
@@ -130,16 +120,6 @@
       };
       window.storeLowStockEnabled = {{ 'true' if store.settings.products.low_stock_enabled else 'false' }};
       window.storeLowStockThreshold = {{ store.settings.products.low_stock_threshold | default(5) }};
-
-      // Loyalty Rewards config (only set if enabled)
-      {% if session.template not in ['product_details', 'cart_page', 'page_details'] and store.settings.checkout.is_loyalty_enabled %}
-      window.loyaltyConfig = {
-        direction: "{{ session.locale.language.direction }}",
-        textRewards: "{{ _('Rewards') }}",
-        textLoyaltyOptions: "{{ _('For {points} get a discount {percentage}') }}",
-        currencyCode: "{{ session.currency.code }}"
-      };
-      {% endif %}
     </script>
     <!-- prettier-ignore-end -->
 
@@ -151,6 +131,16 @@
 
     {% vitrin_body %}
 
+    {# Loyalty Rewards - loaded AFTER vitrin_body so popup is in DOM #}
+    {% if session.template not in ['product_details', 'cart_page', 'page_details'] and store.settings.checkout.is_loyalty_enabled %}
+      <script>
+        var loyalty_button_direction = "{{ session.locale.language.direction }}";
+        var text_loyalty_rewards = '{{ _("Rewards") }}';
+        var text_loyalty_options = '{{ _("For {points} get a discount {percentage}") }}';
+        var store_currency_code = "{{ session.currency }}";
+      </script>
+      <script src="{{ 'js/layout-loyalty.js' | asset_url }}"></script>
+    {% endif %}
     {% block footer_scripts %}
     {% endblock %}
   </body>

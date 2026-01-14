@@ -9,12 +9,17 @@
   - description: string (optional) - Hero description
   - image: string (optional) - Background image URL
 #}
-<section class="relative flex min-h-[300px] items-center overflow-hidden px-4 py-6 md:min-h-[400px] md:px-16 md:py-16">
+<section
+  class="{{ 'min-h-[300px] md:min-h-[400px] md:py-16' if image else 'md:py-8' }} relative flex items-center overflow-hidden px-4 py-6 md:px-16"
+>
   {% if image %}
-    <div
-      class="absolute inset-0 -z-10 bg-cover bg-center bg-no-repeat"
-      style="background-image: url('{{ image }}')"
-    >
+    <div class="absolute inset-0 -z-10">
+      <img
+        src="{{ image_url(image, w=1920, q=85, f='auto') }}"
+        alt="{{ title }}"
+        class="size-full object-cover"
+        loading="lazy"
+      />
       <div class="absolute inset-0 bg-white/20"></div>
     </div>
   {% else %}

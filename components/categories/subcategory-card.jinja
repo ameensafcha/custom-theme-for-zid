@@ -18,9 +18,9 @@
     {# Has image #}
     <img
       {% if subcategory.image_full_size %}
-        src="{{ image_url(subcategory.image_full_size, w=320, q=90, f='auto') }}"
+        src="{{ image_url(subcategory.image_full_size, w=300, q=80, f='auto') }}"
       {% else %}
-        src="{{ image_url(subcategory.image, w=320, q=90, f='auto') }}"
+        src="{{ image_url(subcategory.image, w=300, q=80, f='auto') }}"
       {% endif %}
       alt="{{ subcategory.name }}"
       class="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-105"

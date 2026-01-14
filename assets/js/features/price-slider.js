@@ -2,11 +2,11 @@
  * Price Slider Module
  *
  * Initializes noUiSlider for price range filtering.
- * Requires noUiSlider CDN to be loaded.
  */
 
+import noUiSlider from "nouislider";
+
 function initPriceSliders() {
-  if (typeof noUiSlider === "undefined") return;
 
   const sliders = document.querySelectorAll("[data-price-slider]");
 
