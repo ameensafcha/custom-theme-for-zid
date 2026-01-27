@@ -9,7 +9,16 @@
 const initializedForms = new WeakSet();
 
 // Form elements (will be set during init)
-let form, productIdInput, nameInput, emailInput, phoneInputWrapper, submitBtn, submitText, submitSpinner, dialog;
+let form,
+  productIdInput,
+  nameInput,
+  emailInput,
+  phoneInputWrapper,
+  phoneErrorMessage,
+  submitBtn,
+  submitText,
+  submitSpinner,
+  dialog;
 
 function setLoading(loading) {
   if (submitBtn) submitBtn.disabled = loading;
@@ -58,12 +67,21 @@ function getPhoneValidationMessage(errorCode) {
   }
 }
 
-function setPhoneError(hasError) {
+function setPhoneError(hasError, message = "") {
   if (phoneInputWrapper) {
     if (hasError) {
       phoneInputWrapper.setAttribute("data-error", "true");
     } else {
       phoneInputWrapper.removeAttribute("data-error");
+    }
+  }
+  if (phoneErrorMessage) {
+    if (hasError && message) {
+      phoneErrorMessage.textContent = message;
+      phoneErrorMessage.classList.remove("hidden");
+    } else {
+      phoneErrorMessage.textContent = "";
+      phoneErrorMessage.classList.add("hidden");
     }
   }
 }
@@ -97,8 +115,8 @@ async function submitStockAlert(e) {
     if (phoneNumber) {
       const validationError = phoneApi.validate();
       if (validationError && validationError !== "EMPTY") {
-        setPhoneError(true);
-        showToast(getPhoneValidationMessage(validationError), "error");
+        const errorMsg = getPhoneValidationMessage(validationError);
+        setPhoneError(true, errorMsg);
         return;
       }
       setPhoneError(false);
@@ -215,6 +233,7 @@ function initNotifyMe() {
   nameInput = document.querySelector("[data-notify-name]");
   emailInput = document.querySelector("[data-notify-email]");
   phoneInputWrapper = document.querySelector("[data-phone-input]");
+  phoneErrorMessage = document.querySelector("[data-phone-error-message]");
   submitBtn = document.querySelector("[data-notify-submit-btn]");
   submitText = document.querySelector("[data-notify-submit-text]");
   submitSpinner = document.querySelector("[data-notify-submit-spinner]");

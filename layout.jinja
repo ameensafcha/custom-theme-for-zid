@@ -88,8 +88,6 @@
     data-template="{{ session.template }}"
     class="min-h-dvh font-sans antialiased"
   >
-    {# DEV TOOL: Theme Selector - Remove in production #}
-    {% include 'components/dev/theme-selector.jinja' %}
     {% include 'header.jinja' %}
     <main id="main">{% block content %}{% endblock %}</main>
 
@@ -120,6 +118,34 @@
       };
       window.storeLowStockEnabled = {{ 'true' if store.settings.products.low_stock_enabled else 'false' }};
       window.storeLowStockThreshold = {{ store.settings.products.low_stock_threshold | default(5) }};
+
+      // Notify Me translations (used by notify-me.js for stock alerts)
+      window.notifyMeTranslations = {
+        success: "{{ _('You will be notified when this product is back in stock!') }}",
+        error: "{{ _('Failed to submit. Please try again.') }}",
+        required: "{{ _('Please fill in all required fields') }}",
+        phoneRequired: "{{ _('Phone number is required') }}",
+        phoneTooShort: "{{ _('Phone number is too short') }}",
+        phoneTooLong: "{{ _('Phone number is too long') }}",
+        phoneInvalid: "{{ _('Invalid phone number') }}"
+      };
+
+      // Custom styles for Vitrin Kit Components (bundle, gift, region dialogs)
+      // These override the default styles in platform widgets
+      window.zidCustomStyles = {
+        bundle_selection: {
+          fontFamily: "var(--font-family)",
+          fontSize: "14px"
+        },
+        gift_dialog: {
+          fontFamily: "var(--font-family)",
+          fontSize: "14px"
+        },
+        region_settings_dialog: {
+          fontFamily: "var(--font-family)",
+          fontSize: "14px"
+        }
+      };
     </script>
     <!-- prettier-ignore-end -->
 

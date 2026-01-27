@@ -100,6 +100,33 @@ class QuestionForm {
   }
 
   /**
+   * Show inline message on the form
+   * @param {string} message - Message to show
+   * @param {string} type - Type: 'success' or 'error'
+   */
+  showNotification(message, type) {
+    const messageEl = document.getElementById("question-form-message");
+    if (!messageEl) return;
+
+    // Set message and styling
+    messageEl.textContent = message;
+    messageEl.classList.remove("hidden", "bg-success/10", "text-success", "bg-destructive/10", "text-destructive");
+
+    if (type === "success") {
+      messageEl.classList.add("bg-success/10", "text-success");
+    } else {
+      messageEl.classList.add("bg-destructive/10", "text-destructive");
+    }
+
+    // Auto-hide after 5 seconds for success
+    if (type === "success") {
+      setTimeout(() => {
+        messageEl.classList.add("hidden");
+      }, 5000);
+    }
+  }
+
+  /**
    * Validate all form inputs
    * @returns {boolean} - True if valid, false otherwise
    */
@@ -160,18 +187,14 @@ class QuestionForm {
       });
 
       // Success - show notification
-      if (window.toastr) {
-        toastr.success(this.messages.successMessage, this.messages.successTitle);
-      }
+      this.showNotification(this.messages.successMessage, "success");
 
       // Reset form
       this.form.reset();
       this.fillCustomerData(); // Re-fill customer data after reset
     } catch (error) {
       console.error("Failed to submit question:", error);
-      if (window.toastr) {
-        toastr.error(this.messages.errorMessage, this.messages.errorTitle);
-      }
+      this.showNotification(this.messages.errorMessage, "error");
     } finally {
       // Re-enable submit button
       this.submitBtn.disabled = false;

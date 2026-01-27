@@ -30,7 +30,8 @@ function updateQuantity(wrapper, delta) {
 
   if (newValue !== current) {
     input.value = newValue;
-    input.dispatchEvent(new Event("change", { bubbles: true }));
+    // Dispatch custom event only - native change would trigger duplicate handling
+    // (both platform listener and our own line 113 listener)
     dispatchQtyChange(wrapper, newValue);
   }
 }

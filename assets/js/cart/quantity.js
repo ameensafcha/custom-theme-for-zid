@@ -63,25 +63,20 @@ export function handleCartQuantityChange(cartProductId, productId, quantity, onS
     })
   );
 
-  // Call the system's API function if available
-  if (typeof window.updateProductQuantityApiCall === "function") {
-    window.updateProductQuantityApiCall(cartProductId, productId, quantity, "template_for_cart_products_list");
-  } else {
-    // Fallback: use Zid SDK directly
-    window.zid.cart
-      .updateProduct({ product_id: cartProductId, quantity }, { showErrorNotification: true })
-      .then(() => {
-        if (onSuccess) onSuccess();
-      })
-      .catch((error) => {
-        console.error("Error updating cart quantity:", error);
-        window.dispatchEvent(
-          new CustomEvent("zidcart:error", {
-            detail: { cartProductId, productId, operation: "update", error: error.message || error }
-          })
-        );
-      });
-  }
+  // Use Zid SDK directly for cart updates
+  window.zid.cart
+    .updateProduct({ product_id: cartProductId, quantity }, { showErrorNotification: true })
+    .then(() => {
+      if (onSuccess) onSuccess();
+    })
+    .catch((error) => {
+      console.error("Error updating cart quantity:", error);
+      window.dispatchEvent(
+        new CustomEvent("zidcart:error", {
+          detail: { cartProductId, productId, operation: "update", error: error.message || error }
+        })
+      );
+    });
 }
 
 /**
@@ -91,31 +86,27 @@ export function handleCartQuantityChange(cartProductId, productId, quantity, onS
  * @param {Function} onSuccess - Optional callback after success
  */
 export function handleCartProductRemove(cartProductId, productId, onSuccess) {
-  // Call the system's remove function if available
-  if (typeof window.removeProductApiCall === "function") {
-    window.removeProductApiCall(cartProductId, productId, "template_for_cart_products_list");
-  } else {
-    // Fallback: use Zid SDK directly
-    window.dispatchEvent(
-      new CustomEvent("zidcart:loading", {
-        detail: { cartProductId, productId, operation: "remove" }
-      })
-    );
+  // Dispatch loading event
+  window.dispatchEvent(
+    new CustomEvent("zidcart:loading", {
+      detail: { cartProductId, productId, operation: "remove" }
+    })
+  );
 
-    window.zid.cart
-      .removeProduct({ product_id: cartProductId }, { showErrorNotification: true })
-      .then(() => {
-        if (onSuccess) onSuccess();
-      })
-      .catch((error) => {
-        console.error("Error removing product:", error);
-        window.dispatchEvent(
-          new CustomEvent("zidcart:error", {
-            detail: { cartProductId, productId, operation: "remove", error: error.message || error }
-          })
-        );
-      });
-  }
+  // Use Zid SDK directly for cart removal
+  window.zid.cart
+    .removeProduct({ product_id: cartProductId }, { showErrorNotification: true })
+    .then(() => {
+      if (onSuccess) onSuccess();
+    })
+    .catch((error) => {
+      console.error("Error removing product:", error);
+      window.dispatchEvent(
+        new CustomEvent("zidcart:error", {
+          detail: { cartProductId, productId, operation: "remove", error: error.message || error }
+        })
+      );
+    });
 }
 
 /**

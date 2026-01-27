@@ -167,73 +167,73 @@
           </svg>
           <span>{{ product.meta.bundle_offer.name }}</span>
         </div>
+      {% endif %}
 
-        {# Bundle Sub-Items Toggle #}
-        {% if product.sub_items and product.sub_items | length > 0 %}
-          <button
-            type="button"
-            class="text-foreground text-xs flex items-center gap-1 hover:underline"
-            data-action="bundle-toggle"
-            data-bundle-id="bundle-{{ product.id }}"
+      {# Bundle Sub-Items Toggle (shown for any product with sub_items - dynamic bundles, static bundles, etc.) #}
+      {% if product.sub_items and product.sub_items | length > 0 %}
+        <button
+          type="button"
+          class="text-foreground text-xs flex items-center gap-1 hover:underline"
+          data-action="bundle-toggle"
+          data-bundle-id="bundle-{{ product.id }}"
+        >
+          <span>{{ product.sub_items | length }} {{ _("items included") }}</span>
+          <svg
+            class="size-3 transition-transform"
+            data-bundle-arrow="{{ product.id }}"
+            viewBox="0 0 16 16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            <span>{{ product.sub_items | length }} {{ _("items included") }}</span>
-            <svg
-              class="size-3 transition-transform"
-              data-bundle-arrow="{{ product.id }}"
-              viewBox="0 0 16 16"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M4 6l4 4 4-4"
-                stroke="currentColor"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-          </button>
+            <path
+              d="M4 6l4 4 4-4"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
 
-          {# Bundle Sub-Items List (Collapsible) #}
-          <div
-            id="bundle-{{ product.id }}"
-            class="bg-secondary/50 mt-1 hidden flex-col gap-2 rounded p-2 lg:mt-0 lg:p-3"
-          >
-            {% for sub_item in product.sub_items %}
-              <div class="flex items-center gap-2">
-                {# Sub-item Image #}
-                <div class="size-10 shrink-0 overflow-hidden rounded">
-                  {% if sub_item.images and sub_item.images | length > 0 %}
-                    <img
-                      src="{{ image_url(sub_item.images[0].thumbs.fullSize, w=40, h=40, q=85, f='auto') }}"
-                      alt="{{ sub_item.name }}"
-                      class="size-full object-cover"
-                      loading="lazy"
-                    />
-                  {% else %}
-                    <img
-                      src="{{ image_url(('images/placeholder-image.svg' | asset_url), w=128, q=100, f='auto') }}"
-                      alt="{{ sub_item.name }}"
-                      class="bg-secondary size-full object-cover"
-                    />
+        {# Bundle Sub-Items List (Collapsible) #}
+        <div
+          id="bundle-{{ product.id }}"
+          class="bg-secondary/50 mt-1 hidden flex-col gap-2 rounded p-2 lg:mt-0 lg:p-3"
+        >
+          {% for sub_item in product.sub_items %}
+            <div class="flex items-center gap-2">
+              {# Sub-item Image #}
+              <div class="size-10 shrink-0 overflow-hidden rounded">
+                {% if sub_item.images and sub_item.images | length > 0 %}
+                  <img
+                    src="{{ image_url(sub_item.images[0].thumbs.fullSize, w=40, h=40, q=85, f='auto') }}"
+                    alt="{{ sub_item.name }}"
+                    class="size-full object-cover"
+                    loading="lazy"
+                  />
+                {% else %}
+                  <img
+                    src="{{ image_url(('images/placeholder-image.svg' | asset_url), w=128, q=100, f='auto') }}"
+                    alt="{{ sub_item.name }}"
+                    class="bg-secondary size-full object-cover"
+                  />
+                {% endif %}
+              </div>
+
+              {# Sub-item Details #}
+              <div class="min-w-0 flex-1">
+                <p class="text-foreground text-xs truncate">{{ sub_item.product_name or sub_item.name }}</p>
+                <div class="text-muted text-xs flex items-center gap-2">
+                  <span class="lg:hidden">{{ _("Qty") }}: {{ sub_item.quantity }}</span>
+                  <span class="hidden lg:inline">{{ _("Quantity") }}: {{ sub_item.quantity }}</span>
+                  {% if sub_item.price_string %}
+                    <span>{{ sub_item.price_string }}</span>
                   {% endif %}
                 </div>
-
-                {# Sub-item Details #}
-                <div class="min-w-0 flex-1">
-                  <p class="text-foreground text-xs truncate">{{ sub_item.product_name or sub_item.name }}</p>
-                  <div class="text-muted text-xs flex items-center gap-2">
-                    <span class="lg:hidden">{{ _("Qty") }}: {{ sub_item.quantity }}</span>
-                    <span class="hidden lg:inline">{{ _("Quantity") }}: {{ sub_item.quantity }}</span>
-                    {% if sub_item.price_string %}
-                      <span>{{ sub_item.price_string }}</span>
-                    {% endif %}
-                  </div>
-                </div>
               </div>
-            {% endfor %}
-          </div>
-        {% endif %}
+            </div>
+          {% endfor %}
+        </div>
       {% endif %}
     </div>
 

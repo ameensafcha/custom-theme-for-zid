@@ -38,29 +38,37 @@ function createCountryOptionHTML(country, isSelected) {
   return `
     <button
       type="button"
-      class="phone-country-option"
-      tabindex="-1"
+      class="phone-country-option group text-foreground hover:bg-secondary aria-selected:bg-secondary flex w-full cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition-colors"
       data-country-code="${country.code}"
       data-dial-code="${country.dialCode}"
       data-country-name="${country.name}"
       data-country-name-ar="${country.nameAr || ""}"
       ${isSelected ? 'aria-selected="true"' : ""}
     >
-      <span data-slot="flag">
+      <span class="bg-secondary flex h-4 w-6 shrink-0 overflow-hidden rounded-sm">
         <img
+          class="size-full object-cover"
           src="https://flagcdn.com/w40/${country.code.toLowerCase()}.png"
           srcset="https://flagcdn.com/w80/${country.code.toLowerCase()}.png 2x"
           alt="${country.name}"
           loading="lazy"
         />
       </span>
-      <span data-slot="name">${displayName}</span>
-      <span data-slot="code">${country.dialCode}</span>
-      <span data-slot="check">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="20 6 9 17 4 12" />
-        </svg>
-      </span>
+      <span class="flex-1 truncate text-start">${displayName}</span>
+      <span class="text-muted shrink-0">${country.dialCode}</span>
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="ms-auto size-4 shrink-0 opacity-0 group-aria-selected:opacity-100"
+      >
+        <path d="M20 6 9 17l-5-5"></path>
+      </svg>
     </button>
   `;
 }

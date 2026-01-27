@@ -212,10 +212,13 @@ function showAddButton(productId) {
 
 /**
  * Find cart item by product ID
+ * @param {string} productId - Product ID to find
+ * @param {Object} cart - Optional cart object (if not provided, will fetch)
+ * @returns {Object} - { cartItem, cart } - both the found item and the cart data
  */
-async function findCartItem(productId) {
-  const cart = await window.zid.cart.get();
-  if (!cart?.products) return null;
+async function findCartItem(productId, cart) {
+  const cartData = cart || (await window.zid.cart.get());
+  if (!cartData?.products) return { cartItem: null, cart: cartData };
 
   const normalize = (id) =>
     String(id || "")
@@ -223,10 +226,12 @@ async function findCartItem(productId) {
       .toLowerCase();
   const targetId = normalize(productId);
 
-  return cart.products.find((item) => {
+  const cartItem = cartData.products.find((item) => {
     const id = item.product?.id || item.product_id;
     return normalize(id) === targetId;
   });
+
+  return { cartItem, cart: cartData };
 }
 
 /**
@@ -243,14 +248,16 @@ async function handleQtyRemove(wrapper) {
   if (input) input.disabled = true;
 
   try {
-    const cartItem = await findCartItem(productId);
+    const { cartItem } = await findCartItem(productId);
     if (!cartItem) throw new Error("Item not in cart");
 
     await window.zid.cart.removeProduct({ product_id: cartItem.id }, { showErrorNotification: true });
 
     dispatch("cart:updated", { productId, action: "remove" });
     showAddButton(productId);
-    refreshBadge();
+    // Fetch updated cart once for badge refresh
+    const updatedCart = await window.zid.cart.get();
+    refreshBadge(updatedCart);
   } catch (err) {
     console.error("[Cart] Remove from cart failed:", err);
   } finally {
@@ -273,13 +280,15 @@ async function handleQtyChange(wrapper, newQty) {
   if (input) input.disabled = true;
 
   try {
-    const cartItem = await findCartItem(productId);
+    const { cartItem } = await findCartItem(productId);
     if (!cartItem) throw new Error("Item not in cart");
 
     await window.zid.cart.updateProduct({ product_id: cartItem.id, quantity: newQty }, { showErrorNotification: true });
 
     dispatch("cart:updated", { productId, action: "update", quantity: newQty });
-    refreshBadge();
+    // Fetch updated cart once for badge refresh
+    const updatedCart = await window.zid.cart.get();
+    refreshBadge(updatedCart);
   } catch (err) {
     console.error("[Cart] Update quantity failed:", err);
   } finally {
@@ -342,9 +351,12 @@ export function initButtons() {
     });
   });
 
-  // Qty input events (for product cards)
+  // Qty input events (for product cards only - NOT cart page inputs)
+  // Cart page inputs have data-cart-product-id and are handled by cart/controller.js
   document.querySelectorAll("[data-qty-input]").forEach((wrapper) => {
     if (initialized.has(wrapper)) return;
+    // Skip cart page quantity inputs - they're handled by cart controller
+    if (wrapper.dataset.cartProductId) return;
     initialized.add(wrapper);
 
     wrapper.addEventListener("qty:remove", () => handleQtyRemove(wrapper));
@@ -354,18 +366,20 @@ export function initButtons() {
 
 /**
  * Sync cart state with UI on load
+ * @param {Object} cart - Optional cart data (if not provided, will fetch)
  */
-async function syncCartState() {
+async function syncCartState(cart) {
   try {
-    const cart = await window.zid.cart.get();
-    if (!cart?.products?.length) return;
+    // Use provided cart data or fetch if not provided
+    const cartData = cart || (await window.zid.cart.get());
+    if (!cartData?.products?.length) return;
 
     const normalize = (id) =>
       String(id || "")
         .replace(/-/g, "")
         .toLowerCase();
 
-    cart.products.forEach((item) => {
+    cartData.products.forEach((item) => {
       const productId = item.product?.id || item.product_id;
       const qty = item.quantity || 1;
 
@@ -426,6 +440,13 @@ export async function initCart() {
 
   initButtons();
   initBundleSelectionListener();
-  refreshBadge();
-  syncCartState();
+
+  // Fetch cart once and share with both functions to avoid duplicate API calls
+  try {
+    const cart = await window.zid.cart.get();
+    refreshBadge(cart);
+    syncCartState(cart);
+  } catch (err) {
+    console.error("[Cart] Init cart failed:", err);
+  }
 }

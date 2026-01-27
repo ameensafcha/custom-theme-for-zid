@@ -1,5 +1,7 @@
 {# Mobile Navigation Drawer #}
-<el-dialog class="group contents">
+<el-dialog
+        id="mobile-drawer-dialog"
+        class="group contents">
   <button
     command="show-modal"
     commandfor="mobile-drawer"
@@ -163,7 +165,7 @@
               {% if show_country or show_language %}
                 <button
                   type="button"
-                  onclick="zidOpenRegionSettingDialog()"
+                  onclick="document.getElementById('mobile-drawer-dialog')?.hide(); zidOpenRegionSettingDialog();"
                   class="text-foreground text-sm flex w-full items-center gap-2 px-6 py-3 text-start"
                 >
                   <svg

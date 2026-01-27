@@ -868,3 +868,25 @@ body {
     transform: translateX(50%);
   }
 }
+
+/* ========================================
+   VITRIN INCLUDES - Typography Overrides
+   Override hardcoded styles from platform templates
+   ======================================== */
+
+/* Loyalty Points Widget (vitrin:products/loyalty_points_widget.jinja) */
+.loyalty-points-products-section {
+  font-size: 0.875rem !important; /* 14px - matches text-sm */
+  font-family: inherit !important;
+  border-color: var(--border) !important;
+  border-radius: var(--radius) !important;
+}
+
+.loyalty-points-products-section p {
+  font-size: inherit !important;
+}
+
+.loyalty-points-products-section .loyalty-points-rewards {
+  font-size: inherit !important;
+  color: var(--foreground) !important;
+}

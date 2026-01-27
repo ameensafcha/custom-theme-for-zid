@@ -78,8 +78,14 @@
           </div>
 
           {# Phone Input with Country Code - All countries for global customers #}
-          {% set all_countries = true %}
-          {% include 'components/ui/phone-input.jinja' with context %}
+          <div class="flex flex-col gap-1">
+            {% set all_countries = true %}
+            {% include 'components/ui/phone-input.jinja' with context %}
+            <p
+              class="text-destructive text-sm hidden"
+              data-phone-error-message
+            ></p>
+          </div>
 
           {# Submit Button #}
           <div class="flex justify-end pt-2">

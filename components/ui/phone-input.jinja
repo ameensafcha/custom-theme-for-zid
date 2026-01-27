@@ -130,40 +130,61 @@
     autocomplete="tel-national"
   />
 
-  {# Country Selector Popover - Simple popover with custom JS filtering #}
+  {# Country Selector Popover #}
   <el-popover
     id="{{ popover_id }}"
     popover
     anchor="bottom"
-    class="border-border-light bg-background w-[300px] overflow-hidden rounded border shadow-lg transition transition-discrete [--anchor-gap:4px] data-closed:translate-y-1 data-closed:opacity-0 data-enter:duration-200 data-enter:ease-out data-leave:duration-150 data-leave:ease-in"
+    class="bg-background border-border-light z-50 w-[300px] overflow-hidden rounded border p-0 shadow-lg transition transition-discrete [--anchor-gap:4px] data-closed:translate-y-1 data-closed:opacity-0 data-enter:duration-200 data-enter:ease-out data-leave:duration-150 data-leave:ease-in"
   >
-    {# Search Input #}
-    <input
-      type="text"
-      class="text-sm text-foreground border-border-light placeholder:text-muted-foreground w-full border-b bg-transparent px-3 py-3 outline-none"
-      placeholder="{{ _('Search country...') }}"
-      autocomplete="off"
-      data-phone-country-search
-    />
+    {# Search Input with Icon #}
+    <div class="border-border-light flex items-center border-b px-3">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="text-muted-foreground me-2 size-4 shrink-0"
+      >
+        <circle
+          cx="11"
+          cy="11"
+          r="8"
+        ></circle>
+        <path d="m21 21-4.3-4.3"></path>
+      </svg>
+      <input
+        type="text"
+        class="text-foreground placeholder:text-muted-foreground h-11 w-full bg-transparent py-3 text-sm outline-none"
+        placeholder="{{ _('Search country...') }}"
+        autocomplete="off"
+        data-phone-country-search
+      />
+    </div>
 
     {# Country List #}
     <div
-      class="max-h-60 overflow-y-auto"
+      class="max-h-[300px] overflow-y-auto p-1"
       data-phone-country-list
     >
       {% for country in country_list %}
         <button
           type="button"
-          class="group text-sm text-foreground hover:bg-secondary aria-selected:bg-secondary flex w-full cursor-pointer items-center gap-3 px-3 py-2.5 transition-colors"
+          class="phone-country-option group text-foreground hover:bg-secondary aria-selected:bg-secondary flex w-full cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition-colors"
           data-country-code="{{ country.code }}"
           data-dial-code="{{ country.dial_code }}"
           data-country-name="{{ country.name }}"
           data-country-name-ar="{{ country.name_ar | default('') }}"
           {% if country.dial_code == current_country.found.dial_code %}aria-selected="true"{% endif %}
         >
-          <span class="flex h-4 w-6 shrink-0 items-center justify-center overflow-hidden rounded-sm">
+          <span class="bg-secondary flex h-4 w-6 shrink-0 overflow-hidden rounded-sm">
             <img
-              class="h-full w-full object-cover"
+              class="size-full object-cover"
               src="https://flagcdn.com/w40/{{ country.code | lower }}.png"
               srcset="https://flagcdn.com/w80/{{ country.code | lower }}.png 2x"
               alt="{{ country.name }}"
@@ -177,28 +198,27 @@
               {{ country.name }}
             {% endif %}
           </span>
-          <span class="text-muted-foreground shrink-0">{{ country.dial_code }}</span>
-          <span class="text-foreground shrink-0 opacity-0 group-aria-selected:opacity-100">
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <polyline points="20 6 9 17 4 12" />
-            </svg>
-          </span>
+          <span class="text-muted shrink-0">{{ country.dial_code }}</span>
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="ms-auto size-4 shrink-0 opacity-0 group-aria-selected:opacity-100"
+          >
+            <path d="M20 6 9 17l-5-5"></path>
+          </svg>
         </button>
       {% endfor %}
     </div>
 
     {# No Results #}
     <div
-      class="text-sm text-muted-foreground px-3 py-6 text-center"
+      class="text-muted-foreground px-3 py-6 text-center text-sm"
       data-phone-no-results
       hidden
     >
