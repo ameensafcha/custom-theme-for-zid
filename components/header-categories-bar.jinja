@@ -1,0 +1,40 @@
+{# Header Categories Bar - Horizontal scrollable categories strip #}
+{# Row 2 of the header: shows top-level menu items as clickable category links #}
+
+{% set menu_items = store.settings.menus.main_menu.items %}
+
+{% if menu_items | length > 0 %}
+<div class="bg-secondary border-border-light border-b">
+    <div class="theme-container relative flex items-center px-4 md:px-16">
+        {# Left scroll arrow - desktop only #}
+        <button type="button" data-scroll-left
+            class="hidden lg:flex shrink-0 size-8 items-center justify-center text-foreground hover:text-primary transition-opacity disabled:opacity-30"
+            aria-label="Scroll left">
+            <svg class="size-5 rtl:rotate-180" viewBox="0 0 20 20" fill="none">
+                <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round" />
+            </svg>
+        </button>
+
+        {# Scrollable categories container #}
+        <div class="categories-scroll flex flex-1 items-center gap-6 overflow-x-auto py-2.5" data-categories-scroll>
+            {% for menu in menu_items %}
+            <a href="{{ menu.url | localized_url if menu.resource_type != 'url' else menu.url }}"
+                class="text-sm text-foreground whitespace-nowrap shrink-0 hover:underline transition-colors">
+                {{ menu.label }}
+            </a>
+            {% endfor %}
+        </div>
+
+        {# Right scroll arrow - desktop only #}
+        <button type="button" data-scroll-right
+            class="hidden lg:flex shrink-0 size-8 items-center justify-center text-foreground hover:text-primary transition-opacity disabled:opacity-30"
+            aria-label="Scroll right">
+            <svg class="size-5 rtl:rotate-180" viewBox="0 0 20 20" fill="none">
+                <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round" />
+            </svg>
+        </button>
+    </div>
+</div>
+{% endif %}

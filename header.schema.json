@@ -85,26 +85,22 @@
           "default": false
         },
         {
-          "id": "enable_marquee",
-          "type": "checkbox",
+          "id": "bg_color",
+          "type": "color",
           "label": {
-            "ar": "تفعيل التمرير المتحرك",
-            "en": "Enable Marquee Animation"
+            "ar": "لون خلفية شريط الإعلانات",
+            "en": "Background Color"
           },
-          "default": false
+          "default": ""
         },
         {
-          "id": "marquee_speed",
-          "type": "range",
+          "id": "text_color",
+          "type": "color",
           "label": {
-            "ar": "سرعة التمرير",
-            "en": "Marquee Speed"
+            "ar": "لون نص شريط الإعلانات",
+            "en": "Text Color"
           },
-          "min": 10,
-          "max": 60,
-          "step": 5,
-          "unit": "s",
-          "default": 30
+          "default": ""
         },
         {
           "id": "texts",
@@ -113,6 +109,7 @@
             "ar": "النصوص",
             "en": "Texts"
           },
+          "max_items": 3,
           "item_label": {
             "ar": "نص",
             "en": "Text"
@@ -127,15 +124,6 @@
               }
             }
           ]
-        },
-        {
-          "id": "url",
-          "type": "text",
-          "label": {
-            "ar": "الرابط",
-            "en": "Link URL"
-          },
-          "default": ""
         },
         {
           "id": "page_display",

@@ -1,0 +1,23 @@
+{
+  "id": "7706caf2-481b-4443-a7ab-e9bdfcedba68",
+  "slug": "default-theme-vitrin-7706caf2",
+  "updatedAt": "2026-02-12T11:27:15.385Z",
+  "installations": [
+    {
+      "id": "38fccddb-f01c-4fe8-98cb-059435f08c71",
+      "store_id": "3059022",
+      "store_name": "qwerty",
+      "installed_at": "2026-02-12T10:34:19.042Z",
+      "version": "1.0.2",
+      "activated": true,
+      "activated_at": "2026-02-12T10:43:21.153Z"
+    },
+    {
+      "id": "38fccddb-f01c-4fe8-98cb-059435f08c71",
+      "store_id": "3059022",
+      "store_name": "qwerty",
+      "installed_at": "2026-02-12T11:27:15.384Z",
+      "version": "1.0.4"
+    }
+  ]
+}
