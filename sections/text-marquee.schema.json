@@ -6,16 +6,22 @@
     },
     "settings": [
         {
-            "id": "marquee_text",
+            "id": "marquee_text_ar",
             "type": "text",
             "label": {
-                "ar": "النص المتحرك",
-                "en": "Marquee Text"
+                "ar": "النص المتحرك (عربي)",
+                "en": "Marquee Text (Arabic)"
             },
-            "default": {
-                "ar": "مرحباً بكم في متجرنا! شحن مجاني للطلبات فوق 200 ريال 🚚",
-                "en": "Welcome to our store! Free shipping on orders over 200 SAR 🚚"
-            }
+            "default": "مرحباً بكم في متجرنا! شحن مجاني للطلبات فوق 200 ريال 🚚"
+        },
+        {
+            "id": "marquee_text_en",
+            "type": "text",
+            "label": {
+                "ar": "النص المتحرك (إنجليزي)",
+                "en": "Marquee Text (English)"
+            },
+            "default": "Welcome to our store! Free shipping on orders over 200 SAR 🚚"
         },
         {
             "id": "bg_color",

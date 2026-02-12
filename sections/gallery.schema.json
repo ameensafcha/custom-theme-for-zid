@@ -6,11 +6,20 @@
   },
   "settings": [
     {
-      "id": "title",
+      "id": "title_ar",
       "type": "text",
       "label": {
-        "ar": "العنوان",
-        "en": "Title"
+        "ar": "العنوان (عربي)",
+        "en": "Title (Arabic)"
+      },
+      "default": ""
+    },
+    {
+      "id": "title_en",
+      "type": "text",
+      "label": {
+        "ar": "العنوان (إنجليزي)",
+        "en": "Title (English)"
       },
       "default": ""
     },
@@ -44,27 +53,51 @@
           }
         },
         {
-          "id": "alt",
+          "id": "alt_ar",
           "type": "text",
           "label": {
-            "ar": "النص البديل للصورة",
-            "en": "Image alt text"
+            "ar": "النص البديل (عربي)",
+            "en": "Alt Text (Arabic)"
           }
         },
         {
-          "id": "image_title",
+          "id": "alt_en",
           "type": "text",
           "label": {
-            "ar": "عنوان الصورة",
-            "en": "Image title"
+            "ar": "النص البديل (إنجليزي)",
+            "en": "Alt Text (English)"
           }
         },
         {
-          "id": "primary_button_text",
+          "id": "image_title_ar",
           "type": "text",
           "label": {
-            "ar": "نص الزر الأساسي",
-            "en": "Primary button text"
+            "ar": "عنوان الصورة (عربي)",
+            "en": "Image Title (Arabic)"
+          }
+        },
+        {
+          "id": "image_title_en",
+          "type": "text",
+          "label": {
+            "ar": "عنوان الصورة (إنجليزي)",
+            "en": "Image Title (English)"
+          }
+        },
+        {
+          "id": "primary_button_text_ar",
+          "type": "text",
+          "label": {
+            "ar": "نص الزر الأساسي (عربي)",
+            "en": "Primary Button Text (Arabic)"
+          }
+        },
+        {
+          "id": "primary_button_text_en",
+          "type": "text",
+          "label": {
+            "ar": "نص الزر الأساسي (إنجليزي)",
+            "en": "Primary Button Text (English)"
           }
         },
         {
@@ -76,11 +109,19 @@
           }
         },
         {
-          "id": "secondary_button_text",
+          "id": "secondary_button_text_ar",
           "type": "text",
           "label": {
-            "ar": "نص الزر الثانوي",
-            "en": "Secondary button text"
+            "ar": "نص الزر الثانوي (عربي)",
+            "en": "Secondary Button Text (Arabic)"
+          }
+        },
+        {
+          "id": "secondary_button_text_en",
+          "type": "text",
+          "label": {
+            "ar": "نص الزر الثانوي (إنجليزي)",
+            "en": "Secondary Button Text (English)"
           }
         },
         {

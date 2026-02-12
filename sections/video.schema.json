@@ -6,16 +6,22 @@
   },
   "settings": [
     {
-      "id": "title",
+      "id": "title_ar",
       "type": "text",
       "label": {
-        "ar": "العنوان",
-        "en": "Title"
+        "ar": "العنوان (عربي)",
+        "en": "Title (Arabic)"
       },
-      "default": {
-        "ar": "",
-        "en": ""
-      }
+      "default": ""
+    },
+    {
+      "id": "title_en",
+      "type": "text",
+      "label": {
+        "ar": "العنوان (إنجليزي)",
+        "en": "Title (English)"
+      },
+      "default": ""
     },
     {
       "id": "poster_image",

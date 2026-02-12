@@ -226,52 +226,76 @@
           "default": "start"
         },
         {
-          "id": "badge_text",
+          "id": "badge_text_ar",
           "type": "text",
           "label": {
-            "ar": "نص الشارة",
-            "en": "Badge Text"
+            "ar": "نص الشارة (عربي)",
+            "en": "Badge Text (Arabic)"
           },
-          "default": {
-            "ar": "مجموعة جديدة",
-            "en": "NEW COLLECTION"
-          }
+          "default": "مجموعة جديدة"
         },
         {
-          "id": "heading",
+          "id": "badge_text_en",
           "type": "text",
           "label": {
-            "ar": "العنوان الرئيسي",
-            "en": "Heading"
+            "ar": "نص الشارة (إنجليزي)",
+            "en": "Badge Text (English)"
           },
-          "default": {
-            "ar": "تشكيلة 2025",
-            "en": "Superbloom 2025"
-          }
+          "default": "NEW COLLECTION"
         },
         {
-          "id": "description",
+          "id": "heading_ar",
+          "type": "text",
+          "label": {
+            "ar": "العنوان الرئيسي (عربي)",
+            "en": "Heading (Arabic)"
+          },
+          "default": "تشكيلة 2025"
+        },
+        {
+          "id": "heading_en",
+          "type": "text",
+          "label": {
+            "ar": "العنوان الرئيسي (إنجليزي)",
+            "en": "Heading (English)"
+          },
+          "default": "Superbloom 2025"
+        },
+        {
+          "id": "description_ar",
           "type": "textarea",
           "label": {
-            "ar": "الوصف",
-            "en": "Description"
+            "ar": "الوصف (عربي)",
+            "en": "Description (Arabic)"
           },
-          "default": {
-            "ar": "ادخل الموسم بتصاميم انسيابية وأناقة بلا مجهود",
-            "en": "Step into the season with flowing silhouettes and effortless elegance."
-          }
+          "default": "ادخل الموسم بتصاميم انسيابية وأناقة بلا مجهود"
         },
         {
-          "id": "button_text",
+          "id": "description_en",
+          "type": "textarea",
+          "label": {
+            "ar": "الوصف (إنجليزي)",
+            "en": "Description (English)"
+          },
+          "default": "Step into the season with flowing silhouettes and effortless elegance."
+        },
+        {
+          "id": "button_text_ar",
           "type": "text",
           "label": {
-            "ar": "نص الزر",
-            "en": "Button Text"
+            "ar": "نص الزر (عربي)",
+            "en": "Button Text (Arabic)"
           },
-          "default": {
-            "ar": "تسوق المجموعة",
-            "en": "Shop the Collection"
-          }
+          "default": "تسوق المجموعة"
+        },
+        {
+          "id": "button_text_en",
+          "type": "text",
+          "label": {
+            "ar": "نص الزر (إنجليزي)",
+            "en": "Button Text (English)"
+          },
+          "default": "Shop the Collection"
         },
         {
           "id": "button_url",

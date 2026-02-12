@@ -3,85 +3,65 @@
 {% set desktop_image = image_url(settings.background_image, w=1920, q=85, f='auto') %}
 {% set is_lazy = settings.order > 2 %}
 
-<section
-  section-id="{{ sectionId }}"
-  class="relative flex min-h-[700px] items-center justify-center overflow-hidden px-4 py-6 md:min-h-[480px] md:px-16 md:py-32"
->
+<section section-id="{{ sectionId }}"
+  class="relative flex min-h-[700px] items-center justify-center overflow-hidden px-4 py-6 md:min-h-[480px] md:px-16 md:py-32">
   {% if settings.background_image %}
-    <div class="absolute inset-0 -z-10">
-      <picture>
-        <source media="(min-width: 768px)" srcset="{{ desktop_image }}" />
-        <img
-          src="{{ mobile_image }}"
-          alt="{{ settings.title | default('') }}"
-          class="h-full w-full object-cover md:object-bottom"
-          {% if is_lazy %}loading="lazy"{% else %}fetchpriority="high"{% endif %}
-        />
-      </picture>
-      <div
-        class="bg-primary absolute inset-0"
-        style="opacity: {{ settings.overlay_opacity | default(5) / 100 }}"
-      ></div>
-    </div>
+  <div class="absolute inset-0 -z-10">
+    <picture>
+      <source media="(min-width: 768px)" srcset="{{ desktop_image }}" />
+      <img src="{{ mobile_image }}" alt="{{ settings.title | default('') }}"
+        class="h-full w-full object-cover md:object-bottom" {% if is_lazy %}loading="lazy" {% else
+        %}fetchpriority="high" {% endif %} />
+    </picture>
+    <div class="bg-primary absolute inset-0" style="opacity: {{ settings.overlay_opacity | default(5) / 100 }}"></div>
+  </div>
   {% endif %}
   <div class="theme-container">
     <div class="countdown-content grid gap-x-20 gap-y-8 lg:grid-cols-12 lg:items-center">
       <div class="space-y-6 lg:col-span-6">
         <div>
-          {% if settings.badge_text %}
-            <span class="text-foreground text-xs uppercase tracking-wide">{{ settings.badge_text }}</span>
+          {% set badge = settings.badge_text_ar if session.lang == 'ar' else settings.badge_text_en %}
+          {% if badge %}
+          <span class="text-foreground text-xs uppercase tracking-wide">{{ badge }}</span>
           {% endif %}
-          {% if settings.title %}
-            <h2 class="text-foreground text-2xl md:text-3xl font-semibold tracking-tight uppercase">{{ settings.title }}</h2>
+          {% set title_text = settings.title_ar if session.lang == 'ar' else settings.title_en %}
+          {% if title_text %}
+          <h2 class="text-foreground text-2xl md:text-3xl font-semibold tracking-tight uppercase">{{ title_text }}</h2>
           {% endif %}
-          {% if settings.description %}
-            <p class="text-foreground text-base">{{ settings.description }}</p>
+          {% set desc = settings.description_ar if session.lang == 'ar' else settings.description_en %}
+          {% if desc %}
+          <p class="text-foreground text-base">{{ desc }}</p>
           {% endif %}
         </div>
-        {% if settings.button_text %}
-          <a
-            href="{{ settings.button_url | default('#') }}"
-            class="btn btn-filled btn-lg"
-          >
-            {{ settings.button_text }}
-          </a>
+        {% set btn_text = settings.button_text_ar if session.lang == 'ar' else settings.button_text_en %}
+        {% if btn_text %}
+        <a href="{{ settings.button_url | default('#') }}" class="btn btn-filled btn-lg">
+          {{ btn_text }}
+        </a>
         {% endif %}
       </div>
       <div class="lg:col-span-6">
         <div class="countdown-timer flex items-stretch gap-4 lg:justify-end">
           <div
-            class="flex min-w-16 flex-col items-center justify-center rounded bg-white/30 p-2 text-center backdrop-blur-sm md:min-w-[98px]"
-          >
+            class="flex min-w-16 flex-col items-center justify-center rounded bg-white/30 p-2 text-center backdrop-blur-sm md:min-w-[98px]">
             <span class="days-value text-foreground text-xl md:text-2xl font-semibold"> 00 </span>
             <span class="text-foreground text-xs uppercase tracking-wide uppercase"> {{ _('Day') }} </span>
           </div>
-          <span
-            aria-hidden="true"
-            class="bg-border-disabled my-2 w-px"
-          ></span>
+          <span aria-hidden="true" class="bg-border-disabled my-2 w-px"></span>
           <div
-            class="flex min-w-16 flex-col items-center justify-center rounded bg-white/30 p-2 text-center backdrop-blur-sm md:min-w-[98px]"
-          >
+            class="flex min-w-16 flex-col items-center justify-center rounded bg-white/30 p-2 text-center backdrop-blur-sm md:min-w-[98px]">
             <span class="hours-value text-foreground text-xl md:text-2xl font-semibold"> 00 </span>
             <span class="text-foreground text-xs uppercase tracking-wide uppercase"> {{ _('Hour') }} </span>
           </div>
-          <span
-            aria-hidden="true"
-            class="bg-border-disabled my-2 w-px"
-          ></span>
+          <span aria-hidden="true" class="bg-border-disabled my-2 w-px"></span>
           <div
-            class="flex min-w-16 flex-col items-center justify-center rounded bg-white/30 p-2 text-center backdrop-blur-sm md:min-w-[98px]"
-          >
+            class="flex min-w-16 flex-col items-center justify-center rounded bg-white/30 p-2 text-center backdrop-blur-sm md:min-w-[98px]">
             <span class="minutes-value text-foreground text-xl md:text-2xl font-semibold"> 00 </span>
             <span class="text-foreground text-xs uppercase tracking-wide uppercase"> {{ _('Min') }} </span>
           </div>
-          <span
-            aria-hidden="true"
-            class="bg-border-disabled my-2 w-px"
-          ></span>
+          <span aria-hidden="true" class="bg-border-disabled my-2 w-px"></span>
           <div
-            class="flex min-w-16 flex-col items-center justify-center rounded bg-white/30 p-2 text-center backdrop-blur-sm md:min-w-[98px]"
-          >
+            class="flex min-w-16 flex-col items-center justify-center rounded bg-white/30 p-2 text-center backdrop-blur-sm md:min-w-[98px]">
             <span class="seconds-value text-foreground text-xl md:text-2xl font-semibold"> 00 </span>
             <span class="text-foreground text-xs uppercase tracking-wide uppercase"> {{ _('Sec') }} </span>
           </div>

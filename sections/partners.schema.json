@@ -6,16 +6,22 @@
   },
   "settings": [
     {
-      "id": "title",
+      "id": "title_ar",
       "type": "text",
       "label": {
-        "ar": "العنوان",
-        "en": "Title"
+        "ar": "العنوان (عربي)",
+        "en": "Title (Arabic)"
       },
-      "default": {
-        "ar": "شركاؤنا",
-        "en": "Our Partners"
-      }
+      "default": "شركاؤنا"
+    },
+    {
+      "id": "title_en",
+      "type": "text",
+      "label": {
+        "ar": "العنوان (إنجليزي)",
+        "en": "Title (English)"
+      },
+      "default": "Our Partners"
     },
     {
       "id": "store_partners",
@@ -55,11 +61,19 @@
           }
         },
         {
-          "id": "name",
+          "id": "name_ar",
           "type": "text",
           "label": {
-            "ar": "اسم الشريك",
-            "en": "Partner Name"
+            "ar": "اسم الشريك (عربي)",
+            "en": "Partner Name (Arabic)"
+          }
+        },
+        {
+          "id": "name_en",
+          "type": "text",
+          "label": {
+            "ar": "اسم الشريك (إنجليزي)",
+            "en": "Partner Name (English)"
           }
         }
       ]

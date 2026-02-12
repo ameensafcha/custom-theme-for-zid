@@ -1,4 +1,5 @@
-{% if settings.marquee_text and settings.marquee_text | trim %}
+{% set marquee_text = settings.marquee_text_ar if session.lang == 'ar' else settings.marquee_text_en %}
+{% if marquee_text and marquee_text | trim %}
 <section section-id="{{ sectionId }}" class="overflow-hidden py-3 md:py-5"
     style="background-color: {{ settings.bg_color | default('#000000') }}; color: {{ settings.text_color | default('#FFFFFF') }};">
 
@@ -6,7 +7,7 @@
     <div class="marquee-track" data-marquee-track style="font-size: clamp(16px, 4vw, 22px);">
         <div class="marquee-content" data-marquee-content>
             {% for i in range(10) %}
-            <span class="marquee-item">{{ settings.marquee_text }}</span>
+            <span class="marquee-item">{{ marquee_text }}</span>
             {% endfor %}
         </div>
     </div>

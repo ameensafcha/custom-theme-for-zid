@@ -6,14 +6,16 @@
     <div>
 
         {# ===== Header: Title + View All ===== #}
-        {% if settings.title or settings.display_more %}
+        {% set title_text = settings.title_ar if session.lang == 'ar' else settings.title_en %}
+        {% set more_text = settings.more_text_ar if session.lang == 'ar' else settings.more_text_en %}
+        {% if title_text or settings.display_more %}
         <div class="flex items-center justify-between mb-8 px-4 md:px-16">
-            {% if settings.title %}
-            <h2 class="text-xl md:text-[26px] font-semibold text-foreground">{{ settings.title }}</h2>
+            {% if title_text %}
+            <h2 class="text-xl md:text-[26px] font-semibold text-foreground">{{ title_text }}</h2>
             {% endif %}
-            {% if settings.display_more and settings.more_text %}
+            {% if settings.display_more and more_text %}
             <a href="{{ url_for('list_products') }}" class="text-primary text-xl md:text-[26px] font-medium underline">
-                {{ settings.more_text }}
+                {{ more_text }}
             </a>
             {% endif %}
         </div>

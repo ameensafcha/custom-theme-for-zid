@@ -1,119 +1,78 @@
-{# REBUILT Categories Bar - Row 2 #}
 {% set categories_list = store.categories %}
-{# Fallback: if store.categories is empty, try main menu #}
 {% if categories_list | length == 0 %}
-{% set categories_list = store.settings.menus.main_menu.items %}
+    {% set categories_list = store.settings.menus.main_menu.items %}
 {% endif %}
 
-{# Only render if we have items #}
 {% if categories_list | length > 0 %}
-<div class="header-row-2 border-b border-border-light relative z-20"
-    style="background-color: {{ settings.header_row2_bg_color | default('#f8f9fa') }}; color: {{ settings.header_row2_text_color | default('#000000') }};">
+<div class="nav-container">
+    <div class="nav-content">
+        <button type="button" class="nav-arrow" onclick="document.querySelector('.nav-scroll').scrollBy({left: -200, behavior: 'smooth'})">&lt;</button>
 
-    <div class="relative mx-auto px-8 max-w-7xl w-full">
-        <div class="flex items-center justify-center gap-4 py-5">
-
-            {# Left Scroll Button #}
-            <button type="button" data-scroll-left
-                class="flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-lg text-gray-700 hover:text-primary hover:bg-gray-100 absolute left-0 z-10 transition-transform active:scale-95 disabled:opacity-30"
-                aria-label="Scroll left">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
-                    stroke="currentColor" class="w-6 h-6 rtl:rotate-180">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-                </svg>
-            </button>
-
-            {# Categories Scroll Container #}
-            <div class="categories-scroll-container flex items-center gap-8 overflow-x-auto w-full scroll-smooth no-scrollbar px-10 justify-center"
-                data-categories-scroll style="scrollbar-width: none; -ms-overflow-style: none;">
-
-                {% for category in categories_list %}
-                {% set cat_url = category.url | localized_url %}
-                {% set cat_name = category.name if category.name else category.label %}
-
-                <a href="{{ cat_url }}"
-                    class="category-link whitespace-nowrap shrink-0 transition-all duration-200 block font-bold hover:text-primary"
-                    style="font-size: clamp(14px, 5vw, 30px);">
-                    {{ cat_name }}
+        <div class="nav-scroll no-scrollbar">
+            {% for category in categories_list %}
+                <a href="{{ category.url | localized_url }}" class="nav-link">
+                    {{ category.name if category.name else category.label }}
                 </a>
-                {% endfor %}
-            </div>
-
-            {# Right Scroll Button #}
-            <button type="button" data-scroll-right
-                class="flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-lg text-gray-700 hover:text-primary hover:bg-gray-100 absolute right-0 z-10 transition-transform active:scale-95 disabled:opacity-30"
-                aria-label="Scroll right">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
-                    stroke="currentColor" class="w-6 h-6 rtl:rotate-180">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                </svg>
-            </button>
+            {% endfor %}
         </div>
+
+        <button type="button" class="nav-arrow" onclick="document.querySelector('.nav-scroll').scrollBy({left: 200, behavior: 'smooth'})">&gt;</button>
     </div>
 </div>
 
 <style>
-    /* Force hide scrollbars */
-    .no-scrollbar::-webkit-scrollbar {
-        display: none;
+    /* 1. Basic Reset & Background */
+    .nav-container {
+        background-color: #004d26; /* Dark Green */
+        width: 100%;
+        overflow: hidden;
     }
 
-    .no-scrollbar {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-    }
-
-    /* Category link style */
-    .category-link {
-        color: inherit;
-        line-height: 1.2;
-        text-decoration: none;
-    }
-
-    .category-link:hover {
-        opacity: 0.7;
-        transform: scale(1.05);
-        /* Hover par halka sa zoom */
-    }
-
-    /* Container ko resize hone par text katne se bachata hai */
-    .categories-scroll-container {
-        min-height: 50px;
+    /* 2. Layout & 7xl Width (1280px) */
+    .nav-content {
+        max-width: 1280px; /* 7xl equivalent */
+        margin: 0 auto;
+        display: flex;
         align-items: center;
+        justify-content: center; /* Center PC mein */
+        padding: 10px;
     }
+
+    /* 3. Scrolling Area */
+    .nav-scroll {
+        display: flex;
+        gap: 25px;
+        overflow-x: auto;
+        white-space: nowrap;
+        scroll-behavior: smooth;
+    }
+
+    /* 4. Responsive Font (Important) */
+    .nav-link {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 22px; /* Default for Tablet/PC */
+    }
+
+    .nav-arrow {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        padding: 0 15px;
+    }
+
+    /* 5. Mobile Adjustments */
+    @media (max-width: 768px) {
+        .nav-link { font-size: 16px; } /* Phone par 16px */
+        .nav-arrow { display: none; }  /* Mobile pe arrows ki zarurat nahi (touch scroll) */
+        .nav-content { justify-content: flex-start; }
+    }
+
+    /* Hide Scrollbar */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 </style>
-
-<script>
-    (function () {
-        var container = document.querySelector('[data-categories-scroll]');
-        var leftBtn = document.querySelector('[data-scroll-left]');
-        var rightBtn = document.querySelector('[data-scroll-right]');
-
-        if (container && leftBtn && rightBtn) {
-            var scrollAmount = 400; // Text bada hai isliye scroll bhi zyada rakha hai
-            var isRtl = document.documentElement.dir === 'rtl';
-
-            function updateArrows() {
-                var scrollLeft = container.scrollLeft;
-                var maxScroll = container.scrollWidth - container.clientWidth;
-                leftBtn.disabled = Math.abs(scrollLeft) <= 5;
-                rightBtn.disabled = Math.abs(scrollLeft) >= maxScroll - 5;
-            }
-
-            leftBtn.addEventListener('click', function () {
-                var dir = isRtl ? 1 : -1;
-                container.scrollBy({ left: dir * scrollAmount, behavior: 'smooth' });
-            });
-
-            rightBtn.addEventListener('click', function () {
-                var dir = isRtl ? -1 : 1;
-                container.scrollBy({ left: dir * scrollAmount, behavior: 'smooth' });
-            });
-
-            container.addEventListener('scroll', updateArrows);
-            window.addEventListener('resize', updateArrows);
-            setTimeout(updateArrows, 200);
-        }
-    })();
-</script>
 {% endif %}

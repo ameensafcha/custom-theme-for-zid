@@ -6,16 +6,22 @@
   },
   "settings": [
     {
-      "id": "title",
+      "id": "title_ar",
       "type": "text",
       "label": {
-        "ar": "العنوان",
-        "en": "Title"
+        "ar": "العنوان (عربي)",
+        "en": "Title (Arabic)"
       },
-      "default": {
-        "ar": "اكتشف مجموعاتنا المميزة",
-        "en": "Discover our signature collections"
-      }
+      "default": "اكتشف مجموعاتنا المميزة"
+    },
+    {
+      "id": "title_en",
+      "type": "text",
+      "label": {
+        "ar": "العنوان (إنجليزي)",
+        "en": "Title (English)"
+      },
+      "default": "Discover our signature collections"
     },
     {
       "id": "categories",
@@ -37,16 +43,22 @@
       ]
     },
     {
-      "id": "more_text",
+      "id": "more_text_ar",
       "type": "text",
       "label": {
-        "ar": "نص زر جميع التصنيفات",
-        "en": "View all button text"
+        "ar": "نص زر جميع التصنيفات (عربي)",
+        "en": "View all button text (Arabic)"
       },
-      "default": {
-        "ar": "عرض الكل",
-        "en": "View all"
-      }
+      "default": "عرض الكل"
+    },
+    {
+      "id": "more_text_en",
+      "type": "text",
+      "label": {
+        "ar": "نص زر جميع التصنيفات (إنجليزي)",
+        "en": "View all button text (English)"
+      },
+      "default": "View all"
     },
     {
       "id": "display_more",

@@ -38,11 +38,19 @@
       "default": "carousel"
     },
     {
-      "id": "title",
+      "id": "title_ar",
       "type": "text",
       "label": {
-        "ar": "العنوان",
-        "en": "Title"
+        "ar": "العنوان (عربي)",
+        "en": "Title (Arabic)"
+      }
+    },
+    {
+      "id": "title_en",
+      "type": "text",
+      "label": {
+        "ar": "العنوان (إنجليزي)",
+        "en": "Title (English)"
       }
     },
     {
@@ -54,11 +62,19 @@
       }
     },
     {
-      "id": "more_text",
+      "id": "more_text_ar",
       "type": "text",
       "label": {
-        "ar": "نص زر المزيد",
-        "en": "More Button Text"
+        "ar": "نص زر المزيد (عربي)",
+        "en": "More Button Text (Arabic)"
+      }
+    },
+    {
+      "id": "more_text_en",
+      "type": "text",
+      "label": {
+        "ar": "نص زر المزيد (إنجليزي)",
+        "en": "More Button Text (English)"
       }
     },
     {

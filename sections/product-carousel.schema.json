@@ -6,16 +6,22 @@
     },
     "settings": [
         {
-            "id": "title",
+            "id": "title_ar",
             "type": "text",
             "label": {
-                "ar": "العنوان",
-                "en": "Title"
+                "ar": "العنوان (عربي)",
+                "en": "Title (Arabic)"
             },
-            "default": {
-                "ar": "الأكثر مبيعاً",
-                "en": "Best Sellers"
-            }
+            "default": "الأكثر مبيعاً"
+        },
+        {
+            "id": "title_en",
+            "type": "text",
+            "label": {
+                "ar": "العنوان (إنجليزي)",
+                "en": "Title (English)"
+            },
+            "default": "Best Sellers"
         },
         {
             "id": "products",
@@ -26,16 +32,22 @@
             }
         },
         {
-            "id": "more_text",
+            "id": "more_text_ar",
             "type": "text",
             "label": {
-                "ar": "نص عرض الكل",
-                "en": "View All Text"
+                "ar": "نص عرض الكل (عربي)",
+                "en": "View All Text (Arabic)"
             },
-            "default": {
-                "ar": "عرض جميع المنتجات",
-                "en": "View all products"
-            }
+            "default": "عرض جميع المنتجات"
+        },
+        {
+            "id": "more_text_en",
+            "type": "text",
+            "label": {
+                "ar": "نص عرض الكل (إنجليزي)",
+                "en": "View All Text (English)"
+            },
+            "default": "View all products"
         },
         {
             "id": "display_more",

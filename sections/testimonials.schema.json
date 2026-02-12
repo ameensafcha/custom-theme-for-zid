@@ -6,16 +6,22 @@
   },
   "settings": [
     {
-      "id": "title",
+      "id": "title_ar",
       "type": "text",
       "label": {
-        "ar": "العنوان",
-        "en": "Title"
+        "ar": "العنوان (عربي)",
+        "en": "Title (Arabic)"
       },
-      "default": {
-        "ar": "آراء عملائنا",
-        "en": "Customer Testimonials"
-      }
+      "default": "آراء عملائنا"
+    },
+    {
+      "id": "title_en",
+      "type": "text",
+      "label": {
+        "ar": "العنوان (إنجليزي)",
+        "en": "Title (English)"
+      },
+      "default": "Customer Testimonials"
     },
     {
       "id": "testimonials",
@@ -39,19 +45,35 @@
           "default": 5
         },
         {
-          "id": "text",
+          "id": "text_ar",
           "type": "textarea",
           "label": {
-            "ar": "النص",
-            "en": "Text"
+            "ar": "النص (عربي)",
+            "en": "Text (Arabic)"
           }
         },
         {
-          "id": "name",
+          "id": "text_en",
+          "type": "textarea",
+          "label": {
+            "ar": "النص (إنجليزي)",
+            "en": "Text (English)"
+          }
+        },
+        {
+          "id": "name_ar",
           "type": "text",
           "label": {
-            "ar": "الاسم",
-            "en": "Name"
+            "ar": "الاسم (عربي)",
+            "en": "Name (Arabic)"
+          }
+        },
+        {
+          "id": "name_en",
+          "type": "text",
+          "label": {
+            "ar": "الاسم (إنجليزي)",
+            "en": "Name (English)"
           }
         }
       ]

@@ -6,40 +6,58 @@
   },
   "settings": [
     {
-      "id": "badge_text",
+      "id": "badge_text_ar",
       "type": "text",
       "label": {
-        "ar": "نص الشارة",
-        "en": "Badge Text"
+        "ar": "نص الشارة (عربي)",
+        "en": "Badge Text (Arabic)"
       },
-      "default": {
-        "ar": "",
-        "en": ""
-      }
+      "default": ""
     },
     {
-      "id": "title",
+      "id": "badge_text_en",
       "type": "text",
       "label": {
-        "ar": "العنوان",
-        "en": "Title"
+        "ar": "نص الشارة (إنجليزي)",
+        "en": "Badge Text (English)"
       },
-      "default": {
-        "ar": "",
-        "en": ""
-      }
+      "default": ""
     },
     {
-      "id": "description",
+      "id": "title_ar",
+      "type": "text",
+      "label": {
+        "ar": "العنوان (عربي)",
+        "en": "Title (Arabic)"
+      },
+      "default": ""
+    },
+    {
+      "id": "title_en",
+      "type": "text",
+      "label": {
+        "ar": "العنوان (إنجليزي)",
+        "en": "Title (English)"
+      },
+      "default": ""
+    },
+    {
+      "id": "description_ar",
       "type": "textarea",
       "label": {
-        "ar": "الوصف",
-        "en": "Description"
+        "ar": "الوصف (عربي)",
+        "en": "Description (Arabic)"
       },
-      "default": {
-        "ar": "",
-        "en": ""
-      }
+      "default": ""
+    },
+    {
+      "id": "description_en",
+      "type": "textarea",
+      "label": {
+        "ar": "الوصف (إنجليزي)",
+        "en": "Description (English)"
+      },
+      "default": ""
     },
     {
       "id": "end_date",
@@ -55,16 +73,22 @@
       "default": ""
     },
     {
-      "id": "button_text",
+      "id": "button_text_ar",
       "type": "text",
       "label": {
-        "ar": "نص الزر",
-        "en": "Button Text"
+        "ar": "نص الزر (عربي)",
+        "en": "Button Text (Arabic)"
       },
-      "default": {
-        "ar": "",
-        "en": ""
-      }
+      "default": ""
+    },
+    {
+      "id": "button_text_en",
+      "type": "text",
+      "label": {
+        "ar": "نص الزر (إنجليزي)",
+        "en": "Button Text (English)"
+      },
+      "default": ""
     },
     {
       "id": "button_url",
