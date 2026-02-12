@@ -12,6 +12,7 @@
 import { createCarousel, createConditionalCarousel } from "./lib/carousel.js";
 import { initAllProductGalleries } from "./product/gallery.js";
 import { initCart, initButtons as initCartButtons } from "./cart/add-to-cart.js";
+import "./cart/controller.js"; // Exposes window.CartPage for cart templates
 
 // Product modules (self-initializing, register global callbacks)
 import "./product/variants.js";

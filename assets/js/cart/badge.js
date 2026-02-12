@@ -16,29 +16,32 @@ export async function refreshBadge(cart) {
   try {
     if (!window.zid) return;
 
-    // Always fetch fresh cart data to ensure we have totals + products
-    let cartData;
-    try {
-      cartData = await window.zid.cart.get();
-    } catch (e) {
-      cartData = cart;
+    // Use passed cart if available, otherwise fetch fresh data
+    var cartData = cart;
+    if (!cartData) {
+      try {
+        cartData = await window.zid.cart.get();
+      } catch (e) {
+        console.error("[Cart] Fetch failed:", e);
+        return;
+      }
     }
 
     if (!cartData) return;
 
     // Calculate total quantity (sum of all product quantities)
-    let totalQuantity = 0;
+    var totalQuantity = 0;
 
     // Try products array first (has individual quantities)
     if (cartData.products && cartData.products.length > 0) {
-      for (let i = 0; i < cartData.products.length; i++) {
+      for (var i = 0; i < cartData.products.length; i++) {
         totalQuantity += (cartData.products[i].quantity || 1);
       }
     }
 
     // Fallback: try cart_items array
     if (totalQuantity === 0 && cartData.cart_items && cartData.cart_items.length > 0) {
-      for (let i = 0; i < cartData.cart_items.length; i++) {
+      for (var i = 0; i < cartData.cart_items.length; i++) {
         totalQuantity += (cartData.cart_items[i].quantity || 1);
       }
     }
@@ -49,11 +52,11 @@ export async function refreshBadge(cart) {
     }
 
     // Get formatted total price from totals array
-    let formattedPrice = "";
-    let rawPrice = 0;
+    var formattedPrice = "";
+    var rawPrice = 0;
 
     if (cartData.totals && cartData.totals.length > 0) {
-      for (let i = 0; i < cartData.totals.length; i++) {
+      for (var i = 0; i < cartData.totals.length; i++) {
         if (cartData.totals[i].code === "total") {
           formattedPrice = cartData.totals[i].value_string || "";
           rawPrice = cartData.totals[i].value || 0;
@@ -123,4 +126,6 @@ export async function refreshBadge(cart) {
 }
 
 // Expose globally so controller.js and refresh.js can call window.cartManager.refreshBadge()
-window.cartManager = { refreshBadge };
+// Use existing cartManager or create new one to avoid overwriting other potential properties
+window.cartManager = window.cartManager || {};
+window.cartManager.refreshBadge = refreshBadge;

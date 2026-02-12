@@ -1,23 +1,55 @@
 {# Header Categories Bar - Full width, evenly spaced categories #}
 
-{% set menu_items = store.settings.menus.main_menu.items %}
-{% set row2_bg = settings.header_row2_bg_color | default('') %}
-{% set row2_text = settings.header_row2_text_color | default('') %}
+{% set categories_list = store.categories %}
+{# Fallback to menu if no categories found (shouldnt happen usually) #}
+{% if categories_list | length == 0 %}
+{% set categories_list = store.settings.menus.main_menu.items %}
+{% endif %}
 
-{% if menu_items | length > 0 %}
-<div class="bg-secondary border-border-light border-b" {% if row2_bg or row2_text %}
+{# Debug script removed to fix template error #}
+
+{% if categories_list | length > 0 %}
+<div class="bg-secondary border-border-light" {% if row2_bg or row2_text %}
     style="{% if row2_bg %}background-color: {{ row2_bg }};{% endif %}{% if row2_text %}color: {{ row2_text }};{% endif %}"
     {% endif %}>
-    <div class="px-4 md:px-8 lg:px-16">
-        {# Full width, justify-evenly for even spacing #}
-        <div class="categories-scroll flex items-center justify-evenly gap-4 overflow-x-auto py-2.5 w-full"
-            data-categories-scroll>
-            {% for menu in menu_items %}
-            <a href="{{ menu.url | localized_url if menu.resource_type != 'url' else menu.url }}"
-                class="text-sm whitespace-nowrap shrink-0 hover:underline transition-colors">
-                {{ menu.label }}
-            </a>
-            {% endfor %}
+
+    {# Inner container with max-width and centering #}
+    <div class="max-w-6xl mx-auto px-4 md:px-8 relative group">
+        <div class="flex items-center gap-2">
+
+            {# Left Scroll Button (Hidden on Mobile) #}
+            <button type="button"
+                class="hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-md text-gray-700 hover:text-primary hover:bg-gray-50 disabled:opacity-0 disabled:cursor-not-allowed transition-all shrink-0 z-10 opacity-0 group-hover:opacity-100 absolute left-0 md:left-2"
+                data-scroll-left aria-label="Previous categories">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                    stroke="currentColor" class="w-5 h-5 rtl:rotate-180">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                </svg>
+            </button>
+
+            {# Categories List #}
+            {# overflow-x-auto allows touch scrolling on mobile. #}
+            {# scrollbar-hide hides the visual scrollbar. #}
+            <div class="categories-scroll flex items-center gap-8 overflow-x-auto py-6 w-full scrollbar-hide text-lg font-medium px-4 md:px-12"
+                data-categories-scroll>
+                {% for category in store.categories %}
+                {# If it is a menu item, it has .url and .label. If it is a category object, it has .url and .name #}
+                <a href="{{ category.url | localized_url }}"
+                    class="whitespace-nowrap shrink-0 hover:text-primary transition-colors block leading-none">
+                    {{ category.name if category.name else category.label }}
+                </a>
+                {% endfor %}
+            </div>
+
+            {# Right Scroll Button (Hidden on Mobile) #}
+            <button type="button"
+                class="hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-md text-gray-700 hover:text-primary hover:bg-gray-50 disabled:opacity-0 disabled:cursor-not-allowed transition-all shrink-0 z-10 opacity-0 group-hover:opacity-100 absolute right-0 md:right-2"
+                data-scroll-right aria-label="Next categories">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                    stroke="currentColor" class="w-5 h-5 rtl:rotate-180">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                </svg>
+            </button>
         </div>
     </div>
 </div>

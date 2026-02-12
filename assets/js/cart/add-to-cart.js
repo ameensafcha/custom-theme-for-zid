@@ -31,6 +31,18 @@ async function waitForZid(maxAttempts = 20) {
 }
 
 /**
+ * Helper: Fetch fresh cart data
+ */
+async function fetchFreshCart() {
+  try {
+    return await window.zid.cart.get();
+  } catch (err) {
+    console.error("[Cart] Fetch failed:", err);
+    return null;
+  }
+}
+
+/**
  * Simple add to cart (product cards without options)
  */
 async function addToCart(btn) {
@@ -43,7 +55,11 @@ async function addToCart(btn) {
     await window.zid.cart.addProduct({ product_id: productId, quantity: 1 }, { showErrorNotification: true });
 
     dispatch("cart:updated", { productId, action: "add" });
-    refreshBadge();
+
+    // Fetch fresh cart data for badge update
+    const cart = await fetchFreshCart();
+    refreshBadge(cart);
+
     showQuantityInput(productId, 1);
   } catch (err) {
     console.error("[Cart] Add to cart failed:", err);
@@ -76,7 +92,10 @@ async function addToCartFromForm(btn) {
     btn.innerHTML = `${successIcon} ${successText}`;
 
     dispatch("cart:updated", { formId, action: "add" });
-    refreshBadge();
+
+    // Fetch fresh cart data for badge update
+    const cart = await fetchFreshCart();
+    refreshBadge(cart);
 
     setTimeout(() => {
       btn.innerHTML = originalContent;
@@ -131,7 +150,10 @@ async function addVariantToCart(btn) {
     btn.innerHTML = `${successIcon} ${successText}`;
 
     dispatch("cart:updated", { variantId, action: "add" });
-    refreshBadge();
+
+    // Fetch fresh cart data for badge update
+    const cart = await fetchFreshCart();
+    refreshBadge(cart);
 
     setTimeout(() => {
       btn.innerHTML = originalContent;
@@ -255,8 +277,9 @@ async function handleQtyRemove(wrapper) {
 
     dispatch("cart:updated", { productId, action: "remove" });
     showAddButton(productId);
+
     // Fetch updated cart once for badge refresh
-    const updatedCart = await window.zid.cart.get();
+    const updatedCart = await fetchFreshCart();
     refreshBadge(updatedCart);
   } catch (err) {
     console.error("[Cart] Remove from cart failed:", err);
@@ -286,8 +309,9 @@ async function handleQtyChange(wrapper, newQty) {
     await window.zid.cart.updateProduct({ product_id: cartItem.id, quantity: newQty }, { showErrorNotification: true });
 
     dispatch("cart:updated", { productId, action: "update", quantity: newQty });
+
     // Fetch updated cart once for badge refresh
-    const updatedCart = await window.zid.cart.get();
+    const updatedCart = await fetchFreshCart();
     refreshBadge(updatedCart);
   } catch (err) {
     console.error("[Cart] Update quantity failed:", err);

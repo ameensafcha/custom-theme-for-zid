@@ -113,7 +113,8 @@
             {# Footer: Login/Account + Region #}
             <div class="border-border-light flex w-full flex-col items-start gap-[3px] border-t pt-4 pb-6 mt-auto">
               {# Logged out state #}
-              <button id="mobile-login-btn" type="button" onclick="handleLoginAction()"
+              <button id="mobile-login-btn" type="button"
+                onclick="document.getElementById('mobile-drawer-dialog')?.hide(); handleLoginAction()"
                 class="text-foreground text-sm min-h-px w-full min-w-px px-6 py-3 text-start">
                 {{ _("Login") }}
               </button>
