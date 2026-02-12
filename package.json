@@ -1,7 +1,7 @@
 {
-  "name": "default-theme-vitrin",
+  "name": "shah_theme",
   "version": "1.0.0",
-  "description": "New default theme for Vitrin",
+  "description": "Create by Shah Ameen",
   "type": "module",
   "scripts": {
     "dev": "npm-run-all --parallel dev:*",
