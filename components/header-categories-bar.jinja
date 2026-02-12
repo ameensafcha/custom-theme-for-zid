@@ -1,56 +1,119 @@
-{# Header Categories Bar - Full width, evenly spaced categories #}
-
+{# REBUILT Categories Bar - Row 2 #}
 {% set categories_list = store.categories %}
-{# Fallback to menu if no categories found (shouldnt happen usually) #}
+{# Fallback: if store.categories is empty, try main menu #}
 {% if categories_list | length == 0 %}
 {% set categories_list = store.settings.menus.main_menu.items %}
 {% endif %}
 
-{# Debug script removed to fix template error #}
-
+{# Only render if we have items #}
 {% if categories_list | length > 0 %}
-<div class="bg-secondary border-border-light" {% if row2_bg or row2_text %}
-    style="{% if row2_bg %}background-color: {{ row2_bg }};{% endif %}{% if row2_text %}color: {{ row2_text }};{% endif %}"
-    {% endif %}>
+<div class="header-row-2 border-b border-border-light relative z-20"
+    style="background-color: {{ settings.header_row2_bg_color | default('#f8f9fa') }}; color: {{ settings.header_row2_text_color | default('#000000') }};">
 
-    {# Inner container with max-width and centering #}
-    <div class="max-w-6xl mx-auto px-4 md:px-8 relative group">
-        <div class="flex items-center gap-2">
+    <div class="relative mx-auto px-4 md:px-8 max-w-7xl w-full">
+        {# Py-5 padding di gayi hai taaki bada text upar-niche se na kate #}
+        <div class="flex items-center gap-4 py-5">
 
-            {# Left Scroll Button (Hidden on Mobile) #}
-            <button type="button"
-                class="hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-md text-gray-700 hover:text-primary hover:bg-gray-50 disabled:opacity-0 disabled:cursor-not-allowed transition-all shrink-0 z-10 opacity-0 group-hover:opacity-100 absolute left-0 md:left-2"
-                data-scroll-left aria-label="Previous categories">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                    stroke="currentColor" class="w-5 h-5 rtl:rotate-180">
+            {# Left Scroll Button #}
+            <button type="button" data-scroll-left
+                class="hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-lg text-gray-700 hover:text-primary hover:bg-gray-100 absolute left-0 z-10 transition-transform active:scale-95 disabled:opacity-30"
+                aria-label="Scroll left">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+                    stroke="currentColor" class="w-6 h-6 rtl:rotate-180">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
                 </svg>
             </button>
 
-            {# Categories List #}
-            {# overflow-x-auto allows touch scrolling on mobile. #}
-            {# scrollbar-hide hides the visual scrollbar. #}
-            <div class="categories-scroll flex items-center gap-8 overflow-x-auto py-6 w-full scrollbar-hide text-lg font-medium px-4 md:px-12"
-                data-categories-scroll>
-                {% for category in store.categories %}
-                {# If it is a menu item, it has .url and .label. If it is a category object, it has .url and .name #}
-                <a href="{{ category.url | localized_url }}"
-                    class="whitespace-nowrap shrink-0 hover:text-primary transition-colors block leading-none">
-                    {{ category.name if category.name else category.label }}
+            {# Categories Scroll Container #}
+            <div class="categories-scroll-container flex items-center gap-8 overflow-x-auto w-full scroll-smooth no-scrollbar px-10 md:justify-center"
+                data-categories-scroll style="scrollbar-width: none; -ms-overflow-style: none;">
+
+                {% for category in categories_list %}
+                {% set cat_url = category.url | localized_url %}
+                {% set cat_name = category.name if category.name else category.label %}
+
+                <a href="{{ cat_url }}"
+                    class="category-link whitespace-nowrap shrink-0 transition-all duration-200 block font-bold hover:text-primary">
+                    {{ cat_name }}
                 </a>
                 {% endfor %}
             </div>
 
-            {# Right Scroll Button (Hidden on Mobile) #}
-            <button type="button"
-                class="hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-md text-gray-700 hover:text-primary hover:bg-gray-50 disabled:opacity-0 disabled:cursor-not-allowed transition-all shrink-0 z-10 opacity-0 group-hover:opacity-100 absolute right-0 md:right-2"
-                data-scroll-right aria-label="Next categories">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                    stroke="currentColor" class="w-5 h-5 rtl:rotate-180">
+            {# Right Scroll Button #}
+            <button type="button" data-scroll-right
+                class="hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-lg text-gray-700 hover:text-primary hover:bg-gray-100 absolute right-0 z-10 transition-transform active:scale-95 disabled:opacity-30"
+                aria-label="Scroll right">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+                    stroke="currentColor" class="w-6 h-6 rtl:rotate-180">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
                 </svg>
             </button>
         </div>
     </div>
 </div>
+
+<style>
+    /* Force hide scrollbars */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    /* Bada Text Size aur Style */
+    .category-link {
+        color: inherit;
+        font-size: 30px !important; /* Aapka requested size */
+        line-height: 1.2;
+        text-decoration: none;
+    }
+
+    .category-link:hover {
+        opacity: 0.7;
+        transform: scale(1.05); /* Hover par halka sa zoom */
+    }
+
+    /* Container ko resize hone par text katne se bachata hai */
+    .categories-scroll-container {
+        min-height: 50px;
+        align-items: center;
+    }
+</style>
+
+<script>
+    (function () {
+        var container = document.querySelector('[data-categories-scroll]');
+        var leftBtn = document.querySelector('[data-scroll-left]');
+        var rightBtn = document.querySelector('[data-scroll-right]');
+
+        if (container && leftBtn && rightBtn) {
+            var scrollAmount = 400; // Text bada hai isliye scroll bhi zyada rakha hai
+            var isRtl = document.documentElement.dir === 'rtl';
+
+            function updateArrows() {
+                var scrollLeft = container.scrollLeft;
+                var maxScroll = container.scrollWidth - container.clientWidth;
+                leftBtn.disabled = Math.abs(scrollLeft) <= 5;
+                rightBtn.disabled = Math.abs(scrollLeft) >= maxScroll - 5;
+            }
+
+            leftBtn.addEventListener('click', function () {
+                var dir = isRtl ? 1 : -1;
+                container.scrollBy({ left: dir * scrollAmount, behavior: 'smooth' });
+            });
+
+            rightBtn.addEventListener('click', function () {
+                var dir = isRtl ? -1 : 1;
+                container.scrollBy({ left: dir * scrollAmount, behavior: 'smooth' });
+            });
+
+            container.addEventListener('scroll', updateArrows);
+            window.addEventListener('resize', updateArrows);
+            setTimeout(updateArrows, 200);
+        }
+    })();
+</script>
 {% endif %}

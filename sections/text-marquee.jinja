@@ -1,0 +1,48 @@
+{% if settings.marquee_text and settings.marquee_text | trim %}
+<section section-id="{{ sectionId }}" class="overflow-hidden py-6"
+    style="background-color: {{ settings.bg_color | default('#000000') }}; color: {{ settings.text_color | default('#FFFFFF') }};">
+    <div class="marquee-track flex whitespace-nowrap" style="font-size: 22px;">
+        {# Text ko 6 baar repeat kiya hai taaki smooth infinite loop bane #}
+        {% for i in range(6) %}
+        <span class="marquee-item shrink-0 px-8">{{ settings.marquee_text }}</span>
+        {% endfor %}
+    </div>
+
+    <style>
+        .marquee-track {
+            animation: marquee-scroll 20s linear infinite;
+            will-change: transform;
+        }
+
+        /* RTL support */
+        [dir="rtl"] .marquee-track {
+            animation: marquee-scroll-rtl 20s linear infinite;
+        }
+
+        @keyframes marquee-scroll {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        @keyframes marquee-scroll-rtl {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(50%);
+            }
+        }
+
+        /* Hover par pause ho jaye */
+        .marquee-track:hover {
+            animation-play-state: paused;
+        }
+    </style>
+</section>
+{% endif %}
