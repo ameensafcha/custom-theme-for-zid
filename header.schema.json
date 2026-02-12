@@ -30,6 +30,42 @@
             "en": "Hide country"
           },
           "default": false
+        },
+        {
+          "id": "row1_bg_color",
+          "type": "color",
+          "label": {
+            "ar": "لون خلفية الصف الأول",
+            "en": "Row 1 Background Color"
+          },
+          "default": ""
+        },
+        {
+          "id": "row1_text_color",
+          "type": "color",
+          "label": {
+            "ar": "لون نص الصف الأول",
+            "en": "Row 1 Text Color"
+          },
+          "default": ""
+        },
+        {
+          "id": "row2_bg_color",
+          "type": "color",
+          "label": {
+            "ar": "لون خلفية الصف الثاني",
+            "en": "Row 2 Background Color"
+          },
+          "default": ""
+        },
+        {
+          "id": "row2_text_color",
+          "type": "color",
+          "label": {
+            "ar": "لون نص الصف الثاني",
+            "en": "Row 2 Text Color"
+          },
+          "default": ""
         }
       ]
     },

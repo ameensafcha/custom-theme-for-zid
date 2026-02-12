@@ -30,6 +30,7 @@ import "./features/price-slider.js";
 import "./features/bundle-offers.js";
 import "./features/notify-me.js";
 import "./features/categories-scroll.js";
+import "./features/header-search.js";
 // Note: loyalty-rewards is loaded as standalone script AFTER vitrin_body in layout.jinja
 
 // Store for initialized carousel instances (for cleanup)

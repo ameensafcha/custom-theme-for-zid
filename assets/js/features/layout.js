@@ -104,6 +104,10 @@ function initCustomerGreeting() {
       if (headerProfileBtn) {
         headerProfileBtn.classList.remove("hidden");
         headerProfileBtn.classList.add("flex");
+
+        // Update name text in the pill button
+        const nameEl = headerProfileBtn.querySelector("[data-customer-name]");
+        if (nameEl) nameEl.textContent = customer.name;
       }
 
       const mobileLoginBtn = document.getElementById("mobile-login-btn");
