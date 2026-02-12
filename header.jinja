@@ -1,14 +1,14 @@
 {% set row1_bg = settings.header_row1_bg_color | default('') %}
 {% set row1_text = settings.header_row1_text_color | default('') %}
 
-<div class="sticky top-0 z-50">
+<div class="z-50">
   {% include 'components/header-announcement-bar.jinja' %}
   <header class="bg-secondary border-border-light border-b" {% if row1_bg or row1_text %}
     style="{% if row1_bg %}background-color: {{ row1_bg }};{% endif %}{% if row1_text %}color: {{ row1_text }};{% endif %}"
     {% endif %}>
     {# ===== ROW 1: Logo + Search + Account + Cart ===== #}
-    <div class="px-4 py-3 md:px-8 lg:px-16">
-      <nav class="flex items-center gap-3 md:gap-4 w-full">
+    <div class="px-3 py-2 md:px-8 lg:px-16 md:py-3">
+      <nav class="flex items-center gap-2 md:gap-4 w-full">
         {# Hamburger menu - mobile/tablet only (before logo) #}
         {% include 'components/header/mobile-drawer.jinja' %}
 
@@ -18,11 +18,10 @@
         </a>
 
         {# Search Bar with live suggestions dropdown #}
-        <div class="flex-1 relative" data-header-search>
+        <div class="flex flex-1 relative" data-header-search>
           <form action="/products" method="get"
-            class="flex items-center bg-background border border-border rounded-full px-4 py-2 gap-2"
+            class="flex-1 flex items-center bg-background border border-border rounded-full px-4 py-2 gap-2"
             data-header-search-form>
-            {# Search icon #}
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
               class="text-muted-foreground shrink-0" fill="none">
               <path
@@ -32,22 +31,12 @@
             <input type="search" name="q" placeholder="{{ _('Search') }} {{ store.name }}"
               class="flex-1 bg-transparent text-sm outline-none border-none text-foreground placeholder:text-muted-foreground"
               autocomplete="off" data-header-search-input />
-            {# Clear button #}
-            <button type="button" class="hidden text-muted-foreground hover:text-foreground transition-colors"
-              data-header-search-clear aria-label="{{ _('Clear') }}">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
-            </button>
           </form>
 
           {# Live search results dropdown #}
           <div
             class="hidden absolute left-0 right-0 top-full mt-1 z-50 bg-background border border-border rounded-2xl shadow-lg overflow-hidden"
             data-header-search-dropdown>
-            {# Loading state #}
             <div class="hidden items-center justify-center py-8" data-header-search-loading>
               <svg class="animate-spin size-5 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" fill="none"
                 viewBox="0 0 24 24">
@@ -57,8 +46,6 @@
                 </path>
               </svg>
             </div>
-
-            {# Results list #}
             <div class="hidden" data-header-search-results>
               <div class="max-h-[400px] overflow-y-auto" data-header-search-products></div>
               <a href="/products"
@@ -67,23 +54,20 @@
                 {{ _('View all results') }}
               </a>
             </div>
-
-            {# Empty state #}
             <div class="hidden py-8 text-center text-sm text-muted-foreground" data-header-search-empty>
               {{ _('No products found') }}
             </div>
           </div>
         </div>
 
-        {# Action buttons: Account + Cart (pill style with border) #}
-        <div class="flex items-center gap-2 shrink-0">
+        {# Action buttons #}
+        <div class="flex items-center gap-1 md:gap-2 shrink-0">
           {% include 'components/header/region-selector.jinja' %}
 
-          {# Account / Login button - pill style #}
+          {# === DESKTOP: Account pill with text === #}
           <div class="hidden lg:block">
-            {# Login button (shown when not logged in) #}
             <button id="header-login-btn" type="button" onclick="handleLoginAction()"
-              class="flex items-center gap-2 border border-foreground rounded-full px-4 py-2 text-sm hover:bg-foreground hover:text-background transition-colors">
+              class="flex items-center gap-2 border border-foreground rounded-full px-4 py-2.5 text-sm hover:bg-foreground hover:text-background transition-colors">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
                 <path
                   d="M11.999 13.9229C13.0092 13.9229 14.0076 14.0477 14.9951 14.2979C15.8677 14.5189 16.779 14.8269 17.7285 15.2227L18.1377 15.3975C18.605 15.6053 18.9719 15.9062 19.249 16.3018V16.3008C19.5134 16.6783 19.6552 17.1421 19.6553 17.7158V18.5244C19.6553 18.8592 19.5425 19.1335 19.3027 19.374C19.0645 19.6129 18.7885 19.7275 18.4463 19.7275H5.55371C5.21376 19.7275 4.93928 19.6137 4.70215 19.375C4.46327 19.1345 4.35059 18.8598 4.35059 18.5244V17.7158C4.35064 17.1454 4.49342 16.6821 4.75879 16.3027C5.04025 15.9001 5.39983 15.5959 5.8457 15.3867C6.94406 14.895 7.99428 14.5294 8.99512 14.2861C9.99378 14.0434 10.9952 13.9229 11.999 13.9229ZM11.999 4.59863C13.0272 4.59867 13.8317 4.92124 14.457 5.54492H14.458C15.0828 6.16805 15.4052 6.97149 15.4053 7.99902C15.4053 9.02689 15.0829 9.83061 14.458 10.4531C13.8327 11.076 13.0274 11.3974 11.999 11.3975C10.9705 11.3975 10.1671 11.0753 9.54492 10.4531C8.92267 9.83076 8.60059 9.02739 8.60059 7.99902C8.60066 7.03508 8.88347 6.26849 9.43164 5.66309L9.54492 5.54395C10.1672 4.92084 10.9707 4.59863 11.999 4.59863Z"
@@ -91,10 +75,8 @@
               </svg>
               <span>{{ _('Account') }}</span>
             </button>
-
-            {# Profile button (shown when logged in) - displays user name #}
             <a id="header-profile-btn" href="{{ url_for('profile') }}"
-              class="hidden items-center gap-2 border border-foreground rounded-full px-4 py-2 text-sm hover:bg-foreground hover:text-background transition-colors">
+              class="hidden items-center gap-2 border border-foreground rounded-full px-4 py-2.5 text-sm hover:bg-foreground hover:text-background transition-colors">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
                 <path
                   d="M11.999 13.9229C13.0092 13.9229 14.0076 14.0477 14.9951 14.2979C15.8677 14.5189 16.779 14.8269 17.7285 15.2227L18.1377 15.3975C18.605 15.6053 18.9719 15.9062 19.249 16.3018V16.3008C19.5134 16.6783 19.6552 17.1421 19.6553 17.7158V18.5244C19.6553 18.8592 19.5425 19.1335 19.3027 19.374C19.0645 19.6129 18.7885 19.7275 18.4463 19.7275H5.55371C5.21376 19.7275 4.93928 19.6137 4.70215 19.375C4.46327 19.1345 4.35059 18.8598 4.35059 18.5244V17.7158C4.35064 17.1454 4.49342 16.6821 4.75879 16.3027C5.04025 15.9001 5.39983 15.5959 5.8457 15.3867C6.94406 14.895 7.99428 14.5294 8.99512 14.2861C9.99378 14.0434 10.9952 13.9229 11.999 13.9229ZM11.999 4.59863C13.0272 4.59867 13.8317 4.92124 14.457 5.54492H14.458C15.0828 6.16805 15.4052 6.97149 15.4053 7.99902C15.4053 9.02689 15.0829 9.83061 14.458 10.4531C13.8327 11.076 13.0274 11.3974 11.999 11.3975C10.9705 11.3975 10.1671 11.0753 9.54492 10.4531C8.92267 9.83076 8.60059 9.02739 8.60059 7.99902C8.60066 7.03508 8.88347 6.26849 9.43164 5.66309L9.54492 5.54395C10.1672 4.92084 10.9707 4.59863 11.999 4.59863Z"
@@ -104,15 +86,43 @@
             </a>
           </div>
 
-          {# Cart button - pill style with realtime price + count #}
+          {# === MOBILE/TABLET: Account icon only === #}
+          <button type="button" onclick="handleLoginAction()"
+            class="lg:hidden flex items-center justify-center size-10 text-foreground" aria-label="{{ _('Account') }}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M11.999 13.9229C13.0092 13.9229 14.0076 14.0477 14.9951 14.2979C15.8677 14.5189 16.779 14.8269 17.7285 15.2227L18.1377 15.3975C18.605 15.6053 18.9719 15.9062 19.249 16.3018V16.3008C19.5134 16.6783 19.6552 17.1421 19.6553 17.7158V18.5244C19.6553 18.8592 19.5425 19.1335 19.3027 19.374C19.0645 19.6129 18.7885 19.7275 18.4463 19.7275H5.55371C5.21376 19.7275 4.93928 19.6137 4.70215 19.375C4.46327 19.1345 4.35059 18.8598 4.35059 18.5244V17.7158C4.35064 17.1454 4.49342 16.6821 4.75879 16.3027C5.04025 15.9001 5.39983 15.5959 5.8457 15.3867C6.94406 14.895 7.99428 14.5294 8.99512 14.2861C9.99378 14.0434 10.9952 13.9229 11.999 13.9229ZM11.999 4.59863C13.0272 4.59867 13.8317 4.92124 14.457 5.54492H14.458C15.0828 6.16805 15.4052 6.97149 15.4053 7.99902C15.4053 9.02689 15.0829 9.83061 14.458 10.4531C13.8327 11.076 13.0274 11.3974 11.999 11.3975C10.9705 11.3975 10.1671 11.0753 9.54492 10.4531C8.92267 9.83076 8.60059 9.02739 8.60059 7.99902C8.60066 7.03508 8.88347 6.26849 9.43164 5.66309L9.54492 5.54395C10.1672 4.92084 10.9707 4.59863 11.999 4.59863Z"
+                fill="currentColor" stroke="currentColor"></path>
+            </svg>
+          </button>
+
+          {# === DESKTOP: Cart pill with text === #}
           <a href="{{ url_for('cart_page') }}"
-            class="relative flex items-center gap-2 border border-foreground rounded-full px-4 py-2 text-sm hover:bg-foreground hover:text-background transition-colors">
+            class="hidden lg:flex items-center gap-2 border border-foreground rounded-full px-4 py-2.5 text-sm hover:bg-foreground hover:text-background transition-colors">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
               <path
                 d="M11.999 1.8699C13.0632 1.8699 13.965 2.23624 14.7051 2.97049C15.3989 3.65874 15.7709 4.4912 15.8213 5.46854L15.8271 5.66678V5.94119H18.4463C18.901 5.94119 19.2955 6.10766 19.6299 6.44217C19.9643 6.77649 20.1309 7.17105 20.1309 7.62576V20.4461C20.1309 20.899 19.9641 21.2917 19.6299 21.6248C19.2955 21.9581 18.9011 22.1248 18.4463 22.1248H5.55371C5.10067 22.1248 4.70815 21.9581 4.375 21.6248C4.04176 21.2916 3.87598 20.8991 3.87598 20.4461V7.62576C3.87598 7.17098 4.04165 6.77651 4.375 6.44217C4.70814 6.10776 5.10075 5.94122 5.55371 5.94119H8.17285V5.66678C8.1808 4.60339 8.55537 3.70474 9.29492 2.97049C10.0342 2.23651 10.935 1.86992 11.999 1.8699ZM5.5293 20.4715H18.4717V7.60037H15.8271V9.7742C15.8271 10.0081 15.7466 10.2033 15.5869 10.3621C15.4273 10.5209 15.2305 10.6004 14.9951 10.6004C14.7601 10.6003 14.5648 10.5206 14.4082 10.3621C14.2517 10.2034 14.1729 10.008 14.1729 9.7742V7.60037H9.82715V9.7742C9.82711 10.0081 9.74663 10.2033 9.58691 10.3621C9.42732 10.5209 9.23046 10.6004 8.99512 10.6004C8.76014 10.6003 8.56481 10.5206 8.4082 10.3621C8.25168 10.2034 8.17289 10.008 8.17285 9.7742V7.60037H5.5293V20.4715ZM12 3.52908C11.4719 3.52908 11.0147 3.68698 10.6299 4.00272L10.4697 4.14725C10.0535 4.55929 9.84112 5.06599 9.83301 5.6658V5.94119H14.168V5.6658C14.1599 5.06597 13.9469 4.55929 13.5303 4.14725C13.1137 3.7351 12.6031 3.52918 12 3.52908Z"
                 fill="currentColor" stroke="currentColor" stroke-width="0.05"></path>
             </svg>
             <span data-cart-badge-text>0</span>
+          </a>
+
+          {# === MOBILE/TABLET: Cart icon with quantity badge + price below === #}
+          <a href="{{ url_for('cart_page') }}" class="lg:hidden relative flex flex-col items-center text-foreground"
+            aria-label="{{ _('Cart') }}">
+            <div class="relative">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M11.999 1.8699C13.0632 1.8699 13.965 2.23624 14.7051 2.97049C15.3989 3.65874 15.7709 4.4912 15.8213 5.46854L15.8271 5.66678V5.94119H18.4463C18.901 5.94119 19.2955 6.10766 19.6299 6.44217C19.9643 6.77649 20.1309 7.17105 20.1309 7.62576V20.4461C20.1309 20.899 19.9641 21.2917 19.6299 21.6248C19.2955 21.9581 18.9011 22.1248 18.4463 22.1248H5.55371C5.10067 22.1248 4.70815 21.9581 4.375 21.6248C4.04176 21.2916 3.87598 20.8991 3.87598 20.4461V7.62576C3.87598 7.17098 4.04165 6.77651 4.375 6.44217C4.70814 6.10776 5.10075 5.94122 5.55371 5.94119H8.17285V5.66678C8.1808 4.60339 8.55537 3.70474 9.29492 2.97049C10.0342 2.23651 10.935 1.86992 11.999 1.8699ZM5.5293 20.4715H18.4717V7.60037H15.8271V9.7742C15.8271 10.0081 15.7466 10.2033 15.5869 10.3621C15.4273 10.5209 15.2305 10.6004 14.9951 10.6004C14.7601 10.6003 14.5648 10.5206 14.4082 10.3621C14.2517 10.2034 14.1729 10.008 14.1729 9.7742V7.60037H9.82715V9.7742C9.82711 10.0081 9.74663 10.2033 9.58691 10.3621C9.42732 10.5209 9.23046 10.6004 8.99512 10.6004C8.76014 10.6003 8.56481 10.5206 8.4082 10.3621C8.25168 10.2034 8.17289 10.008 8.17285 9.7742V7.60037H5.5293V20.4715ZM12 3.52908C11.4719 3.52908 11.0147 3.68698 10.6299 4.00272L10.4697 4.14725C10.0535 4.55929 9.84112 5.06599 9.83301 5.6658V5.94119H14.168V5.6658C14.1599 5.06597 13.9469 4.55929 13.5303 4.14725C13.1137 3.7351 12.6031 3.52918 12 3.52908Z"
+                  fill="currentColor" stroke="currentColor" stroke-width="0.05"></path>
+              </svg>
+              {# Total quantity badge on top-right of icon #}
+              <span data-cart-badge
+                class="absolute -top-1.5 -right-2 bg-foreground text-background text-[10px] font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1"
+                hidden>0</span>
+            </div>
+            {# Price below icon #}
+            <span data-cart-badge-price class="text-[10px] mt-0.5 text-foreground font-medium leading-none">0.00</span>
           </a>
         </div>
       </nav>

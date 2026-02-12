@@ -1,26 +1,17 @@
 {# Header Logo Component #}
 {# Displays responsive logo with separate desktop/mobile variants #}
+{# Mobile/tablet: height matches search bar. Desktop: original size. #}
 
 {% if settings.logo_desktop or settings.logo_mobile %}
-  <img
-    width="106"
-    height="44"
-    src="{{ image_url(settings.logo_desktop | default(settings.logo_mobile) | default(store.logo), w=212, q=90, f='auto') }}"
-    class="hidden md:block"
-    alt="{{ store.name }}"
-  />
-  <img
-    width="106"
-    height="44"
-    src="{{ image_url(settings.logo_mobile | default(settings.logo_desktop) | default(store.logo), w=212, q=90, f='auto') }}"
-    class="block md:hidden"
-    alt="{{ store.name }}"
-  />
+<img width="106" height="44"
+  src="{{ image_url(settings.logo_desktop | default(settings.logo_mobile) | default(store.logo), w=212, q=90, f='auto') }}"
+  class="hidden md:block" alt="{{ store.name }}" />
+<img
+  src="{{ image_url(settings.logo_mobile | default(settings.logo_desktop) | default(store.logo), w=212, q=90, f='auto') }}"
+  class="block md:hidden h-[36px] w-auto object-contain" alt="{{ store.name }}" />
 {% else %}
-  <img
-    width="106"
-    height="44"
-    src="{{ image_url(store.logo, w=212, q=90, f='auto') }}"
-    alt="{{ store.name }}"
-  />
+<img width="106" height="44" src="{{ image_url(store.logo, w=212, q=90, f='auto') }}" class="hidden md:block"
+  alt="{{ store.name }}" />
+<img src="{{ image_url(store.logo, w=212, q=90, f='auto') }}" class="block md:hidden h-[36px] w-auto object-contain"
+  alt="{{ store.name }}" />
 {% endif %}

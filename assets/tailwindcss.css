@@ -127,6 +127,7 @@
   --tw-prose-invert-th-borders: var(--border);
   --tw-prose-invert-td-borders: var(--border);
 }
+
 body {
   background: var(--background);
   color: var(--foreground);
@@ -143,6 +144,7 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
 .categories-scroll::-webkit-scrollbar {
   display: none;
 }
@@ -170,6 +172,7 @@ body {
   0% {
     transform: translateX(0);
   }
+
   100% {
     transform: translateX(-50%);
   }
@@ -179,10 +182,12 @@ body {
   0% {
     transform: translateX(0);
   }
+
   100% {
     transform: translateX(50%);
   }
 }
+
 /* ========================================
    VITRIN INCLUDES - Typography Overrides
    Override hardcoded styles from platform templates
@@ -190,7 +195,8 @@ body {
 
 /* Loyalty Points Widget (vitrin:products/loyalty_points_widget.jinja) */
 .loyalty-points-products-section {
-  font-size: 0.875rem !important; /* 14px - matches text-sm */
+  font-size: 0.875rem !important;
+  /* 14px - matches text-sm */
   font-family: inherit !important;
   border-color: var(--border) !important;
   border-radius: var(--radius) !important;
@@ -203,4 +209,24 @@ body {
 .loyalty-points-products-section .loyalty-points-rewards {
   font-size: inherit !important;
   color: var(--foreground) !important;
+}
+
+/* Auth/login dialog should appear above mobile sidebar */
+#auth-dialog,
+.auth-dialog,
+[data-auth-dialog],
+.zid-auth-dialog,
+div[id*="auth"] dialog,
+div[id*="login"] dialog {
+  z-index: 9999 !important;
+}
+
+/* Hide native browser clear (×) button on search inputs */
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+  display: none;
 }
