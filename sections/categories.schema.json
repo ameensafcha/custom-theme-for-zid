@@ -12,7 +12,10 @@
         "ar": "العنوان",
         "en": "Title"
       },
-      "default": "Discover our signature collections"
+      "default": {
+        "ar": "اكتشف مجموعاتنا المميزة",
+        "en": "Discover our signature collections"
+      }
     },
     {
       "id": "categories",
@@ -40,7 +43,10 @@
         "ar": "نص زر جميع التصنيفات",
         "en": "View all button text"
       },
-      "default": "View all"
+      "default": {
+        "ar": "عرض الكل",
+        "en": "View all"
+      }
     },
     {
       "id": "display_more",

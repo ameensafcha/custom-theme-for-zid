@@ -12,7 +12,10 @@
                 "ar": "النص المتحرك",
                 "en": "Marquee Text"
             },
-            "default": "Welcome to our store! Free shipping on orders over 200 SAR 🚚"
+            "default": {
+                "ar": "مرحباً بكم في متجرنا! شحن مجاني للطلبات فوق 200 ريال 🚚",
+                "en": "Welcome to our store! Free shipping on orders over 200 SAR 🚚"
+            }
         },
         {
             "id": "bg_color",

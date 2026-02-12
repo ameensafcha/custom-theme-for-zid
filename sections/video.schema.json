@@ -12,7 +12,10 @@
         "ar": "العنوان",
         "en": "Title"
       },
-      "default": ""
+      "default": {
+        "ar": "",
+        "en": ""
+      }
     },
     {
       "id": "poster_image",

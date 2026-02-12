@@ -1,22 +1,33 @@
 {% if settings.marquee_text and settings.marquee_text | trim %}
-<section section-id="{{ sectionId }}" class="overflow-hidden py-6"
+<section section-id="{{ sectionId }}" class="overflow-hidden py-3 md:py-5"
     style="background-color: {{ settings.bg_color | default('#000000') }}; color: {{ settings.text_color | default('#FFFFFF') }};">
-    <div class="marquee-track flex whitespace-nowrap" style="font-size: 22px;">
-        {# Text ko 6 baar repeat kiya hai taaki smooth infinite loop bane #}
-        {% for i in range(6) %}
-        <span class="marquee-item shrink-0 px-8">{{ settings.marquee_text }}</span>
-        {% endfor %}
+
+    {# Seamless marquee using CSS animation + JS cloning for perfect loop #}
+    <div class="marquee-track" data-marquee-track style="font-size: clamp(16px, 4vw, 22px);">
+        <div class="marquee-content" data-marquee-content>
+            {% for i in range(10) %}
+            <span class="marquee-item">{{ settings.marquee_text }}</span>
+            {% endfor %}
+        </div>
     </div>
 
     <style>
         .marquee-track {
-            animation: marquee-scroll 20s linear infinite;
-            will-change: transform;
+            overflow: hidden;
+            width: 100%;
+            position: relative;
         }
 
-        /* RTL support */
-        [dir="rtl"] .marquee-track {
-            animation: marquee-scroll-rtl 20s linear infinite;
+        .marquee-content {
+            display: flex;
+            width: max-content;
+            animation: marquee-scroll 60s linear infinite;
+        }
+
+        .marquee-item {
+            white-space: nowrap;
+            flex-shrink: 0;
+            padding: 0 2rem;
         }
 
         @keyframes marquee-scroll {
@@ -29,6 +40,10 @@
             }
         }
 
+        [dir="rtl"] .marquee-content {
+            animation-name: marquee-scroll-rtl;
+        }
+
         @keyframes marquee-scroll-rtl {
             0% {
                 transform: translateX(0);
@@ -39,10 +54,26 @@
             }
         }
 
-        /* Hover par pause ho jaye */
-        .marquee-track:hover {
+        section:hover .marquee-content {
             animation-play-state: paused;
         }
     </style>
+
+    <script>
+        (function () {
+            var track = document.querySelector('[data-marquee-track]');
+            if (!track) return;
+            var content = track.querySelector('[data-marquee-content]');
+            if (!content) return;
+
+            // Clone the content to ensure seamless loop
+            var clone = content.cloneNode(true);
+            // Append all children of clone into original content
+            var items = clone.querySelectorAll('.marquee-item');
+            for (var i = 0; i < items.length; i++) {
+                content.appendChild(items[i].cloneNode(true));
+            }
+        })();
+    </script>
 </section>
 {% endif %}

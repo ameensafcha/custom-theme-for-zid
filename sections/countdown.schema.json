@@ -12,7 +12,10 @@
         "ar": "نص الشارة",
         "en": "Badge Text"
       },
-      "default": ""
+      "default": {
+        "ar": "",
+        "en": ""
+      }
     },
     {
       "id": "title",
@@ -21,7 +24,10 @@
         "ar": "العنوان",
         "en": "Title"
       },
-      "default": ""
+      "default": {
+        "ar": "",
+        "en": ""
+      }
     },
     {
       "id": "description",
@@ -30,7 +36,10 @@
         "ar": "الوصف",
         "en": "Description"
       },
-      "default": ""
+      "default": {
+        "ar": "",
+        "en": ""
+      }
     },
     {
       "id": "end_date",
@@ -52,7 +61,10 @@
         "ar": "نص الزر",
         "en": "Button Text"
       },
-      "default": ""
+      "default": {
+        "ar": "",
+        "en": ""
+      }
     },
     {
       "id": "button_url",

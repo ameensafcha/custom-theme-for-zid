@@ -10,13 +10,12 @@
 <div class="header-row-2 border-b border-border-light relative z-20"
     style="background-color: {{ settings.header_row2_bg_color | default('#f8f9fa') }}; color: {{ settings.header_row2_text_color | default('#000000') }};">
 
-    <div class="relative mx-auto px-4 md:px-8 max-w-7xl w-full">
-        {# Py-5 padding di gayi hai taaki bada text upar-niche se na kate #}
-        <div class="flex items-center gap-4 py-5">
+    <div class="relative mx-auto px-8 max-w-7xl w-full">
+        <div class="flex items-center justify-center gap-4 py-5">
 
             {# Left Scroll Button #}
             <button type="button" data-scroll-left
-                class="hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-lg text-gray-700 hover:text-primary hover:bg-gray-100 absolute left-0 z-10 transition-transform active:scale-95 disabled:opacity-30"
+                class="flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-lg text-gray-700 hover:text-primary hover:bg-gray-100 absolute left-0 z-10 transition-transform active:scale-95 disabled:opacity-30"
                 aria-label="Scroll left">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
                     stroke="currentColor" class="w-6 h-6 rtl:rotate-180">
@@ -25,7 +24,7 @@
             </button>
 
             {# Categories Scroll Container #}
-            <div class="categories-scroll-container flex items-center gap-8 overflow-x-auto w-full scroll-smooth no-scrollbar px-10 md:justify-center"
+            <div class="categories-scroll-container flex items-center gap-8 overflow-x-auto w-full scroll-smooth no-scrollbar px-10 justify-center"
                 data-categories-scroll style="scrollbar-width: none; -ms-overflow-style: none;">
 
                 {% for category in categories_list %}
@@ -33,7 +32,8 @@
                 {% set cat_name = category.name if category.name else category.label %}
 
                 <a href="{{ cat_url }}"
-                    class="category-link whitespace-nowrap shrink-0 transition-all duration-200 block font-bold hover:text-primary">
+                    class="category-link whitespace-nowrap shrink-0 transition-all duration-200 block font-bold hover:text-primary"
+                    style="font-size: clamp(14px, 5vw, 30px);">
                     {{ cat_name }}
                 </a>
                 {% endfor %}
@@ -41,7 +41,7 @@
 
             {# Right Scroll Button #}
             <button type="button" data-scroll-right
-                class="hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-lg text-gray-700 hover:text-primary hover:bg-gray-100 absolute right-0 z-10 transition-transform active:scale-95 disabled:opacity-30"
+                class="flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-lg text-gray-700 hover:text-primary hover:bg-gray-100 absolute right-0 z-10 transition-transform active:scale-95 disabled:opacity-30"
                 aria-label="Scroll right">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
                     stroke="currentColor" class="w-6 h-6 rtl:rotate-180">
@@ -63,17 +63,17 @@
         scrollbar-width: none;
     }
 
-    /* Bada Text Size aur Style */
+    /* Category link style */
     .category-link {
         color: inherit;
-        font-size: 30px !important; /* Aapka requested size */
         line-height: 1.2;
         text-decoration: none;
     }
 
     .category-link:hover {
         opacity: 0.7;
-        transform: scale(1.05); /* Hover par halka sa zoom */
+        transform: scale(1.05);
+        /* Hover par halka sa zoom */
     }
 
     /* Container ko resize hone par text katne se bachata hai */

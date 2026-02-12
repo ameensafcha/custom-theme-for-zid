@@ -1,17 +1,24 @@
-{# Optimize hero images for better LCP #}
+{# Hero Banner - Image only, optionally clickable #}
 {% set mobile_image = image_url(settings.background_image_mobile or settings.background_image, w=768, q=75, f='auto') %}
 {% set desktop_image = image_url(settings.background_image, w=1920, q=75, f='auto') %}
 {% set is_lazy = settings.order > 2 %}
+{% set link = settings.link_url | default('') %}
 
-<section section-id="{{ sectionId }}" class="relative w-full"
-  data-variant="{{ settings.style_variant | default('default') }}">
-  {# Simple Responsive Image - No text, no fixed height #}
-  <div class="w-full">
-    <picture>
-      <source media="(min-width: 768px)" srcset="{{ desktop_image }}" />
-      <img src="{{ mobile_image }}" alt="{{ settings.heading | default('Hero Image') }}" class="w-full h-auto block"
-        loading="{% if is_lazy %}lazy{% else %}eager{% endif %}"
-        fetchpriority="{% if is_lazy %}auto{% else %}high{% endif %}" />
-    </picture>
+<section section-id="{{ sectionId }}" class="relative w-full">
+  {% if link %}
+  <a href="{{ link }}" class="block w-full cursor-pointer">
+    {% else %}
+    <div class="block w-full">
+      {% endif %}
+      <picture>
+        <source media="(min-width: 768px)" srcset="{{ desktop_image }}" />
+        <img src="{{ mobile_image }}" alt="Hero Image" class="w-full h-auto block"
+          loading="{% if is_lazy %}lazy{% else %}eager{% endif %}"
+          fetchpriority="{% if is_lazy %}auto{% else %}high{% endif %}" />
+      </picture>
+      {% if link %}
+  </a>
+  {% else %}
   </div>
+  {% endif %}
 </section>

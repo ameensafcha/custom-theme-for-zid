@@ -12,7 +12,10 @@
         "ar": "العنوان",
         "en": "Title"
       },
-      "default": "Our Partners"
+      "default": {
+        "ar": "شركاؤنا",
+        "en": "Our Partners"
+      }
     },
     {
       "id": "store_partners",

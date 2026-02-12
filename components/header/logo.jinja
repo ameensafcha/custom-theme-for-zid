@@ -1,17 +1,27 @@
 {# Header Logo Component #}
-{# Displays responsive logo with separate desktop/mobile variants #}
-{# Mobile/tablet: height matches search bar. Desktop: original size. #}
+{# PC: 100px, Tablet: mobile logo, Phone: mobile logo small #}
 
 {% if settings.logo_desktop or settings.logo_mobile %}
-<img width="106" height="44"
-  src="{{ image_url(settings.logo_desktop | default(settings.logo_mobile) | default(store.logo), w=212, q=90, f='auto') }}"
-  class="hidden md:block" alt="{{ store.name }}" />
+{# PC Logo - 100px height #}
+<img
+  src="{{ image_url(settings.logo_desktop | default(settings.logo_mobile) | default(store.logo), w=500, q=90, f='auto') }}"
+  class="hidden lg:block h-[100px] w-auto object-contain" alt="{{ store.name }}" />
+{# Tablet - mobile logo #}
 <img
   src="{{ image_url(settings.logo_mobile | default(settings.logo_desktop) | default(store.logo), w=212, q=90, f='auto') }}"
-  class="block md:hidden h-[36px] w-auto object-contain" alt="{{ store.name }}" />
+  class="hidden md:block lg:hidden h-[44px] w-auto object-contain" alt="{{ store.name }}" />
+{# Phone - mobile logo small #}
+<img
+  src="{{ image_url(settings.logo_mobile | default(settings.logo_desktop) | default(store.logo), w=150, q=90, f='auto') }}"
+  class="block md:hidden h-[32px] w-auto object-contain" alt="{{ store.name }}" />
 {% else %}
-<img width="106" height="44" src="{{ image_url(store.logo, w=212, q=90, f='auto') }}" class="hidden md:block"
+{# PC Logo - 100px height #}
+<img src="{{ image_url(store.logo, w=500, q=90, f='auto') }}" class="hidden lg:block h-[100px] w-auto object-contain"
   alt="{{ store.name }}" />
-<img src="{{ image_url(store.logo, w=212, q=90, f='auto') }}" class="block md:hidden h-[36px] w-auto object-contain"
+{# Tablet - same as phone #}
+<img src="{{ image_url(store.logo, w=212, q=90, f='auto') }}"
+  class="hidden md:block lg:hidden h-[44px] w-auto object-contain" alt="{{ store.name }}" />
+{# Phone #}
+<img src="{{ image_url(store.logo, w=150, q=90, f='auto') }}" class="block md:hidden h-[32px] w-auto object-contain"
   alt="{{ store.name }}" />
 {% endif %}

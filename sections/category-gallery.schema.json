@@ -1,0 +1,28 @@
+{
+    "template": "sections/category-gallery.jinja",
+    "name": {
+        "ar": "معرض التصنيفات",
+        "en": "Category Gallery"
+    },
+    "settings": [
+        {
+            "id": "categories",
+            "type": "list",
+            "label": {
+                "ar": "التصنيفات",
+                "en": "Categories"
+            },
+            "max_items": 6,
+            "settings": [
+                {
+                    "id": "category",
+                    "type": "category",
+                    "label": {
+                        "ar": "اختر التصنيف",
+                        "en": "Select Category"
+                    }
+                }
+            ]
+        }
+    ]
+}

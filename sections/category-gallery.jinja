@@ -1,0 +1,85 @@
+{% set is_lazy = settings.order > 2 %}
+{% set cats = safeget(settings, "categories", []) %}
+
+{% if cats | length > 0 %}
+<section section-id="{{ sectionId }}">
+    {# Grid: Mobile 1 col, Tablet/Desktop 3 cols — Full Width #}
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-3 lg:gap-6">
+        {% for item in cats %}
+        <a href="/categories/{{ item.category.id }}/{{ item.category.slug }}" class="cat-gallery-card group block">
+            {# Image Container #}
+            <div class="cat-gallery-img-wrap relative overflow-hidden rounded-lg">
+                {# Front Image: Category Image #}
+                <img {% if item.category.image %}
+                    src="{{ image_url(item.category.image_full_size, w=700, q=90, f='auto') }}" {% else %}
+                    src="{{ image_url(('images/product-img.svg' | asset_url), w=700, q=90, f='auto') }}" {% endif %}
+                    alt="{{ item.category.name }}"
+                    class="cat-gallery-front w-full object-cover transition-opacity duration-500 ease-in-out" {% if
+                    is_lazy or not loop.first %}loading="lazy" {% endif %} />
+
+                {# Hover Image: Category Cover Image #}
+                {% if item.category.cover_image %}
+                <img src="{{ image_url(item.category.cover_image, w=700, q=90, f='auto') }}"
+                    alt="{{ item.category.name }}"
+                    class="cat-gallery-hover absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-500 ease-in-out"
+                    loading="lazy" />
+                {% endif %}
+
+                {# Category Name - Overlay on Image, bottom se thodi upar #}
+                <div class="absolute inset-x-0 bottom-0 flex justify-center pb-6 z-10">
+                    <span class="cat-gallery-name">
+                        {{ item.category.name }}
+                    </span>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+
+<style>
+    /* Card image size: 616x565 on desktop */
+    .cat-gallery-img-wrap {
+        width: 100%;
+        height: 565px;
+    }
+
+    .cat-gallery-img-wrap img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* Mobile: smaller height */
+    @media (max-width: 767px) {
+        .cat-gallery-img-wrap {
+            height: 500px;
+        }
+    }
+
+    /* Category Name Pill Style */
+    .cat-gallery-name {
+        display: inline-block;
+        background-color: #1d1d1d;
+        color: #fff;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 21.25px;
+        font-weight: 500;
+        line-height: 26.5625px;
+        padding: 15px 46px;
+        border-radius: 30px;
+        border: 1px solid #1d1d1d;
+        text-align: center;
+        text-decoration: none;
+    }
+
+    /* Sirf hovered card ki image change ho */
+    .cat-gallery-card:hover .cat-gallery-front {
+        opacity: 0;
+    }
+
+    .cat-gallery-card:hover .cat-gallery-hover {
+        opacity: 1;
+    }
+</style>
+{% endif %}

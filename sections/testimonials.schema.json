@@ -12,7 +12,10 @@
         "ar": "العنوان",
         "en": "Title"
       },
-      "default": "Customer Testimonials"
+      "default": {
+        "ar": "آراء عملائنا",
+        "en": "Customer Testimonials"
+      }
     },
     {
       "id": "testimonials",

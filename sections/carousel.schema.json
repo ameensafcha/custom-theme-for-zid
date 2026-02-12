@@ -232,7 +232,10 @@
             "ar": "نص الشارة",
             "en": "Badge Text"
           },
-          "default": "NEW COLLECTION"
+          "default": {
+            "ar": "مجموعة جديدة",
+            "en": "NEW COLLECTION"
+          }
         },
         {
           "id": "heading",
@@ -241,7 +244,10 @@
             "ar": "العنوان الرئيسي",
             "en": "Heading"
           },
-          "default": "Superbloom 2025"
+          "default": {
+            "ar": "تشكيلة 2025",
+            "en": "Superbloom 2025"
+          }
         },
         {
           "id": "description",
@@ -250,7 +256,10 @@
             "ar": "الوصف",
             "en": "Description"
           },
-          "default": "Step into the season with flowing silhouettes and effortless elegance."
+          "default": {
+            "ar": "ادخل الموسم بتصاميم انسيابية وأناقة بلا مجهود",
+            "en": "Step into the season with flowing silhouettes and effortless elegance."
+          }
         },
         {
           "id": "button_text",
@@ -259,7 +268,10 @@
             "ar": "نص الزر",
             "en": "Button Text"
           },
-          "default": "Shop the Collection"
+          "default": {
+            "ar": "تسوق المجموعة",
+            "en": "Shop the Collection"
+          }
         },
         {
           "id": "button_url",
