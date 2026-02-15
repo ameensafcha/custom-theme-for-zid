@@ -1,78 +1,47 @@
+{# Categories Bar - Row 2 #}
 {% set categories_list = store.categories %}
 {% if categories_list | length == 0 %}
-    {% set categories_list = store.settings.menus.main_menu.items %}
+{% set categories_list = store.settings.menus.main_menu.items %}
 {% endif %}
 
 {% if categories_list | length > 0 %}
-<div class="nav-container">
-    <div class="nav-content">
-        <button type="button" class="nav-arrow" onclick="document.querySelector('.nav-scroll').scrollBy({left: -200, behavior: 'smooth'})">&lt;</button>
-
-        <div class="nav-scroll no-scrollbar">
-            {% for category in categories_list %}
-                <a href="{{ category.url | localized_url }}" class="nav-link">
-                    {{ category.name if category.name else category.label }}
-                </a>
-            {% endfor %}
-        </div>
-
-        <button type="button" class="nav-arrow" onclick="document.querySelector('.nav-scroll').scrollBy({left: 200, behavior: 'smooth'})">&gt;</button>
+<div class="cat-bar"
+    style="background-color: {{ settings.header_row2_bg_color | default('#f8f9fa') }}; color: {{ settings.header_row2_text_color | default('#000000') }};">
+    <div class="cat-inner">
+        {% for category in categories_list %}
+        <a href="{{ category.url | localized_url }}" class="cat-link">
+            {{ category.name if category.name else category.label }}
+        </a>
+        {% endfor %}
     </div>
 </div>
 
 <style>
-    /* 1. Basic Reset & Background */
-    .nav-container {
-        background-color: #004d26; /* Dark Green */
+    .cat-bar {
         width: 100%;
-        overflow: hidden;
     }
 
-    /* 2. Layout & 7xl Width (1280px) */
-    .nav-content {
-        max-width: 1280px; /* 7xl equivalent */
-        margin: 0 auto;
+    .cat-inner {
         display: flex;
+        justify-content: space-evenly;
         align-items: center;
-        justify-content: center; /* Center PC mein */
-        padding: 10px;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 12px 16px;
+        max-width: 1280px;
+        margin: 0 auto;
     }
 
-    /* 3. Scrolling Area */
-    .nav-scroll {
-        display: flex;
-        gap: 25px;
-        overflow-x: auto;
-        white-space: nowrap;
-        scroll-behavior: smooth;
-    }
-
-    /* 4. Responsive Font (Important) */
-    .nav-link {
-        color: white;
+    .cat-link {
+        color: inherit;
         text-decoration: none;
-        font-weight: bold;
-        font-size: 22px; /* Default for Tablet/PC */
+        white-space: nowrap;
+        padding: 4px 8px;
+        transition: opacity 0.2s;
     }
 
-    .nav-arrow {
-        background: none;
-        border: none;
-        color: white;
-        font-size: 24px;
-        cursor: pointer;
-        padding: 0 15px;
+    .cat-link:hover {
+        opacity: 0.7;
     }
-
-    /* 5. Mobile Adjustments */
-    @media (max-width: 768px) {
-        .nav-link { font-size: 16px; } /* Phone par 16px */
-        .nav-arrow { display: none; }  /* Mobile pe arrows ki zarurat nahi (touch scroll) */
-        .nav-content { justify-content: flex-start; }
-    }
-
-    /* Hide Scrollbar */
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 </style>
 {% endif %}

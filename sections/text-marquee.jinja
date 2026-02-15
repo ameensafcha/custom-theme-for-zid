@@ -1,37 +1,42 @@
 {% set marquee_text = settings.marquee_text_ar if session.lang == 'ar' else settings.marquee_text_en %}
 {% if marquee_text and marquee_text | trim %}
-<section section-id="{{ sectionId }}" class="overflow-hidden py-3 md:py-5"
+<section section-id="{{ sectionId }}" class="marquee-section overflow-hidden py-3 md:py-5"
     style="background-color: {{ settings.bg_color | default('#000000') }}; color: {{ settings.text_color | default('#FFFFFF') }};">
 
-    {# Seamless marquee using CSS animation + JS cloning for perfect loop #}
-    <div class="marquee-track" data-marquee-track style="font-size: clamp(16px, 4vw, 22px);">
-        <div class="marquee-content" data-marquee-content>
-            {% for i in range(10) %}
-            <span class="marquee-item">{{ marquee_text }}</span>
-            {% endfor %}
+    <div class="marquee-track-wrapper" data-speed="{{ settings.speed | default(50) }}"
+        style="font-size: clamp(16px, 4vw, 22px);">
+        <div class="marquee-track">
+            <span class="marquee-text">{{ marquee_text }}</span>
         </div>
     </div>
 
     <style>
-        .marquee-track {
+        [section-id="{{ sectionId }}"] .marquee-track-wrapper {
             overflow: hidden;
             width: 100%;
-            position: relative;
+            display: flex;
+            align-items: center;
         }
 
-        .marquee-content {
+        [section-id="{{ sectionId }}"] .marquee-track {
             display: flex;
             width: max-content;
-            animation: marquee-scroll 60s linear infinite;
+            animation: marquee-scroll-ltr linear infinite;
         }
 
-        .marquee-item {
+        [section-id="{{ sectionId }}"] .marquee-text {
+            padding-right: 80px;
             white-space: nowrap;
-            flex-shrink: 0;
-            padding: 0 2rem;
+            /* In RTL, padding should be on the other side */
+            padding-inline-end: 80px;
+            padding-right: 0;
         }
 
-        @keyframes marquee-scroll {
+        [section-id="{{ sectionId }}"]:hover .marquee-track {
+            animation-play-state: paused;
+        }
+
+        @keyframes marquee-scroll-ltr {
             0% {
                 transform: translateX(0);
             }
@@ -39,10 +44,6 @@
             100% {
                 transform: translateX(-50%);
             }
-        }
-
-        [dir="rtl"] .marquee-content {
-            animation-name: marquee-scroll-rtl;
         }
 
         @keyframes marquee-scroll-rtl {
@@ -55,24 +56,43 @@
             }
         }
 
-        section:hover .marquee-content {
-            animation-play-state: paused;
+        /* Direction-based animation */
+        [dir="rtl"] [section-id="{{ sectionId }}"] .marquee-track {
+            animation-name: marquee-scroll-rtl;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            [section-id="{{ sectionId }}"] .marquee-track {
+                animation: none;
+            }
         }
     </style>
 
     <script>
         (function () {
-            var track = document.querySelector('[data-marquee-track]');
-            if (!track) return;
-            var content = track.querySelector('[data-marquee-content]');
-            if (!content) return;
+            const section = document.querySelector('[section-id="{{ sectionId }}"]');
+            if (!section) return;
 
-            // Clone the content to ensure seamless loop
-            var clone = content.cloneNode(true);
-            // Append all children of clone into original content
-            var items = clone.querySelectorAll('.marquee-item');
-            for (var i = 0; i < items.length; i++) {
-                content.appendChild(items[i].cloneNode(true));
+            const wrapper = section.querySelector(".marquee-track-wrapper");
+            const track = section.querySelector(".marquee-track");
+            const textContent = track.innerHTML;
+
+            const speed = parseFloat(wrapper.getAttribute("data-speed")) || 50;
+            const singleWidth = track.scrollWidth;
+            const screenWidth = window.innerWidth;
+
+            if (singleWidth > 0) {
+                // Ensure the marquee is wide enough to cover the screen twice for seamless looping
+                const copiesNeeded = Math.ceil((screenWidth * 2) / singleWidth) + 1;
+                const fullContent = textContent.repeat(copiesNeeded);
+                track.innerHTML = fullContent;
+
+                // Duration based on half the new track length (since we scroll 50%)
+                const totalWidth = track.scrollWidth;
+                const distanceToTravel = totalWidth / 2;
+                const duration = distanceToTravel / speed;
+
+                track.style.animationDuration = duration + 's';
             }
         })();
     </script>

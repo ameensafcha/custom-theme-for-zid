@@ -40,6 +40,22 @@
                 "en": "Text Color"
             },
             "default": "#FFFFFF"
+        },
+        {
+            "id": "speed",
+            "type": "range",
+            "label": {
+                "ar": "سرعة التمرير",
+                "en": "Scroll Speed"
+            },
+            "min": 10,
+            "max": 200,
+            "step": 10,
+            "default": 50,
+            "info": {
+                "ar": "القيمة الأعلى = أسرع",
+                "en": "Higher value = faster"
+            }
         }
     ]
 }
