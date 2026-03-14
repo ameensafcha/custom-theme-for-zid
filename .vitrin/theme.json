@@ -1,0 +1,76 @@
+{
+  "id": "f966c472-f17a-4d95-ad9b-fee5f621d851",
+  "updatedAt": "2026-03-10T14:15:59.373Z",
+  "installations": [
+    {
+      "id": "8bc778ec-7803-4ab0-831c-2a97676e5539",
+      "store_id": "3059022",
+      "store_name": "qwerty",
+      "installed_at": "2026-03-10T13:38:22.963Z",
+      "version": "1.0.28"
+    },
+    {
+      "id": "8bc778ec-7803-4ab0-831c-2a97676e5539",
+      "store_id": "3059022",
+      "store_name": "qwerty",
+      "installed_at": "2026-03-10T13:44:00.910Z",
+      "version": "1.0.29"
+    },
+    {
+      "id": "8bc778ec-7803-4ab0-831c-2a97676e5539",
+      "store_id": "3059022",
+      "store_name": "qwerty",
+      "installed_at": "2026-03-10T13:52:11.185Z",
+      "version": "1.0.30"
+    },
+    {
+      "id": "8bc778ec-7803-4ab0-831c-2a97676e5539",
+      "store_id": "3059022",
+      "store_name": "qwerty",
+      "installed_at": "2026-03-10T13:53:43.623Z",
+      "version": "1.0.31"
+    },
+    {
+      "id": "8bc778ec-7803-4ab0-831c-2a97676e5539",
+      "store_id": "3059022",
+      "store_name": "qwerty",
+      "installed_at": "2026-03-10T13:56:44.484Z",
+      "version": "1.0.32"
+    },
+    {
+      "id": "8bc778ec-7803-4ab0-831c-2a97676e5539",
+      "store_id": "3059022",
+      "store_name": "qwerty",
+      "installed_at": "2026-03-10T13:58:26.139Z",
+      "version": "1.0.33"
+    },
+    {
+      "id": "8bc778ec-7803-4ab0-831c-2a97676e5539",
+      "store_id": "3059022",
+      "store_name": "qwerty",
+      "installed_at": "2026-03-10T14:01:07.970Z",
+      "version": "1.0.34"
+    },
+    {
+      "id": "8bc778ec-7803-4ab0-831c-2a97676e5539",
+      "store_id": "3059022",
+      "store_name": "qwerty",
+      "installed_at": "2026-03-10T14:03:08.912Z",
+      "version": "1.0.36"
+    },
+    {
+      "id": "8bc778ec-7803-4ab0-831c-2a97676e5539",
+      "store_id": "3059022",
+      "store_name": "qwerty",
+      "installed_at": "2026-03-10T14:05:39.736Z",
+      "version": "1.0.37"
+    },
+    {
+      "id": "8bc778ec-7803-4ab0-831c-2a97676e5539",
+      "store_id": "3059022",
+      "store_name": "qwerty",
+      "installed_at": "2026-03-10T14:15:59.372Z",
+      "version": "1.0.38"
+    }
+  ]
+}

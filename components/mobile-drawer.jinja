@@ -1,0 +1,22 @@
+<div id="mobile-menu" class="hidden md:hidden fixed inset-0 z-50 bg-black/40">
+  <div class="absolute left-0 top-0 bottom-0 w-72 bg-white shadow-2xl flex flex-col">
+
+    <div class="flex items-center justify-between p-4 border-b border-gray-100">
+      <span class="text-lg font-bold text-green-700">Menu</span>
+      <button id="mobile-close" class="text-gray-500 hover:text-gray-700">
+        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="flex-1 overflow-y-auto p-4 space-y-1">
+      <a href="/" class="block py-2.5 text-sm font-medium text-green-700 border-b border-gray-100">Home</a>
+      <a href="/products" class="block py-2.5 text-sm font-medium text-gray-700 hover:text-green-600 border-b border-gray-100">All Products</a>
+      {# JS injects categories here #}
+      <div id="mobile-categories"></div>
+      <a href="/account" class="block py-2.5 text-sm font-medium text-gray-700 hover:text-green-600">Account</a>
+    </div>
+
+  </div>
+</div>

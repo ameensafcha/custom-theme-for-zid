@@ -1,0 +1,34 @@
+<nav class="bg-green-700 relative">
+  <div class="max-w-7xl mx-auto flex items-center justify-center">
+
+    {# Left Arrow #}
+    <button id="scroll-left"
+      class="flex-shrink-0 bg-green-700 hover:bg-green-600 text-white px-2 py-2.5 transition-colors z-10">
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+      </svg>
+    </button>
+
+    {# Nav Links Scrollable #}
+    <div id="nav-links" class="flex-1 flex items-center gap-4 md:gap-6 overflow-x-auto scroll-smooth px-4 py-3"
+      style="-ms-overflow-style:none;scrollbar-width:none;">
+      <a href="/" class="text-sm md:text-lg font-medium whitespace-nowrap text-white hover:opacity-80">
+        Home
+      </a>
+      <a href="/products" class="text-sm md:text-lg font-medium whitespace-nowrap text-white hover:opacity-80">
+        All Products
+      </a>
+      {# JS injects categories here #}
+      <div id="nav-categories" class="contents"></div>
+    </div>
+
+    {# Right Arrow #}
+    <button id="scroll-right"
+      class="flex-shrink-0 bg-green-700 hover:bg-green-600 text-white px-2 py-2.5 transition-colors z-10">
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+      </svg>
+    </button>
+
+  </div>
+</nav>

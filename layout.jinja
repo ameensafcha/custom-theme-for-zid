@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ store.name }}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="{{ 'style.css' | asset_url }}">
+  {% vitrin_head %}
+</head>
+<body class="bg-white text-gray-900">
+
+  {% include 'header.jinja' %}
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  {% include 'footer.jinja' %}
+
+{# ✅ Sirf ek JS file #}
+  <script src="{{ 'main.js' | asset_url }}"></script>
+  {% vitrin_body %}
+
+  {% vitrin_body %}
+
+</body>
+</html>
