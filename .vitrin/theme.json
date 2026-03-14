@@ -1,76 +1,76 @@
 {
   "id": "f966c472-f17a-4d95-ad9b-fee5f621d851",
-  "updatedAt": "2026-03-10T14:15:59.373Z",
+  "updatedAt": "2026-03-14T20:38:54.121Z",
   "installations": [
     {
       "id": "8bc778ec-7803-4ab0-831c-2a97676e5539",
       "store_id": "3059022",
       "store_name": "qwerty",
-      "installed_at": "2026-03-10T13:38:22.963Z",
-      "version": "1.0.28"
+      "installed_at": "2026-03-14T19:59:38.685Z",
+      "version": "1.0.40"
     },
     {
       "id": "8bc778ec-7803-4ab0-831c-2a97676e5539",
       "store_id": "3059022",
       "store_name": "qwerty",
-      "installed_at": "2026-03-10T13:44:00.910Z",
-      "version": "1.0.29"
+      "installed_at": "2026-03-14T20:15:23.111Z",
+      "version": "1.0.41"
     },
     {
       "id": "8bc778ec-7803-4ab0-831c-2a97676e5539",
       "store_id": "3059022",
       "store_name": "qwerty",
-      "installed_at": "2026-03-10T13:52:11.185Z",
-      "version": "1.0.30"
+      "installed_at": "2026-03-14T20:19:16.585Z",
+      "version": "1.0.42"
     },
     {
       "id": "8bc778ec-7803-4ab0-831c-2a97676e5539",
       "store_id": "3059022",
       "store_name": "qwerty",
-      "installed_at": "2026-03-10T13:53:43.623Z",
-      "version": "1.0.31"
+      "installed_at": "2026-03-14T20:21:36.059Z",
+      "version": "1.0.43"
     },
     {
       "id": "8bc778ec-7803-4ab0-831c-2a97676e5539",
       "store_id": "3059022",
       "store_name": "qwerty",
-      "installed_at": "2026-03-10T13:56:44.484Z",
-      "version": "1.0.32"
+      "installed_at": "2026-03-14T20:24:43.168Z",
+      "version": "1.0.44"
     },
     {
       "id": "8bc778ec-7803-4ab0-831c-2a97676e5539",
       "store_id": "3059022",
       "store_name": "qwerty",
-      "installed_at": "2026-03-10T13:58:26.139Z",
-      "version": "1.0.33"
+      "installed_at": "2026-03-14T20:26:57.492Z",
+      "version": "1.0.45"
     },
     {
       "id": "8bc778ec-7803-4ab0-831c-2a97676e5539",
       "store_id": "3059022",
       "store_name": "qwerty",
-      "installed_at": "2026-03-10T14:01:07.970Z",
-      "version": "1.0.34"
+      "installed_at": "2026-03-14T20:29:07.643Z",
+      "version": "1.0.46"
     },
     {
       "id": "8bc778ec-7803-4ab0-831c-2a97676e5539",
       "store_id": "3059022",
       "store_name": "qwerty",
-      "installed_at": "2026-03-10T14:03:08.912Z",
-      "version": "1.0.36"
+      "installed_at": "2026-03-14T20:31:14.108Z",
+      "version": "1.0.47"
     },
     {
       "id": "8bc778ec-7803-4ab0-831c-2a97676e5539",
       "store_id": "3059022",
       "store_name": "qwerty",
-      "installed_at": "2026-03-10T14:05:39.736Z",
-      "version": "1.0.37"
+      "installed_at": "2026-03-14T20:33:57.543Z",
+      "version": "1.0.48"
     },
     {
       "id": "8bc778ec-7803-4ab0-831c-2a97676e5539",
       "store_id": "3059022",
       "store_name": "qwerty",
-      "installed_at": "2026-03-10T14:15:59.372Z",
-      "version": "1.0.38"
+      "installed_at": "2026-03-14T20:38:54.120Z",
+      "version": "1.0.49"
     }
   ]
 }
