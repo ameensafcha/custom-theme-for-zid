@@ -70,22 +70,23 @@ async function loadCart() {
 
   try {
     const response = await fetch('/api/v1/cart', {
-      headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }
+      headers: {
+        'Accept': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest'
+      }
     });
+
     if (!response.ok) throw new Error('Status: ' + response.status);
 
-    const result = await response.json();
-    const cart = result?.cart || result?.data?.cart || result?.data || null;
+    const cart = await response.json();
+    console.log('[Cart] RAW:', cart);
 
-    if (!cart) {
-      container.innerHTML = '<p class="text-center text-gray-400 text-sm mt-10">Your cart is empty</p>';
-      return;
-    }
+    // ✅ Exact fields from docs
+    const products  = cart?.products || [];
+    const count     = cart?.products_count || products.length || 0;
+    const totalStr  = cart?.total?.value_string || cart?.total?.value + ' ر.س' || '0 ر.س';
 
-    const products = cart.products || cart.items || [];
-    const count    = products.length || 0;
-    const total    = cart.total || cart.subtotal || '0';
-
+    // Badges & price update
     const badgeDesktop = document.getElementById('cart-badge-desktop');
     const badgeMobile  = document.getElementById('cart-badge-mobile');
     const priceDesktop = document.getElementById('cart-price-desktop');
@@ -94,38 +95,88 @@ async function loadCart() {
 
     if (badgeDesktop) badgeDesktop.textContent = count;
     if (badgeMobile)  badgeMobile.textContent  = count;
-    if (priceDesktop) priceDesktop.textContent = total + ' SAR';
-    if (priceMobile)  priceMobile.textContent  = total + ' SAR';
-    if (subtotalEl)   subtotalEl.textContent   = total + ' SAR';
+    if (priceDesktop) priceDesktop.textContent = totalStr;
+    if (priceMobile)  priceMobile.textContent  = totalStr;
+    if (subtotalEl)   subtotalEl.textContent   = totalStr;
 
     if (badgeMobile && count > 0) {
       badgeMobile.classList.remove('hidden');
       badgeMobile.classList.add('flex');
     }
 
+    // Empty cart
     if (!products.length) {
-      container.innerHTML = '<p class="text-center text-gray-400 text-sm mt-10">Your cart is empty</p>';
+      container.innerHTML = `
+        <div class="flex flex-col items-center justify-center h-full text-center py-20">
+          <svg class="w-14 h-14 text-gray-200 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+              d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.6 8H19M10 21a1 1 0 1 0 2 0 1 1 0 0 0-2 0zm7 0a1 1 0 1 0 2 0 1 1 0 0 0-2 0z"/>
+          </svg>
+          <p class="text-gray-400 font-medium text-sm">Your cart is empty</p>
+          <a href="/products" class="mt-4 text-green-700 text-sm font-semibold hover:underline">
+            Continue Shopping →
+          </a>
+        </div>`;
       return;
     }
 
-    container.innerHTML = products.map(item => `
-      <div class="flex gap-3 pb-4 mb-4 border-b border-gray-100 last:border-0">
-        <img
-          src="${item.product?.images?.[0]?.url || item.image || ''}"
-          alt="${item.product?.name || item.name || ''}"
-          class="w-20 h-20 rounded-xl object-cover flex-shrink-0 border border-gray-100">
-        <div class="flex-1 min-w-0">
-          <p class="text-sm font-semibold text-gray-800">${item.product?.name || item.name || ''}</p>
-          <span class="text-green-600 font-bold text-sm mt-1 block">
-            ${item.price?.formatted || item.price || ''} SAR
-          </span>
-          <div class="flex items-center gap-2 mt-2">
-            <button class="w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-100 text-base">−</button>
-            <span class="text-sm font-semibold w-5 text-center">${item.quantity || 1}</span>
-            <button class="w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-100 text-base">+</button>
+    // ✅ Render items — exact fields from docs
+    container.innerHTML = products.map(item => {
+
+      // Image — product me image nahi hoti cart mein, sirf name/price
+      const image = item.image
+        || item.images?.[0]?.image?.medium
+        || 'https://placehold.co/80x80?text=?';
+
+      return `
+        <div class="flex gap-3 pb-4 mb-4 border-b border-gray-100 last:border-0 last:mb-0 last:pb-0">
+
+          <!-- Image -->
+          <div class="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 border border-gray-100 bg-gray-50">
+            <img src="${image}" alt="${item.name || ''}"
+              class="w-full h-full object-cover">
           </div>
-        </div>
-      </div>`).join('');
+
+          <!-- Info -->
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-semibold text-gray-800 leading-tight">${item.name || ''}</p>
+
+            <!-- Price per item -->
+            <span class="text-green-700 font-bold text-sm mt-1 block">
+              ${item.price_string || item.price + ' ر.س' || ''}
+            </span>
+
+            <!-- Qty controls -->
+            <div class="flex items-center gap-2 mt-2">
+              <button
+                onclick="updateCartItem(${item.id}, ${item.quantity - 1})"
+                class="w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-100 text-base font-bold">
+                −
+              </button>
+              <span class="text-sm font-semibold w-5 text-center">${item.quantity}</span>
+              <button
+                onclick="updateCartItem(${item.id}, ${item.quantity + 1})"
+                class="w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-100 text-base font-bold">
+                +
+              </button>
+            </div>
+          </div>
+
+          <!-- Total & Remove -->
+          <div class="flex flex-col items-end justify-between flex-shrink-0">
+            <button onclick="removeCartItem(${item.id})"
+              class="text-gray-300 hover:text-red-500 transition">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+            </button>
+            <span class="text-sm font-bold text-gray-800">
+              ${item.total_string || item.total + ' ر.س' || ''}
+            </span>
+          </div>
+
+        </div>`;
+    }).join('');
 
   } catch (err) {
     console.error('[Cart] Error:', err);
@@ -138,6 +189,46 @@ async function loadCart() {
           Try Again
         </button>
       </div>`;
+  }
+}
+
+// Cart item quantity update
+async function updateCartItem(itemId, newQty) {
+  if (newQty < 1) {
+    await removeCartItem(itemId);
+    return;
+  }
+  try {
+    const response = await fetch(`/api/v1/cart/items/${itemId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+      body: JSON.stringify({ quantity: newQty })
+    });
+    if (!response.ok) throw new Error('Status: ' + response.status);
+    await loadCart();
+  } catch (err) {
+    console.error('[Cart] Update error:', err);
+  }
+}
+
+// Cart item remove
+async function removeCartItem(itemId) {
+  try {
+    const response = await fetch(`/api/v1/cart/items/${itemId}`, {
+      method: 'DELETE',
+      headers: {
+        'Accept': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest'
+      }
+    });
+    if (!response.ok) throw new Error('Status: ' + response.status);
+    await loadCart();
+  } catch (err) {
+    console.error('[Cart] Remove error:', err);
   }
 }
 

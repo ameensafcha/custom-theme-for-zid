@@ -1,14 +1,7 @@
 {
   "id": "f966c472-f17a-4d95-ad9b-fee5f621d851",
-  "updatedAt": "2026-03-14T20:38:54.121Z",
+  "updatedAt": "2026-03-14T20:46:27.597Z",
   "installations": [
-    {
-      "id": "8bc778ec-7803-4ab0-831c-2a97676e5539",
-      "store_id": "3059022",
-      "store_name": "qwerty",
-      "installed_at": "2026-03-14T19:59:38.685Z",
-      "version": "1.0.40"
-    },
     {
       "id": "8bc778ec-7803-4ab0-831c-2a97676e5539",
       "store_id": "3059022",
@@ -71,6 +64,13 @@
       "store_name": "qwerty",
       "installed_at": "2026-03-14T20:38:54.120Z",
       "version": "1.0.49"
+    },
+    {
+      "id": "8bc778ec-7803-4ab0-831c-2a97676e5539",
+      "store_id": "3059022",
+      "store_name": "qwerty",
+      "installed_at": "2026-03-14T20:46:27.595Z",
+      "version": "1.0.50"
     }
   ]
 }
