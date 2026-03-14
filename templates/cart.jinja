@@ -1,0 +1,94 @@
+{% extends 'layout.jinja' %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 py-10">
+
+  <!-- Heading & Breadcrumb -->
+  <h1 class="text-2xl font-bold text-gray-900 mb-1">Cart</h1>
+  <p class="text-sm text-gray-400 mb-8">
+    <a href="/" class="hover:underline">Home</a> /
+    <span class="text-gray-600">Cart</span>
+  </p>
+
+  <div class="flex flex-col lg:flex-row gap-8" id="cart-page-wrapper">
+
+    <!-- Left — Cart Items -->
+    <div class="flex-1">
+      <div id="cart-page-items">
+        <!-- Skeleton loader -->
+        <div id="cart-page-skeleton" class="space-y-4">
+          {% for i in range(2) %}
+          <div class="bg-white rounded-2xl p-5 flex gap-4 animate-pulse border border-gray-100">
+            <div class="w-20 h-20 bg-gray-200 rounded-xl flex-shrink-0"></div>
+            <div class="flex-1 space-y-2 py-1">
+              <div class="h-4 bg-gray-200 rounded w-1/2"></div>
+              <div class="h-3 bg-gray-200 rounded w-1/4"></div>
+              <div class="h-8 bg-gray-200 rounded w-32 mt-3"></div>
+            </div>
+            <div class="w-20 space-y-2">
+              <div class="h-4 bg-gray-200 rounded"></div>
+              <div class="h-3 bg-gray-200 rounded"></div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Right — Order Summary -->
+    <div class="w-full lg:w-80 flex-shrink-0">
+      <div class="bg-white border border-gray-100 rounded-2xl p-6 sticky top-24">
+
+        <h2 class="text-lg font-bold text-gray-900 mb-5">Total summary</h2>
+
+        <!-- Totals -->
+        <div id="cart-page-totals" class="space-y-3 mb-5">
+          <div class="flex justify-between text-sm text-gray-500">
+            <span>Subtotal</span>
+            <span id="cart-page-subtotal" class="font-semibold text-gray-800">—</span>
+          </div>
+        </div>
+
+        <div class="border-t border-gray-100 pt-4 mb-5">
+          <div class="flex justify-between text-base font-bold text-gray-900">
+            <span>Total</span>
+            <span id="cart-page-total">—</span>
+          </div>
+        </div>
+
+        <!-- Coupon -->
+        <div class="mb-5">
+          <p class="text-sm font-semibold text-gray-700 mb-2">Discount coupon</p>
+          <div class="flex gap-2">
+            <input
+              type="text"
+              id="coupon-input"
+              placeholder="Enter discount coupon"
+              class="flex-1 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+            >
+            <button
+              onclick="applyCoupon()"
+              class="px-4 py-2 border border-gray-800 text-gray-800 text-sm font-semibold rounded-xl hover:bg-gray-800 hover:text-white transition">
+              Submit
+            </button>
+          </div>
+          <p id="coupon-msg" class="text-xs mt-1 hidden"></p>
+        </div>
+
+        <!-- Checkout Button -->
+        <a href="/checkout"
+          class="block w-full bg-green-800 hover:bg-green-900 text-white text-center font-bold py-3.5 rounded-xl transition text-sm mb-3">
+          Complete Order
+        </a>
+        <a href="/products"
+          class="block w-full text-center border border-gray-200 text-gray-700 font-medium py-3 rounded-xl hover:bg-gray-50 transition text-sm">
+          continue shopping
+        </a>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

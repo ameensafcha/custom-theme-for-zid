@@ -61,7 +61,7 @@ async function loadCategories() {
 
 
 // ============================================================
-// 2. CART — load & open/close
+// 2. CART
 // ============================================================
 
 async function loadCart() {
@@ -79,14 +79,11 @@ async function loadCart() {
     if (!response.ok) throw new Error('Status: ' + response.status);
 
     const cart = await response.json();
-    console.log('[Cart] RAW:', cart);
 
-    // ✅ Exact fields from docs
-    const products  = cart?.products || [];
-    const count     = cart?.products_count || products.length || 0;
-    const totalStr  = cart?.total?.value_string || cart?.total?.value + ' ر.س' || '0 ر.س';
+    const products = cart?.products || [];
+    const count    = cart?.products_count || products.length || 0;
+    const totalStr = cart?.total?.value_string || '0 SAR';
 
-    // Badges & price update
     const badgeDesktop = document.getElementById('cart-badge-desktop');
     const badgeMobile  = document.getElementById('cart-badge-mobile');
     const priceDesktop = document.getElementById('cart-price-desktop');
@@ -104,7 +101,6 @@ async function loadCart() {
       badgeMobile.classList.add('flex');
     }
 
-    // Empty cart
     if (!products.length) {
       container.innerHTML = `
         <div class="flex flex-col items-center justify-center h-full text-center py-20">
@@ -120,59 +116,54 @@ async function loadCart() {
       return;
     }
 
-    // ✅ Render items — exact fields from docs
     container.innerHTML = products.map(item => {
 
-      // Image — product me image nahi hoti cart mein, sirf name/price
-      const image = item.image
-        || item.images?.[0]?.image?.medium
+      const image = item.images?.[0]?.thumbs?.small
+        || item.images?.[0]?.thumbs?.thumbnail
+        || item.images?.[0]?.origin
         || 'https://placehold.co/80x80?text=?';
 
+      const name          = item.name || '';
+      const itemId        = item.id;
+      const qty           = item.quantity || 1;
+      const priceStr      = item.price_string || item.price + ' SAR' || '';
+      const totalStr2     = item.total_string || item.total + ' SAR' || '';
+      const originalPrice = item.price_before_string || null;
+
       return `
-        <div class="flex gap-3 pb-4 mb-4 border-b border-gray-100 last:border-0 last:mb-0 last:pb-0">
+        <div class="flex items-center gap-3 py-4 border-b border-gray-100 last:border-0">
 
-          <!-- Image -->
-          <div class="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 border border-gray-100 bg-gray-50">
-            <img src="${image}" alt="${item.name || ''}"
-              class="w-full h-full object-cover">
-          </div>
+          <img src="${image}" alt="${name}"
+            class="w-16 h-16 rounded-lg object-cover flex-shrink-0 border border-gray-100"
+            onerror="this.src='https://placehold.co/64x64?text=?'">
 
-          <!-- Info -->
           <div class="flex-1 min-w-0">
-            <p class="text-sm font-semibold text-gray-800 leading-tight">${item.name || ''}</p>
-
-            <!-- Price per item -->
-            <span class="text-green-700 font-bold text-sm mt-1 block">
-              ${item.price_string || item.price + ' ر.س' || ''}
-            </span>
-
-            <!-- Qty controls -->
-            <div class="flex items-center gap-2 mt-2">
-              <button
-                onclick="updateCartItem(${item.id}, ${item.quantity - 1})"
-                class="w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-100 text-base font-bold">
+            <p class="text-sm font-semibold text-gray-900 leading-tight mb-1">${name}</p>
+            <div class="flex items-center gap-3">
+              <button onclick="updateCartItem(${itemId}, ${qty - 1}, this)" data-symbol="−"
+                class="w-7 h-7 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-100 font-bold text-base transition">
                 −
               </button>
-              <span class="text-sm font-semibold w-5 text-center">${item.quantity}</span>
-              <button
-                onclick="updateCartItem(${item.id}, ${item.quantity + 1})"
-                class="w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-100 text-base font-bold">
+              <span class="text-sm font-semibold text-gray-800 w-4 text-center">${qty}</span>
+              <button onclick="updateCartItem(${itemId}, ${qty + 1}, this)" data-symbol="+"
+                class="w-7 h-7 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-100 font-bold text-base transition">
                 +
               </button>
             </div>
           </div>
 
-          <!-- Total & Remove -->
-          <div class="flex flex-col items-end justify-between flex-shrink-0">
-            <button onclick="removeCartItem(${item.id})"
-              class="text-gray-300 hover:text-red-500 transition">
+          <div class="flex flex-col items-end justify-between gap-3 flex-shrink-0">
+            <button onclick="removeCartItem(${itemId}, this)"
+              class="text-gray-300 hover:text-red-400 transition">
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
               </svg>
             </button>
-            <span class="text-sm font-bold text-gray-800">
-              ${item.total_string || item.total + ' ر.س' || ''}
-            </span>
+            <div class="text-right">
+              <span class="text-sm font-bold text-gray-900">${totalStr2}</span>
+              ${originalPrice ? `<span class="text-xs text-gray-400 line-through block">${originalPrice}</span>` : ''}
+            </div>
           </div>
 
         </div>`;
@@ -192,31 +183,55 @@ async function loadCart() {
   }
 }
 
-// Cart item quantity update
-async function updateCartItem(itemId, newQty) {
+async function updateCartItem(itemId, newQty, btn = null) {
   if (newQty < 1) {
     await removeCartItem(itemId);
     return;
   }
+
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = `<svg class="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+    </svg>`;
+  }
+
   try {
+    const formData = new URLSearchParams();
+    formData.append('quantity', newQty);
+
     const response = await fetch(`/api/v1/cart/items/${itemId}`, {
       method: 'PATCH',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
         'Accept': 'application/json',
         'X-Requested-With': 'XMLHttpRequest'
       },
-      body: JSON.stringify({ quantity: newQty })
+      body: formData.toString()
     });
+
     if (!response.ok) throw new Error('Status: ' + response.status);
     await loadCart();
+
   } catch (err) {
     console.error('[Cart] Update error:', err);
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = btn.dataset.symbol || '?';
+    }
   }
 }
 
-// Cart item remove
-async function removeCartItem(itemId) {
+async function removeCartItem(itemId, btn = null) {
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = `<svg class="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+    </svg>`;
+  }
+
   try {
     const response = await fetch(`/api/v1/cart/items/${itemId}`, {
       method: 'DELETE',
@@ -225,10 +240,168 @@ async function removeCartItem(itemId) {
         'X-Requested-With': 'XMLHttpRequest'
       }
     });
+
     if (!response.ok) throw new Error('Status: ' + response.status);
     await loadCart();
+
   } catch (err) {
     console.error('[Cart] Remove error:', err);
+  }
+}
+
+// ============================================================
+// CART PAGE — full page render
+// ============================================================
+
+async function loadCartPage() {
+  const itemsContainer = document.getElementById('cart-page-items');
+  const skeleton       = document.getElementById('cart-page-skeleton');
+  if (!itemsContainer) return;
+
+  try {
+    const response = await fetch('/api/v1/cart', {
+      headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }
+    });
+    if (!response.ok) throw new Error('Status: ' + response.status);
+
+    const cart     = await response.json();
+    const products = cart?.products || [];
+    const total    = cart?.total?.value_string || '0 SAR';
+    const subtotal = cart?.totals?.find(t => t.code === 'subtotal')?.value_string || total;
+
+    // Summary update
+    const subtotalEl = document.getElementById('cart-page-subtotal');
+    const totalEl    = document.getElementById('cart-page-total');
+    if (subtotalEl) subtotalEl.textContent = subtotal;
+    if (totalEl)    totalEl.textContent    = total;
+
+    if (skeleton) skeleton.remove();
+
+    if (!products.length) {
+      itemsContainer.innerHTML = `
+        <div class="bg-white rounded-2xl border border-gray-100 p-16 text-center">
+          <svg class="w-14 h-14 text-gray-200 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+              d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.6 8H19M10 21a1 1 0 1 0 2 0 1 1 0 0 0-2 0zm7 0a1 1 0 1 0 2 0 1 1 0 0 0-2 0z"/>
+          </svg>
+          <p class="text-gray-400 font-medium mb-4">Your cart is empty</p>
+          <a href="/products" class="inline-block bg-green-800 text-white px-6 py-2.5 rounded-xl text-sm font-semibold hover:bg-green-900 transition">
+            Shop Now
+          </a>
+        </div>`;
+      return;
+    }
+
+    itemsContainer.innerHTML = products.map(item => {
+
+      const image = item.images?.[0]?.thumbs?.small
+        || item.images?.[0]?.thumbs?.thumbnail
+        || item.images?.[0]?.origin
+        || 'https://placehold.co/80x80?text=?';
+
+      const name      = item.name || '';
+      const itemId    = item.id;
+      const qty       = item.quantity || 1;
+      const priceStr  = item.price_string || '';
+      const totalStr  = item.total_string || '';
+
+      return `
+        <div class="bg-white rounded-2xl border border-gray-100 p-5 flex items-center gap-4 mb-4">
+
+          <!-- Image -->
+          <img src="${image}" alt="${name}"
+            class="w-20 h-20 rounded-xl object-cover flex-shrink-0 border border-gray-100"
+            onerror="this.src='https://placehold.co/80x80?text=?'">
+
+          <!-- Info -->
+          <div class="flex-1 min-w-0">
+            <p class="font-semibold text-gray-900 text-sm mb-3">${name}</p>
+            <div class="flex items-center gap-3">
+              <button onclick="updateCartPageItem(${itemId}, ${qty - 1}, this)" data-symbol="−"
+                class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-100 font-bold transition">
+                −
+              </button>
+              <span class="text-sm font-bold text-gray-800 w-5 text-center">${qty}</span>
+              <button onclick="updateCartPageItem(${itemId}, ${qty + 1}, this)" data-symbol="+"
+                class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-100 font-bold transition">
+                +
+              </button>
+            </div>
+          </div>
+
+          <!-- Price & Remove -->
+          <div class="flex flex-col items-end gap-2 flex-shrink-0">
+            <span class="font-bold text-gray-900">${totalStr}</span>
+            <span class="text-xs text-gray-400">per item ${priceStr}</span>
+            <button onclick="removeCartPageItem(${itemId}, this)"
+              class="text-xs text-gray-400 hover:text-red-500 transition mt-1">
+              Remove
+            </button>
+          </div>
+
+        </div>`;
+    }).join('');
+
+  } catch (err) {
+    console.error('[CartPage] Error:', err);
+  }
+}
+
+async function updateCartPageItem(itemId, newQty, btn = null) {
+  if (newQty < 1) { await removeCartPageItem(itemId); return; }
+  if (btn) { btn.disabled = true; btn.innerHTML = `<svg class="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>`; }
+  try {
+    const formData = new URLSearchParams();
+    formData.append('quantity', newQty);
+    const response = await fetch(`/api/v1/cart/items/${itemId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+      body: formData.toString()
+    });
+    if (!response.ok) throw new Error('Status: ' + response.status);
+    await loadCartPage();
+  } catch (err) {
+    console.error('[CartPage] Update error:', err);
+    if (btn) { btn.disabled = false; btn.innerHTML = btn.dataset.symbol || '?'; }
+  }
+}
+
+async function removeCartPageItem(itemId, btn = null) {
+  if (btn) { btn.disabled = true; btn.textContent = '...'; }
+  try {
+    const response = await fetch(`/api/v1/cart/items/${itemId}`, {
+      method: 'DELETE',
+      headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }
+    });
+    if (!response.ok) throw new Error('Status: ' + response.status);
+    await loadCartPage();
+  } catch (err) {
+    console.error('[CartPage] Remove error:', err);
+  }
+}
+
+async function applyCoupon() {
+  const input = document.getElementById('coupon-input');
+  const msg   = document.getElementById('coupon-msg');
+  if (!input?.value.trim()) return;
+
+  try {
+    const formData = new URLSearchParams();
+    formData.append('code', input.value.trim());
+    const response = await fetch('/api/v1/cart/coupon', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+      body: formData.toString()
+    });
+    if (!response.ok) throw new Error('Invalid coupon');
+    msg.textContent = '✓ Coupon applied!';
+    msg.className = 'text-xs mt-1 text-green-600';
+    msg.classList.remove('hidden');
+    await loadCartPage();
+  } catch (err) {
+    msg.textContent = '✗ Invalid or expired coupon';
+    msg.className = 'text-xs mt-1 text-red-500';
+    msg.classList.remove('hidden');
   }
 }
 
@@ -248,9 +421,43 @@ function closeCart() {
   document.body.style.overflow = '';
 }
 
+async function applySidebarCoupon() {
+  const input = document.getElementById('sidebar-coupon-input');
+  const msg   = document.getElementById('sidebar-coupon-msg');
+  if (!input?.value.trim()) return;
+
+  const btn = input.nextElementSibling;
+  if (btn) { btn.disabled = true; btn.textContent = '...'; }
+
+  try {
+    const response = await fetch(`/api/v1/cart/coupons?coupon_code=${encodeURIComponent(input.value.trim())}`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest'
+      }
+    });
+
+    if (!response.ok) throw new Error('Invalid');
+
+    msg.textContent = '✓ Coupon applied!';
+    msg.className = 'text-xs mt-1 text-green-600';
+    msg.classList.remove('hidden');
+    input.value = '';
+    await loadCart();
+
+  } catch (err) {
+    msg.textContent = '✗ Invalid or expired coupon';
+    msg.className = 'text-xs mt-1 text-red-500';
+    msg.classList.remove('hidden');
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = 'Apply'; }
+  }
+}
+
 
 // ============================================================
-// 3. ADD TO CART — ek hi jagah defined
+// 3. ADD TO CART
 // ============================================================
 
 async function addToCart(productId, quantity = 1, btn = null) {
@@ -277,11 +484,11 @@ async function addToCart(productId, quantity = 1, btn = null) {
 
     if (btn) {
       btn.textContent = 'Added! ✓';
-      btn.classList.replace('bg-green-700', 'bg-gray-800');
+      btn.classList.replace('bg-green-800', 'bg-gray-800');
       setTimeout(() => {
         btn.disabled = false;
         btn.textContent = 'Add To Cart';
-        btn.classList.replace('bg-gray-800', 'bg-green-700');
+        btn.classList.replace('bg-gray-800', 'bg-green-800');
       }, 2000);
     }
 
@@ -290,10 +497,10 @@ async function addToCart(productId, quantity = 1, btn = null) {
     if (btn) {
       btn.disabled = false;
       btn.textContent = 'Failed — Retry';
-      btn.classList.replace('bg-green-700', 'bg-red-500');
+      btn.classList.replace('bg-green-800', 'bg-red-500');
       setTimeout(() => {
         btn.textContent = 'Add To Cart';
-        btn.classList.replace('bg-red-500', 'bg-green-700');
+        btn.classList.replace('bg-red-500', 'bg-green-800');
       }, 2000);
     }
   }
@@ -301,7 +508,7 @@ async function addToCart(productId, quantity = 1, btn = null) {
 
 
 // ============================================================
-// 4. PRODUCTS — fetch & render
+// 4. PRODUCTS
 // ============================================================
 
 async function loadProducts() {
@@ -337,12 +544,10 @@ async function loadProducts() {
     grid.classList.remove('hidden');
     grid.innerHTML = products.map(product => {
 
-      // Price
       const price     = product.formatted_price || '';
       const salePrice = product.formatted_sale_price || null;
       const discount  = product.discount_percentage || 0;
 
-      // Badges
       const discountBadge = discount > 0
         ? `<span class="absolute top-3 right-3 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded z-10">-${discount}%</span>`
         : '';
@@ -351,36 +556,27 @@ async function loadProducts() {
         ? `<span class="absolute top-3 left-3 bg-green-700 text-white text-xs font-bold px-2 py-0.5 rounded z-10">BEST SELLER</span>`
         : '';
 
-      // Images — primary & secondary (hover)
       const img1 = product.images?.[0]?.image?.medium
         || product.images?.[0]?.image?.full_size
         || 'https://placehold.co/400x500?text=No+Image';
 
       const img2 = product.images?.[1]?.image?.medium
         || product.images?.[1]?.image?.full_size
-        || img1; // agar second image nahi toh same image
+        || img1;
 
       const name = product.name || '';
       const slug = product.slug || product.id || '';
       const id   = product.id || '';
-      const desc = product.description?.short || product.short_description || product.subtitle || '';
+
+      // ✅ short_description — HTML tags strip karo
+      const rawDesc = product.short_description || product.description?.short || product.subtitle || '';
+      const desc    = rawDesc.replace(/<[^>]*>/g, '').trim();
 
       return `
         <div class="bg-white rounded-2xl overflow-hidden border border-gray-200 hover:shadow-md transition-shadow duration-300 flex flex-col">
-
-          <!-- Image with hover effect -->
-
-            <a href="/p/${slug}" class="block relative overflow-hidden bg-gray-50 product-img-wrap" style="height: 420px; min-height: 420px;">
-            <img
-              src="${img1}"
-              alt="${name}"
-              class="img-primary w-full h-full object-cover"
-            >
-            <img
-              src="${img2}"
-              alt="${name}"
-              class="img-secondary w-full h-full object-cover"
-            >
+          <a href="/p/${slug}" class="block relative overflow-hidden bg-gray-50 product-img-wrap" style="height: 420px; min-height: 420px;">
+            <img src="${img1}" alt="${name}" class="img-primary w-full h-full object-cover">
+            <img src="${img2}" alt="${name}" class="img-secondary w-full h-full object-cover">
             ${discountBadge}
             ${bestSeller}
             ${!product.in_stock
@@ -389,11 +585,7 @@ async function loadProducts() {
                  </div>`
               : ''}
           </a>
-
-          <!-- Info -->
           <div class="p-5 flex flex-col flex-1">
-
-            <!-- Price -->
             <div class="mb-1 flex items-center gap-2">
               ${salePrice
                 ? `<span class="text-gray-900 font-bold text-sm">${salePrice}</span>
@@ -401,20 +593,13 @@ async function loadProducts() {
                 : `<span class="text-gray-900 font-bold text-sm">${price}</span>`
               }
             </div>
-
-            <!-- Name -->
-            <a href="/p/${slug}"
-              class="text-lg font-bold text-gray-900 hover:text-green-700 transition leading-tight mb-1">
+            <a href="/p/${slug}" class="text-lg font-bold text-gray-900 hover:text-green-700 transition leading-tight mb-1">
               ${name}
             </a>
-
-            <!-- Desc -->
             ${desc
               ? `<p class="text-sm text-gray-400 mb-4 line-clamp-2">${desc}</p>`
               : `<div class="flex-1 mb-4"></div>`
             }
-
-            <!-- Add to Cart -->
             <button
               onclick="addToCart('${id}', 1, this)"
               ${!product.in_stock ? 'disabled' : ''}
@@ -423,7 +608,6 @@ async function loadProducts() {
                 : 'bg-gray-300 cursor-not-allowed'} text-white font-semibold py-3.5 rounded-full transition text-sm tracking-wider">
               ${product.in_stock ? 'Add To Cart' : 'Out of Stock'}
             </button>
-
           </div>
         </div>`;
 
@@ -516,7 +700,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
   loadCategories();
   loadCart();
-  loadProducts();     // ✅ yahan call ho raha hai
+  loadProducts();
+  loadCartPage();
   initSearch();
   initMobileMenu();
   initNavScroll();
