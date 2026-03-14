@@ -43,16 +43,26 @@
       </a>
 
       <!-- Cart -->
-      <button id="cart-trigger" class="flex flex-col md:flex-row items-center md:gap-2 md:px-6 px-2 py-3 rounded-full md:border border-gray-200 text-base font-medium text-gray-700 hover:bg-gray-50 transition-colors">
-        <div class="relative">
-          <svg class="w-5 h-5 md:w-5 md:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.6 8H19M10 21a1 1 0 1 0 2 0 1 1 0 0 0-2 0zm7 0a1 1 0 1 0 2 0 1 1 0 0 0-2 0z"/>
-          </svg>
-          <span id="cart-badge-mobile" class="absolute -top-1.5 -right-1.5 bg-green-600 text-white text-[10px] rounded-full w-4 h-4 hidden items-center justify-center font-bold">0</span>
-        </div>
-        <span class="hidden md:inline" id="cart-price-desktop">0 SAR</span>
-        <span id="cart-badge-desktop" class="hidden md:flex bg-green-600 text-white text-xs rounded-full w-5 h-5 items-center justify-center font-bold">0</span>
-        <span class="md:hidden text-[10px] text-gray-500 leading-none mt-0.5" id="cart-price-mobile">0 SAR</span>
+      <button id="cart-trigger"
+        class="hidden md:flex items-center gap-2 px-4 py-2.5 rounded-full border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.6 8H19M10 21a1 1 0 1 0 2 0 1 1 0 0 0-2 0zm7 0a1 1 0 1 0 2 0 1 1 0 0 0-2 0z"/>
+        </svg>
+        <span id="cart-price-desktop">0 SAR</span>
+        <span id="cart-badge-desktop" class="text-gray-400 font-normal text-xs">(0)</span>
+      </button>
+
+      <!-- Cart Mobile -->
+      <button id="cart-trigger-mobile"
+        class="md:hidden relative p-2 text-gray-700"
+        onclick="openCart()">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.6 8H19M10 21a1 1 0 1 0 2 0 1 1 0 0 0-2 0zm7 0a1 1 0 1 0 2 0 1 1 0 0 0-2 0z"/>
+        </svg>
+        <span id="cart-badge-mobile"
+          class="absolute -top-1 -right-1 bg-green-600 text-white text-[10px] rounded-full w-4 h-4 hidden items-center justify-center font-bold">0</span>
       </button>
 
     </div>

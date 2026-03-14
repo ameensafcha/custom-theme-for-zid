@@ -12,6 +12,9 @@
 //  8. INIT
 // ============================================================
 
+// Global products cache — cart mein description ke liye
+let productsCache = {};
+
 
 // ============================================================
 // 1. CATEGORIES
@@ -81,20 +84,27 @@ async function loadCart() {
     const cart = await response.json();
 
     const products = cart?.products || [];
-    const count    = cart?.products_count || products.length || 0;
-    const totalStr = cart?.total?.value_string || '0 SAR';
+    const count = products.reduce((sum, item) => sum + (item.quantity || 1), 0);
 
-    const badgeDesktop = document.getElementById('cart-badge-desktop');
-    const badgeMobile  = document.getElementById('cart-badge-mobile');
-    const priceDesktop = document.getElementById('cart-price-desktop');
-    const priceMobile  = document.getElementById('cart-price-mobile');
-    const subtotalEl   = document.getElementById('cart-subtotal');
+    // ✅ Exact fields from console output
+    const subtotalRow = cart?.totals?.find(t => t.code === 'sub_totals');
+    const subtotalStr = subtotalRow?.value_string || cart?.total?.value_string || '0 SAR';
+    const totalStr    = cart?.total?.value_string || '0 SAR';
 
-    if (badgeDesktop) badgeDesktop.textContent = count;
+    // Badges update
+    const badgeDesktop  = document.getElementById('cart-badge-desktop');
+    const badgeMobile   = document.getElementById('cart-badge-mobile');
+    const priceDesktop  = document.getElementById('cart-price-desktop');
+    const priceMobile   = document.getElementById('cart-price-mobile');
+    const subtotalEl    = document.getElementById('cart-subtotal');
+    const itemsCountEl  = document.getElementById('cart-items-count');
+
+    if (badgeDesktop) badgeDesktop.textContent = `(${count})`;
     if (badgeMobile)  badgeMobile.textContent  = count;
     if (priceDesktop) priceDesktop.textContent = totalStr;
     if (priceMobile)  priceMobile.textContent  = totalStr;
-    if (subtotalEl)   subtotalEl.textContent   = totalStr;
+    if (subtotalEl)   subtotalEl.textContent   = subtotalStr;
+    if (itemsCountEl) itemsCountEl.textContent = `(${count} ${count === 1 ? 'item' : 'items'})`;
 
     if (badgeMobile && count > 0) {
       badgeMobile.classList.remove('hidden');
@@ -249,162 +259,6 @@ async function removeCartItem(itemId, btn = null) {
   }
 }
 
-// ============================================================
-// CART PAGE — full page render
-// ============================================================
-
-async function loadCartPage() {
-  const itemsContainer = document.getElementById('cart-page-items');
-  const skeleton       = document.getElementById('cart-page-skeleton');
-  if (!itemsContainer) return;
-
-  try {
-    const response = await fetch('/api/v1/cart', {
-      headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }
-    });
-    if (!response.ok) throw new Error('Status: ' + response.status);
-
-    const cart     = await response.json();
-    const products = cart?.products || [];
-    const total    = cart?.total?.value_string || '0 SAR';
-    const subtotal = cart?.totals?.find(t => t.code === 'subtotal')?.value_string || total;
-
-    // Summary update
-    const subtotalEl = document.getElementById('cart-page-subtotal');
-    const totalEl    = document.getElementById('cart-page-total');
-    if (subtotalEl) subtotalEl.textContent = subtotal;
-    if (totalEl)    totalEl.textContent    = total;
-
-    if (skeleton) skeleton.remove();
-
-    if (!products.length) {
-      itemsContainer.innerHTML = `
-        <div class="bg-white rounded-2xl border border-gray-100 p-16 text-center">
-          <svg class="w-14 h-14 text-gray-200 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-              d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.6 8H19M10 21a1 1 0 1 0 2 0 1 1 0 0 0-2 0zm7 0a1 1 0 1 0 2 0 1 1 0 0 0-2 0z"/>
-          </svg>
-          <p class="text-gray-400 font-medium mb-4">Your cart is empty</p>
-          <a href="/products" class="inline-block bg-green-800 text-white px-6 py-2.5 rounded-xl text-sm font-semibold hover:bg-green-900 transition">
-            Shop Now
-          </a>
-        </div>`;
-      return;
-    }
-
-    itemsContainer.innerHTML = products.map(item => {
-
-      const image = item.images?.[0]?.thumbs?.small
-        || item.images?.[0]?.thumbs?.thumbnail
-        || item.images?.[0]?.origin
-        || 'https://placehold.co/80x80?text=?';
-
-      const name      = item.name || '';
-      const itemId    = item.id;
-      const qty       = item.quantity || 1;
-      const priceStr  = item.price_string || '';
-      const totalStr  = item.total_string || '';
-
-      return `
-        <div class="bg-white rounded-2xl border border-gray-100 p-5 flex items-center gap-4 mb-4">
-
-          <!-- Image -->
-          <img src="${image}" alt="${name}"
-            class="w-20 h-20 rounded-xl object-cover flex-shrink-0 border border-gray-100"
-            onerror="this.src='https://placehold.co/80x80?text=?'">
-
-          <!-- Info -->
-          <div class="flex-1 min-w-0">
-            <p class="font-semibold text-gray-900 text-sm mb-3">${name}</p>
-            <div class="flex items-center gap-3">
-              <button onclick="updateCartPageItem(${itemId}, ${qty - 1}, this)" data-symbol="−"
-                class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-100 font-bold transition">
-                −
-              </button>
-              <span class="text-sm font-bold text-gray-800 w-5 text-center">${qty}</span>
-              <button onclick="updateCartPageItem(${itemId}, ${qty + 1}, this)" data-symbol="+"
-                class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-100 font-bold transition">
-                +
-              </button>
-            </div>
-          </div>
-
-          <!-- Price & Remove -->
-          <div class="flex flex-col items-end gap-2 flex-shrink-0">
-            <span class="font-bold text-gray-900">${totalStr}</span>
-            <span class="text-xs text-gray-400">per item ${priceStr}</span>
-            <button onclick="removeCartPageItem(${itemId}, this)"
-              class="text-xs text-gray-400 hover:text-red-500 transition mt-1">
-              Remove
-            </button>
-          </div>
-
-        </div>`;
-    }).join('');
-
-  } catch (err) {
-    console.error('[CartPage] Error:', err);
-  }
-}
-
-async function updateCartPageItem(itemId, newQty, btn = null) {
-  if (newQty < 1) { await removeCartPageItem(itemId); return; }
-  if (btn) { btn.disabled = true; btn.innerHTML = `<svg class="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>`; }
-  try {
-    const formData = new URLSearchParams();
-    formData.append('quantity', newQty);
-    const response = await fetch(`/api/v1/cart/items/${itemId}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
-      body: formData.toString()
-    });
-    if (!response.ok) throw new Error('Status: ' + response.status);
-    await loadCartPage();
-  } catch (err) {
-    console.error('[CartPage] Update error:', err);
-    if (btn) { btn.disabled = false; btn.innerHTML = btn.dataset.symbol || '?'; }
-  }
-}
-
-async function removeCartPageItem(itemId, btn = null) {
-  if (btn) { btn.disabled = true; btn.textContent = '...'; }
-  try {
-    const response = await fetch(`/api/v1/cart/items/${itemId}`, {
-      method: 'DELETE',
-      headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }
-    });
-    if (!response.ok) throw new Error('Status: ' + response.status);
-    await loadCartPage();
-  } catch (err) {
-    console.error('[CartPage] Remove error:', err);
-  }
-}
-
-async function applyCoupon() {
-  const input = document.getElementById('coupon-input');
-  const msg   = document.getElementById('coupon-msg');
-  if (!input?.value.trim()) return;
-
-  try {
-    const formData = new URLSearchParams();
-    formData.append('code', input.value.trim());
-    const response = await fetch('/api/v1/cart/coupon', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
-      body: formData.toString()
-    });
-    if (!response.ok) throw new Error('Invalid coupon');
-    msg.textContent = '✓ Coupon applied!';
-    msg.className = 'text-xs mt-1 text-green-600';
-    msg.classList.remove('hidden');
-    await loadCartPage();
-  } catch (err) {
-    msg.textContent = '✗ Invalid or expired coupon';
-    msg.className = 'text-xs mt-1 text-red-500';
-    msg.classList.remove('hidden');
-  }
-}
-
 function openCart() {
   const sidebar = document.getElementById('cart-sidebar');
   const overlay = document.getElementById('cart-overlay');
@@ -452,6 +306,150 @@ async function applySidebarCoupon() {
     msg.classList.remove('hidden');
   } finally {
     if (btn) { btn.disabled = false; btn.textContent = 'Apply'; }
+  }
+}
+
+
+// ============================================================
+// CART PAGE
+// ============================================================
+
+async function loadCartPage() {
+  const itemsContainer = document.getElementById('cart-page-items');
+  const skeleton       = document.getElementById('cart-page-skeleton');
+  if (!itemsContainer) return;
+
+  try {
+    const response = await fetch('/api/v1/cart', {
+      headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }
+    });
+    if (!response.ok) throw new Error('Status: ' + response.status);
+
+    const cart     = await response.json();
+    const products = cart?.products || [];
+
+    // ✅ Exact fields
+    const subtotalRow = cart?.totals?.find(t => t.code === 'sub_totals');
+    const subtotalStr = subtotalRow?.value_string || cart?.total?.value_string || '0 SAR';
+    const totalStr    = cart?.total?.value_string || '0 SAR';
+
+    const subtotalEl = document.getElementById('cart-page-subtotal');
+    const totalEl    = document.getElementById('cart-page-total');
+    if (subtotalEl) subtotalEl.textContent = subtotalStr;
+    if (totalEl)    totalEl.textContent    = totalStr;
+
+    if (skeleton) skeleton.remove();
+
+    if (!products.length) {
+      itemsContainer.innerHTML = `
+        <div class="bg-white rounded-2xl border border-gray-100 p-16 text-center">
+          <svg class="w-14 h-14 text-gray-200 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+              d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.6 8H19M10 21a1 1 0 1 0 2 0 1 1 0 0 0-2 0zm7 0a1 1 0 1 0 2 0 1 1 0 0 0-2 0z"/>
+          </svg>
+          <p class="text-gray-400 font-medium mb-4">Your cart is empty</p>
+          <a href="/products" class="inline-block bg-green-800 text-white px-6 py-2.5 rounded-xl text-sm font-semibold hover:bg-green-900 transition">
+            Shop Now
+          </a>
+        </div>`;
+      return;
+    }
+
+    itemsContainer.innerHTML = products.map(item => {
+
+      const image = item.images?.[0]?.thumbs?.small
+        || item.images?.[0]?.thumbs?.thumbnail
+        || item.images?.[0]?.origin
+        || 'https://placehold.co/80x80?text=?';
+
+      const name     = item.name || '';
+      const itemId   = item.id;
+      const qty      = item.quantity || 1;
+      const priceStr = item.price_string || '';
+      const totalStr2 = item.total_string || '';
+
+      return `
+        <div class="bg-white rounded-2xl border border-gray-100 p-5 flex items-center gap-4 mb-4">
+          <img src="${image}" alt="${name}"
+            class="w-20 h-20 rounded-xl object-cover flex-shrink-0 border border-gray-100"
+            onerror="this.src='https://placehold.co/80x80?text=?'">
+          <div class="flex-1 min-w-0">
+            <p class="font-semibold text-gray-900 text-sm mb-3">${name}</p>
+            <div class="flex items-center gap-3">
+              <button onclick="updateCartPageItem(${itemId}, ${qty - 1}, this)" data-symbol="−"
+                class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-100 font-bold transition">−</button>
+              <span class="text-sm font-bold text-gray-800 w-5 text-center">${qty}</span>
+              <button onclick="updateCartPageItem(${itemId}, ${qty + 1}, this)" data-symbol="+"
+                class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-100 font-bold transition">+</button>
+            </div>
+          </div>
+          <div class="flex flex-col items-end gap-2 flex-shrink-0">
+            <span class="font-bold text-gray-900">${totalStr2}</span>
+            <span class="text-xs text-gray-400">per item ${priceStr}</span>
+            <button onclick="removeCartPageItem(${itemId}, this)"
+              class="text-xs text-gray-400 hover:text-red-500 transition mt-1">Remove</button>
+          </div>
+        </div>`;
+    }).join('');
+
+  } catch (err) {
+    console.error('[CartPage] Error:', err);
+  }
+}
+
+async function updateCartPageItem(itemId, newQty, btn = null) {
+  if (newQty < 1) { await removeCartPageItem(itemId); return; }
+  if (btn) { btn.disabled = true; btn.innerHTML = `<svg class="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>`; }
+  try {
+    const formData = new URLSearchParams();
+    formData.append('quantity', newQty);
+    const response = await fetch(`/api/v1/cart/items/${itemId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+      body: formData.toString()
+    });
+    if (!response.ok) throw new Error('Status: ' + response.status);
+    await loadCartPage();
+  } catch (err) {
+    console.error('[CartPage] Update error:', err);
+    if (btn) { btn.disabled = false; btn.innerHTML = btn.dataset.symbol || '?'; }
+  }
+}
+
+async function removeCartPageItem(itemId, btn = null) {
+  if (btn) { btn.disabled = true; btn.textContent = '...'; }
+  try {
+    const response = await fetch(`/api/v1/cart/items/${itemId}`, {
+      method: 'DELETE',
+      headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }
+    });
+    if (!response.ok) throw new Error('Status: ' + response.status);
+    await loadCartPage();
+  } catch (err) {
+    console.error('[CartPage] Remove error:', err);
+  }
+}
+
+async function applyCoupon() {
+  const input = document.getElementById('coupon-input');
+  const msg   = document.getElementById('coupon-msg');
+  if (!input?.value.trim()) return;
+
+  try {
+    const response = await fetch(`/api/v1/cart/coupons?coupon_code=${encodeURIComponent(input.value.trim())}`, {
+      method: 'POST',
+      headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }
+    });
+    if (!response.ok) throw new Error('Invalid coupon');
+    msg.textContent = '✓ Coupon applied!';
+    msg.className = 'text-xs mt-1 text-green-600';
+    msg.classList.remove('hidden');
+    input.value = '';
+    await loadCartPage();
+  } catch (err) {
+    msg.textContent = '✗ Invalid or expired coupon';
+    msg.className = 'text-xs mt-1 text-red-500';
+    msg.classList.remove('hidden');
   }
 }
 
@@ -533,6 +531,14 @@ async function loadProducts() {
     let products = result?.results || [];
     if (!Array.isArray(products)) products = [];
 
+    // ✅ Cache for cart descriptions
+    products.forEach(p => {
+      if (p.id) {
+        const raw = p.short_description || p.description?.short || '';
+        productsCache[p.id] = raw.replace(/<[^>]*>/g, '').trim();
+      }
+    });
+
     if (skeleton) skeleton.classList.add('hidden');
 
     if (!products.length) {
@@ -567,8 +573,6 @@ async function loadProducts() {
       const name = product.name || '';
       const slug = product.slug || product.id || '';
       const id   = product.id || '';
-
-      // ✅ short_description — HTML tags strip karo
       const rawDesc = product.short_description || product.description?.short || product.subtitle || '';
       const desc    = rawDesc.replace(/<[^>]*>/g, '').trim();
 
@@ -632,18 +636,31 @@ function initSearch() {
 
   if (!searchInput || !searchDropdown) return;
 
+  let searchTimeout = null;
+
   searchInput.addEventListener('input', function () {
-    if (this.value.trim()) {
-      searchDropdown.classList.remove('hidden');
-      searchDropdown.innerHTML = `<p class="text-gray-500 text-sm">Searching for "<strong>${this.value}</strong>"...</p>`;
-    } else {
+    const query = this.value.trim();
+
+    if (!query) {
       searchDropdown.classList.add('hidden');
+      return;
     }
+
+    // Loading state
+    searchDropdown.classList.remove('hidden');
+    searchDropdown.innerHTML = `<p class="text-gray-400 text-sm text-center py-2">Searching...</p>`;
+
+    // Debounce — 400ms wait
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => searchProducts(query), 400);
   });
 
   searchInput.addEventListener('keydown', function (e) {
     if (e.key === 'Enter' && this.value.trim()) {
       window.location.href = '/products?search=' + encodeURIComponent(this.value.trim());
+    }
+    if (e.key === 'Escape') {
+      searchDropdown.classList.add('hidden');
     }
   });
 
@@ -652,6 +669,62 @@ function initSearch() {
       searchDropdown.classList.add('hidden');
     }
   });
+}
+
+async function searchProducts(query) {
+  const searchDropdown = document.getElementById('search-dropdown');
+  if (!searchDropdown) return;
+
+  try {
+    const response = await fetch('/api/v1/products/search', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+      body: JSON.stringify({ q: query, page: 1, page_size: 6 })
+    });
+
+    if (!response.ok) throw new Error('Status: ' + response.status);
+
+    const result = await response.json();
+    const products = result?.results || result?.products || result?.data || [];
+
+    if (!products.length) {
+      searchDropdown.innerHTML = `
+        <p class="text-gray-400 text-sm text-center py-3">
+          No results for "<strong>${query}</strong>"
+        </p>`;
+      return;
+    }
+
+    searchDropdown.innerHTML = `
+      <div class="divide-y divide-gray-50">
+        ${products.map(p => {
+          const image = p.images?.[0]?.image?.medium || p.images?.[0]?.image?.full_size || '';
+          const price = p.formatted_sale_price || p.formatted_price || '';
+          return `
+            <a href="/p/${p.slug}" class="flex items-center gap-3 px-2 py-2.5 hover:bg-gray-50 rounded-lg transition">
+              <img src="${image}" alt="${p.name}"
+                class="w-10 h-10 rounded-lg object-cover flex-shrink-0 border border-gray-100"
+                onerror="this.src='https://placehold.co/40x40?text=?'">
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-semibold text-gray-800 truncate">${p.name}</p>
+                <p class="text-xs text-green-700 font-bold">${price}</p>
+              </div>
+            </a>`;
+        }).join('')}
+        <a href="/products?search=${encodeURIComponent(query)}"
+          class="block text-center text-xs text-green-700 font-semibold pt-3 pb-1 hover:underline">
+          View all results for "${query}" →
+        </a>
+      </div>`;
+
+  } catch (err) {
+    console.error('[Search] Error:', err);
+    searchDropdown.innerHTML = `<p class="text-gray-400 text-sm text-center py-3">Search failed. Try again.</p>`;
+  }
 }
 
 
@@ -707,6 +780,7 @@ document.addEventListener('DOMContentLoaded', function () {
   initNavScroll();
 
   document.getElementById('cart-trigger')?.addEventListener('click', openCart);
+  document.getElementById('cart-trigger-mobile')?.addEventListener('click', openCart);
   document.getElementById('cart-close')?.addEventListener('click', closeCart);
   document.getElementById('cart-overlay')?.addEventListener('click', closeCart);
 
